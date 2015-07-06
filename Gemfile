@@ -9,15 +9,21 @@ gem 'bcrypt', '3.1.7'
 #Create sample users
 gem 'faker',  '1.4.2'
 
-#Clean Users page
+#Display long lists on multiple pages
 gem 'will_paginate',           '3.0.7'
 gem 'bootstrap-will_paginate', '0.0.10'
+
+#Display charts
+gem 'chartkick'
+gem 'groupdate'
+gem 'active_median'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.3'
 
 # Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+#gem 'sqlite3'
+gem 'mysql2'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'

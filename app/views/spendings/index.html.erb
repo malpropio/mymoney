@@ -1,0 +1,50 @@
+<p id="notice"><%= notice %></p>
+
+<%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
+
+<div class="row">
+
+  <!-- Line Chart - Single Series -->
+  <div class="col-xs-6">
+    <h3>Spendings By Day</h3>
+    <%= line_chart @spendings.group_by_day(:spending_date_ts).count %>
+  </div>
+
+</div>
+
+
+<h1>Listing Spendings</h1>
+
+<%= will_paginate %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Category</th>
+      <th>Spending date ts</th>
+      <th>Amount</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @spendings.each do |spending| %>
+      <tr>
+        <td><%= spending.description %></td>
+        <td><%= spending.name %></td>
+        <td><%= spending.spending_date_ts %></td>
+        <td><%= spending.amount %></td>
+        <td><%= link_to 'Show', spending %></td>
+        <td><%= link_to 'Edit', edit_spending_path(spending) %></td>
+        <td><%= link_to 'Destroy', spending, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= will_paginate %>
+
+<br>
+
+<%= link_to 'New Spending', new_spending_path %>

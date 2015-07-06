@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :categories
+  resources :spendings
   root               		'static_pages#home'
   get 		'home'    	=> 	'static_pages#home'
 
