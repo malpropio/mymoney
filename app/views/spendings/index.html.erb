@@ -3,13 +3,17 @@
 <%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
 
 <div class="row">
-
-  <!-- Line Chart - Single Series -->
-  <div class="col-xs-6">
+  <div class="col-xs-12">
     <h3>Spendings By Day</h3>
-    <%= line_chart @spendings.group_by_day(:spending_date_ts).count %>
+    <%= line_chart spendings_by_day_spendings_path, discrete: true %>
   </div>
+</div>
 
+<div class="row">
+  <div class="col-xs-12">
+    <h3>Spendings By Category</h3>
+    <%= pie_chart spendings_by_category_spendings_path, discrete: true %>
+  </div>
 </div>
 
 

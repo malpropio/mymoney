@@ -1,9 +1,16 @@
 Rails.application.routes.draw do
 
-  resources :categories
-  resources :spendings
   root               		'static_pages#home'
   get 		'home'    	=> 	'static_pages#home'
+
+  resources :categories
+  
+  resources :spendings do
+    collection do
+      get :spendings_by_day
+      get :spendings_by_category
+    end
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

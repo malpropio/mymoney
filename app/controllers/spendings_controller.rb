@@ -9,6 +9,16 @@ class SpendingsController < ApplicationController
      			 .order(:spending_date_ts)
                          .paginate(page: params[:page])
   end
+  
+  def spendings_by_day
+    render json: Spending.group_by_day(:spending_date_ts, format: "%B %d, %Y").sum(:amount)
+  end
+
+  def spendings_by_category
+    render json: Spending.joins("JOIN categories ON spendings.category_id = categories.id")
+                         .select("spendings.*, categories.name")
+                         .group(:name).sum(:amount)
+  end
 
   # GET /spendings/1
   # GET /spendings/1.json
