@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 # Add bootstrap
 gem 'bootstrap-sass', '3.2.0.0'
+gem 'bootstrap-datepicker-rails'
 
 # Add bcrypt for password encription
 gem 'bcrypt', '3.1.7'

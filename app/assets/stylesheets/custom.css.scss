@@ -75,19 +75,6 @@ p {
     display:block;
 }
 
-/* wedding info */
-section.wedding_info {
-
-	h3 {
-      	font-size: 2.5em;
-  		letter-spacing: -1px;
-  		margin-bottom: 15px;
-  		text-align: left;
-  		font-weight: bold;
-  		color: #777;
-    }
-
-}
 
 /* header */
 
@@ -106,6 +93,41 @@ section.wedding_info {
   color: #f2d;
   text-decoration: none;
 }
+
+/* navigation */
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+   color: #000;  /*Sets the text hover color on navbar*/
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active >   
+ a:hover, .navbar-default .navbar-nav > .active > a:focus {
+    color: white; /*BACKGROUND color for active*/
+    background-color: #030033;
+}
+
+.navbar-default {
+    background-color: #0f006f;
+    border-color: #030033;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+    color: #262626;
+    text-decoration: none;
+    background-color: #66CCFF;  /*change color of links in drop down here*/
+}
+
+.nav > li > a:hover,
+.nav > li > a:focus {
+    text-decoration: none;
+    background-color: silver; /*Change rollover cell color here*/
+}
+
+
+.navbar-default .navbar-nav > li > a {
+   color: white; /*Change active text color here*/
+}
+
 
 /* footer */
 

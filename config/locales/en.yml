@@ -21,3 +21,21 @@
 
 en:
   hello: "Hello world"
+
+en-AU:
+  date:
+    datepicker:
+      default: "dd/mm/yyyy"
+      long: "dd MM, yyyy"
+    formats:
+      default: ! '%d/%m/%Y'
+      long: ! '%d %B, %Y'
+
+en-US:
+  date:
+    datepicker:
+      default: "mm/dd/yyyy"
+      long: "MM dd, yyyy"
+    formats:
+      default: "%m/%d/%Y"
+      long: ! '%B %d, %Y'
