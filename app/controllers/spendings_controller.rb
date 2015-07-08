@@ -4,14 +4,15 @@ class SpendingsController < ApplicationController
   # GET /spendings
   # GET /spendings.json
   def index
-    @spendings = Spending.joins("JOIN categories ON spendings.category_id = categories.id")
-                         .select("spendings.*, categories.name")
-     			 .order(:spending_date_ts)
-                         .paginate(page: params[:page])
+    @spendings = Spending.paginate(page: params[:page]).order(:spending_date)
+    #@spendings = Spending.joins("JOIN categories ON spendings.category_id = categories.id")
+    #                     .select("spendings.*, categories.name")
+    # 			 .order(:spending_date)
+    #                     .paginate(page: params[:page])
   end
   
   def spendings_by_day
-    render json: Spending.group_by_day(:spending_date_ts, format: "%B %d, %Y").sum(:amount)
+    render json: Spending.group_by_day(:spending_date, format: "%B %d, %Y").sum(:amount)
   end
 
   def spendings_by_category
@@ -82,6 +83,6 @@ class SpendingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def spending_params
-      params.require(:spending).permit(:description, :category_id, :spending_date_ts, :amount)
+      params.require(:spending).permit(:description, :category_id, :spending_date, :amount)
     end
 end

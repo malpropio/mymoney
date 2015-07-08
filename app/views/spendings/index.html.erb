@@ -19,14 +19,14 @@
 
 <h1>Listing Spendings</h1>
 
-<%= will_paginate %>
+<%= will_paginate @spendings %>
 
 <table>
   <thead>
     <tr>
       <th>Description</th>
       <th>Category</th>
-      <th>Spending date ts</th>
+      <th>Date</th>
       <th>Amount</th>
       <th colspan="3"></th>
     </tr>
@@ -36,8 +36,8 @@
     <% @spendings.each do |spending| %>
       <tr>
         <td><%= spending.description %></td>
-        <td><%= spending.name %></td>
-        <td><%= spending.spending_date_ts %></td>
+        <td><%= spending.category.name %></td>
+        <td><%= spending.spending_date %></td>
         <td><%= spending.amount %></td>
         <td><%= link_to 'Show', spending %></td>
         <td><%= link_to 'Edit', edit_spending_path(spending) %></td>
@@ -47,7 +47,7 @@
   </tbody>
 </table>
 
-<%= will_paginate %>
+<%= will_paginate @spendings %>
 
 <br>
 

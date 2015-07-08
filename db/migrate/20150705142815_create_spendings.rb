@@ -1,13 +1,13 @@
 class CreateSpendings < ActiveRecord::Migration
   def change
     create_table :spendings do |t|
-      t.string :description
-      t.references :category, index: true, foreign_key: true
-      t.datetime :spending_date_ts
-      t.decimal :amount, precision: 4, scale: 2
+      t.string :description, null: false
+      t.references :category, index: true, foreign_key: true, null: false
+      t.date :spending_date, null: false
+      t.decimal :amount, null: false, :precision => 8, :scale => 2
 
       t.timestamps null: false
     end
-    add_index :spendings, :spending_date_ts
+    add_index :spendings, :spending_date
   end
 end

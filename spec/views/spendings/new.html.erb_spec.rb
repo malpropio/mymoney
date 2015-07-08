@@ -16,9 +16,11 @@ RSpec.describe "spendings/new", type: :view do
 
       assert_select "input#spending_description[name=?]", "spending[description]"
 
-      assert_select "input#spending_category_id[name=?]", "spending[category_id]"
+      assert_select "select#spending_category_id[name=?]", "spending[category_id]"
 
       assert_select "input#spending_amount[name=?]", "spending[amount]"
+
+      assert_select "input#spending_spending_date[name=?]", "spending[spending_date]"
     end
   end
 end

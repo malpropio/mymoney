@@ -11,25 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150705143415) do
+ActiveRecord::Schema.define(version: 20150705142815) do
 
   create_table "categories", force: :cascade do |t|
-    t.string   "name"
-    t.string   "description"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.string   "name",        limit: 255, null: false
+    t.string   "description", limit: 255, null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   create_table "spendings", force: :cascade do |t|
-    t.string   "description"
-    t.integer  "category_id"
-    t.datetime "spending_date_ts"
-    t.decimal  "amount",           precision: 4, scale: 2
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
+    t.string   "description",   limit: 255,                         null: false
+    t.integer  "category_id",   limit: 4,                           null: false
+    t.date     "spending_date",                                     null: false
+    t.decimal  "amount",                    precision: 8, scale: 2, null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
   end
 
-  add_index "spendings", ["category_id"], name: "index_spendings_on_category_id"
-  add_index "spendings", ["spending_date_ts"], name: "index_spendings_on_spending_date_ts"
+  add_index "spendings", ["category_id"], name: "index_spendings_on_category_id", using: :btree
+  add_index "spendings", ["spending_date"], name: "index_spendings_on_spending_date", using: :btree
 
+  add_foreign_key "spendings", "categories"
 end

@@ -24,10 +24,10 @@ Category.create(name: "Loans", description: "Loan payments: car, student")
 100.times do |n|
   description  = Faker::Commerce.product_name
   category_id  = Faker::Number.number(1).to_i+1
-  spending_date_ts = Faker::Time.between(DateTime.now - 60, DateTime.now)
+  spending_date = Faker::Time.between(DateTime.now - 60, DateTime.now)
   amount = Faker::Commerce.price
   Spending.create(description:  description,
   	       category_id:  category_id,
-               spending_date_ts: spending_date_ts,
+               spending_date: spending_date,
                amount: amount)
 end
