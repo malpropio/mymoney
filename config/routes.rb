@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :spendings do
     collection do
       get :spendings_by_day
+      get :spendings_by_month
       get :spendings_by_category
     end
   end

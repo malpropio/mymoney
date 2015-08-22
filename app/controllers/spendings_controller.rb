@@ -4,15 +4,19 @@ class SpendingsController < ApplicationController
   # GET /spendings
   # GET /spendings.json
   def index
-    @spendings = Spending.paginate(page: params[:page]).order(:spending_date)
-    #@spendings = Spending.joins("JOIN categories ON spendings.category_id = categories.id")
-    #                     .select("spendings.*, categories.name")
-    # 			 .order(:spending_date)
-    #                     .paginate(page: params[:page])
+    @spendings = Spending.paginate(page: params[:page])
+                         .order(:spending_date)
+                         .order(:category_id)
   end
   
   def spendings_by_day
-    render json: Spending.group_by_day(:spending_date, format: "%B %d, %Y").sum(:amount)
+    render json: Spending.group_by_day(:spending_date, format: "%B %d, %Y")
+                         .sum(:amount)
+  end
+  
+  def spendings_by_month
+    render json: Spending.group_by_month(:spending_date, format: "%B, %Y")
+                         .sum(:amount)
   end
 
   def spendings_by_category
