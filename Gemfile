@@ -6,6 +6,9 @@ gem 'bootstrap-datepicker-rails'
 
 gem 'passenger'
 
+# Help with login etc...
+gem 'devise'
+
 # Add bcrypt for password encription
 gem 'bcrypt', '3.1.7'
 

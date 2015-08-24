@@ -5,7 +5,7 @@ class SpendingsController < ApplicationController
   # GET /spendings.json
   def index
     @spendings = Spending.paginate(page: params[:page])
-                         .order(:spending_date)
+                         .order(spending_date: :desc)
                          .order(:category_id)
   end
   
