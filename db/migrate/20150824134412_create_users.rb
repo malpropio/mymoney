@@ -7,6 +7,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :username
       t.string :password_digest
       t.string :remember_digest
+      t.string :activation_digest
       t.boolean :activated
 
       t.timestamps null: false
