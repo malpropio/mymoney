@@ -1,12 +1,13 @@
 class SessionsController < ApplicationController
   skip_before_action :require_login, only: [:create, :new, :destroy]
+  ALLOWED = %w[titbabthomas@gmail.com samanthalouis.12@gmail.com]
 
   def new
   end
 
   def create
     user = User.find_by(username: params[:session][:username].downcase)
-    if user 
+    if user && ALLOWED.include?(user.email)
       if user.authenticate(params[:session][:password])
         log_in user
 	params[:session][:remember_me] == '1' ? remember(user) : forget(user)
@@ -16,7 +17,7 @@ class SessionsController < ApplicationController
 	  render 'new'
       end
     else
-          flash.now[:danger] = "Invalid username"
+          flash.now[:danger] = "Invalid username or not Allowed to login"
           render 'new'
     end
   end
