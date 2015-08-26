@@ -16,9 +16,16 @@ Rails.application.routes.draw do
       get :spendings_by_day
       get :spendings_by_month
       get :spendings_by_category
-      get :avg_spendings_by_month
     end
   end
+  
+
+  resources :budgets do
+    collection do
+      get :reset
+    end
+  end
+  
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -11,7 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150824134412) do
+ActiveRecord::Schema.define(version: 20150826205503) do
+
+  create_table "budgets", force: :cascade do |t|
+    t.integer  "category_id",  limit: 4
+    t.date     "budget_month",                                   null: false
+    t.decimal  "amount",                 precision: 8, scale: 2, null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+  end
+
+  add_index "budgets", ["category_id", "budget_month"], name: "by_category_month", unique: true, using: :btree
+  add_index "budgets", ["category_id"], name: "index_budgets_on_category_id", using: :btree
+
+  create_table "budgets_spendings", id: false, force: :cascade do |t|
+    t.integer "spending_id", limit: 4
+    t.integer "budget_id",   limit: 4
+  end
+
+  add_index "budgets_spendings", ["budget_id"], name: "index_budgets_spendings_on_budget_id", using: :btree
+  add_index "budgets_spendings", ["spending_id"], name: "index_budgets_spendings_on_spending_id", using: :btree
 
   create_table "categories", force: :cascade do |t|
     t.string   "name",        limit: 255, null: false
@@ -27,8 +46,10 @@ ActiveRecord::Schema.define(version: 20150824134412) do
     t.decimal  "amount",                    precision: 8, scale: 2, null: false
     t.datetime "created_at",                                        null: false
     t.datetime "updated_at",                                        null: false
+    t.integer  "budget_id",     limit: 4
   end
 
+  add_index "spendings", ["budget_id"], name: "index_spendings_on_budget_id", using: :btree
   add_index "spendings", ["category_id"], name: "index_spendings_on_category_id", using: :btree
   add_index "spendings", ["spending_date"], name: "index_spendings_on_spending_date", using: :btree
 
@@ -48,5 +69,7 @@ ActiveRecord::Schema.define(version: 20150824134412) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
+  add_foreign_key "budgets", "categories"
+  add_foreign_key "spendings", "budgets"
   add_foreign_key "spendings", "categories"
 end

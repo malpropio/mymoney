@@ -17,7 +17,7 @@
 
 <p>
   <strong>Amount:</strong>
-  $<%= @spending.amount %>
+  <%= number_to_currency(@spending.amount) %>
 </p>
 
 <%= link_to 'Edit', edit_spending_path(@spending) %> |
