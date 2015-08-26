@@ -17,7 +17,7 @@ class Spending < ActiveRecord::Base
   def set_budget
     dt = self.spending_date.change(day: 1).strftime('%Y-%m')            
     new_budget = Budget.where("DATE_FORMAT(budget_month, '%Y-%m') = ? AND category_id = ?", dt, self.category_id)
-    self.budget_id = new_budget.id unless new_budget.nil?
+    self.budget_id = new_budget.first.id unless new_budget.nil?
   end
   
 end
