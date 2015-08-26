@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       get :spendings_by_day
       get :spendings_by_month
       get :spendings_by_category
+      get :avg_spendings_by_month
     end
   end
 

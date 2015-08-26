@@ -4,6 +4,13 @@
 
 <div class="row">
   <div class="col-xs-12">
+    <h3>Avg Spendings By Month</h3>
+    <%= line_chart avg_spendings_by_month_spendings_path, discrete: true, library: {vAxis: {format: '$#,###.##'}} %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-12">
     <h3>Spendings By Month</h3>
     <%= line_chart spendings_by_month_spendings_path, discrete: true, library: {vAxis: {format: '$#,###.##'}} %>
   </div>
