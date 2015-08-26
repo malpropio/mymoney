@@ -6,7 +6,7 @@ class SpendingsController < ApplicationController
   def index
     @spendings = Spending.paginate(page: params[:page])
                          .order(spending_date: :desc)
-                         .order(:category_id)
+                         .order(:updated_at: :desc)
   end
   
   def spendings_by_day
