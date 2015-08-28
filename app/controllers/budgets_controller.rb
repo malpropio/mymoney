@@ -25,7 +25,10 @@ class BudgetsController < ApplicationController
   def budgets_by_month
     #render json: Budget.group_by_month(:budget_month, format: "%B, %Y").sum(:amount)
 
-    agg = Spending.joins(:budget).select("SUM(spendings.amount) AS total_spending, SUM(budgets.amount) AS total_budget, budget_month").group("budgets.budget_month") 
+    subquery = Spending.select("SUM(amount) AS total_spending, budget_id").group(:budget_id).to_sql
+    agg = Budget.joins("JOIN (#{subquery}) spendings ON budgets.id = spendings.budget_id")
+                .select("budgets.budget_month, SUM(spendings.total_spending) AS total_spending, SUM(budgets.amount) AS total_budget")
+                .group("budgets.budget_month")
     h1 = Hash.new
 
     agg.each do |budget| 
