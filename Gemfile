@@ -13,7 +13,7 @@ gem 'devise'
 gem 'bcrypt', '3.1.7'
 
 #Create sample users
-gem 'faker',  '1.4.2'
+gem 'faker'
 
 #Display long lists on multiple pages
 gem 'will_paginate',           '3.0.7'
