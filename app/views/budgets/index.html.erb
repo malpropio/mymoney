@@ -2,6 +2,15 @@
 
 <h1>Listing Budgets</h1>
 
+<%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
+
+<div class="row">
+  <div class="col-xs-12">
+    <h3>Budget vs Spending By Month</h3>
+    <%= line_chart budgets_by_month_budgets_path, discrete: true, library: {vAxis: {format: '$#,###.##'}} %>
+  </div>
+</div>
+
 <%= link_to 'Reset All Budgets', reset_budgets_path, :data => {:confirm => 'Are you sure?'} %>
 
 <table>
