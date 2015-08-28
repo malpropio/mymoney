@@ -21,21 +21,7 @@ class BudgetsController < ApplicationController
   # GET /budgets/1/edit
   def edit
   end
-  
-  def budgets_by_month
-    #render json: Budget.group_by_month(:budget_month, format: "%B, %Y").sum(:amount)
 
-    agg = Spending.joins(:budget).select("SUM(spendings.amount) AS total_spending, SUM(budgets.amount) AS total_budget, budget_month").group("budgets.budget_month") 
-    h1 = Hash.new
-
-    agg.each do |budget| 
-      h1.store(["Budget", budget.budget_month.strftime('%b %Y')],budget.total_budget) 
-      h1.store(["Spending", budget.budget_month.strftime('%b %Y')],budget.total_spending)
-    end
-    
-    render json: h1.chart_json
-  end
-  
   # Reset all budgets
   def reset
 

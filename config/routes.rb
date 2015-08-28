@@ -23,7 +23,6 @@ Rails.application.routes.draw do
   resources :budgets do
     collection do
       get :reset
-      get :budgets_by_month
     end
   end
   
