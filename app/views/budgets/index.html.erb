@@ -13,6 +13,8 @@
 
 <%= link_to 'Reset All Budgets', reset_budgets_path, :data => {:confirm => 'Are you sure?'} %>
 
+<%= will_paginate @budgets %>
+
 <table>
   <thead>
     <tr>
@@ -40,6 +42,8 @@
     <% end %>
   </tbody>
 </table>
+
+<%= will_paginate @budgets %>
 
 <br>
 
