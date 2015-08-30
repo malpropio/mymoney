@@ -1,15 +1,12 @@
 class SpendingsController < ApplicationController
-  include SpendingsHelper
-
   before_action :set_spending, only: [:show, :edit, :update, :destroy]
 
   # GET /spendings
   # GET /spendings.json
   def index
-    @spendings = Spending.search(params[:search])
-                         .order(sort_column + " " + sort_direction)
+    @spendings = Spending.paginate(page: params[:page])
+                         .order(spending_date: :desc)
                          .order(updated_at: :desc)
-                         .paginate(page: params[:page])
   end
   
   def spendings_by_day

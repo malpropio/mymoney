@@ -4,9 +4,8 @@ class BudgetsController < ApplicationController
   # GET /budgets
   # GET /budgets.json
   def index
-    @budgets = Budget.order(:budget_month => :desc)
-                     .order(:category_id)
-                     .paginate(:per_page => Category.count, :page => params[:page])
+    @budgets = Budget.all.order(budget_month: :desc)
+                         .order(:category_id)
   end
 
   # GET /budgets/1

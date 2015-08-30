@@ -13,19 +13,11 @@ class Spending < ActiveRecord::Base
     set_budget
   end
 
-  def self.search(search)
-    if search
-      where('description LIKE ?', "%#{search}%")
-    else
-      all
-    end
-  end
-
   private
   def set_budget
     dt = self.spending_date.change(day: 1).strftime('%Y-%m')            
     new_budget = Budget.where("DATE_FORMAT(budget_month, '%Y-%m') = ? AND category_id = ?", dt, self.category_id)
     self.budget_id = new_budget.first.id unless new_budget.first.nil?
   end
-
+  
 end

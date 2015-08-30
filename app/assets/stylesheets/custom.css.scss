@@ -276,7 +276,7 @@ margin-top: 10px;
 margin-bottom: 10px;
 }
 
-th, td {
+table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
     font-family:'Monotype Corsiva','Apple Chancery','ITC Zapf Chancery','URW Chancery L',cursive;
@@ -286,10 +286,6 @@ th, td {
     padding: 15px;
     text-align: left;
     font-size: 1.3em;
-}
-
-.filters table, .filters th, .filters td{
-   border: 0px;
 }
 
 #left_section {
@@ -305,19 +301,4 @@ th, td {
     width:60%;
     float:left;
     padding:10px;	 	 
-}
-
-/* Sortable tables */
-.pretty th .current {
-  padding-right: 12px;
-  background-repeat: no-repeat;
-  background-position: right center;
-}
-
-.pretty th .asc {
-  background-image: url(arrow_up.png);
-}
-
-.pretty th .desc {
-  background-image: url(arrow_down.png);
 }
