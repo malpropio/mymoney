@@ -10,14 +10,17 @@
       </ul>
     </div>
   <% end %>
-
-  <div class="field">
+  <div class="field" id="categories_select" >
+    <%= f.label :category_id %><br>
+    <%= f.collection_select :category_id, Category.all.order(:name), :id, :name, :prompt => true %>
+  </div>
+  <div class="field" id="desc_text" style="display:none;" >
     <%= f.label :description %><br>
     <%= f.text_field :description %>
   </div>
-  <div class="field">
-    <%= f.label :category_id %><br>
-    <%= f.collection_select :category_id, Category.all.order(:name), :id, :name %>
+  <div class="field" id="desc_select" style="display:none;" >
+    <%= f.label :description %><br>
+    <%= f.select :description, [['USDOE/GLELSI', 'USDOE/GLELSI'], ['VW', 'VW'], ['Tulane', 'Tulane']] %>
   </div>
   <div class="field">
     <%= f.label :spending_date, "Date"  %>
