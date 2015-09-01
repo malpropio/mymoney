@@ -1,10 +1,12 @@
 class Spending < ActiveRecord::Base
   belongs_to :category
   belongs_to :budget
+  belongs_to :payment_method
 
   attr_accessor :description_select
+  attr_accessor :description_cc
 
-  validates_presence_of :description, :category_id, :spending_date, :amount
+  validates_presence_of :description, :category_id, :spending_date, :amount, :payment_method_id
   validates :amount, numericality: true
 
   before_save do
@@ -34,7 +36,11 @@ class Spending < ActiveRecord::Base
   end
 
   def clean_desc
-    self.description = self.description_select if (!self.category.nil? && self.category.name == 'Loans')
+    if !self.category.nil?
+      self.description = nil if (self.category.name == 'Loans' || self.category.name == 'Credit Cards')
+      self.description = self.description_select if self.category.name == 'Loans'
+      self.description = self.description_cc if self.category.name == 'Credit Cards'
+    end
   end
 
 end

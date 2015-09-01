@@ -23,6 +23,10 @@
     <%= f.label :description %><br>
     <%= f.select :description_select, [['USDOE/GLELSI', 'USDOE/GLELSI'], ['VW', 'VW'], ['Tulane', 'Tulane']] %>
   </div>
+  <div class="field" id="desc_cc" style="display:none;" >
+    <%= f.label :description %><br>
+    <%= f.select :description_cc, [['Amex', 'Amex'], ['Freedom', 'Freedom'], ['Travel', 'Travel'], ['Cash','Cash'], ['JCP','JCP'], ['Express','Express']] %>
+  </div>
   <div class="field">
     <%= f.label :spending_date, "Date"  %>
     <%= f.calendar_field :spending_date %>
@@ -30,6 +34,10 @@
   <div class="field">
     <%= f.label :amount %><br>
     <%= f.text_field :amount %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_method_id %><br>
+    <%= f.collection_select :payment_method_id, PaymentMethod.all.order(:name), :id, :name %>
   </div>
   <div class="actions">
     <%= f.submit %>

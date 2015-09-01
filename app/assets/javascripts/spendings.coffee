@@ -12,14 +12,19 @@ $(document).on 'change ready page:load', ->
     #alert GetElementInsideContainer('desc_text', 'spending_description').value
     selectedOption = $('#spending_category_id option:selected').text().toLowerCase()
     if selectedOption == 'loans'
-      $('form #desc_select').show()
       $('form #desc_text').hide()
-      #alert GetElementInsideContainer('desc_text', 'spending_description').value
-      GetElementInsideContainer('desc_text', 'spending_description').setAttribute("value","");
-      #alert GetElementInsideContainer('desc_text', 'spending_description').value
+      $('form #desc_cc').hide()
+      $('form #desc_select').show()
+      #GetElementInsideContainer('desc_text', 'spending_description').setAttribute("value","");
+    else if selectedOption == 'credit cards'
+      $('form #desc_cc').show()
+      $('form #desc_select').hide()
+      $('form #desc_text').hide()
+      #GetElementInsideContainer('desc_text', 'spending_description').setAttribute("value","");
     else
       $('form #desc_select').hide()
       $('form #desc_text').show()
+      $('form #desc_cc').hide()
     return;
 
 GetElementInsideContainer = (containerID, childID) ->
