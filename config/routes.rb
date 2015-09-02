@@ -16,14 +16,20 @@ Rails.application.routes.draw do
       get :spendings_by_day
       get :spendings_by_month
       get :spendings_by_category
+      get :spendings_by_payment_method
     end
   end
-  
 
   resources :budgets do
     collection do
       get :reset
       get :budgets_by_month
+    end
+  end
+
+  resources :payment_methods do
+    collection do
+      get :reset
     end
   end
   

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150826205503) do
+ActiveRecord::Schema.define(version: 20150901174504) do
 
   create_table "budgets", force: :cascade do |t|
     t.integer  "category_id",  limit: 4
@@ -24,14 +24,6 @@ ActiveRecord::Schema.define(version: 20150826205503) do
   add_index "budgets", ["category_id", "budget_month"], name: "by_category_month", unique: true, using: :btree
   add_index "budgets", ["category_id"], name: "index_budgets_on_category_id", using: :btree
 
-  create_table "budgets_spendings", id: false, force: :cascade do |t|
-    t.integer "spending_id", limit: 4
-    t.integer "budget_id",   limit: 4
-  end
-
-  add_index "budgets_spendings", ["budget_id"], name: "index_budgets_spendings_on_budget_id", using: :btree
-  add_index "budgets_spendings", ["spending_id"], name: "index_budgets_spendings_on_spending_id", using: :btree
-
   create_table "categories", force: :cascade do |t|
     t.string   "name",        limit: 255, null: false
     t.string   "description", limit: 255, null: false
@@ -39,18 +31,29 @@ ActiveRecord::Schema.define(version: 20150826205503) do
     t.datetime "updated_at",              null: false
   end
 
+  create_table "payment_methods", force: :cascade do |t|
+    t.string   "name",        limit: 255
+    t.string   "description", limit: 255
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  add_index "payment_methods", ["name"], name: "index_payment_methods_on_name", unique: true, using: :btree
+
   create_table "spendings", force: :cascade do |t|
-    t.string   "description",   limit: 255,                         null: false
-    t.integer  "category_id",   limit: 4,                           null: false
-    t.date     "spending_date",                                     null: false
-    t.decimal  "amount",                    precision: 8, scale: 2, null: false
-    t.datetime "created_at",                                        null: false
-    t.datetime "updated_at",                                        null: false
-    t.integer  "budget_id",     limit: 4
+    t.string   "description",       limit: 255,                         null: false
+    t.integer  "category_id",       limit: 4,                           null: false
+    t.date     "spending_date",                                         null: false
+    t.decimal  "amount",                        precision: 8, scale: 2, null: false
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
+    t.integer  "budget_id",         limit: 4
+    t.integer  "payment_method_id", limit: 4
   end
 
   add_index "spendings", ["budget_id"], name: "index_spendings_on_budget_id", using: :btree
   add_index "spendings", ["category_id"], name: "index_spendings_on_category_id", using: :btree
+  add_index "spendings", ["payment_method_id"], name: "index_spendings_on_payment_method_id", using: :btree
   add_index "spendings", ["spending_date"], name: "index_spendings_on_spending_date", using: :btree
 
   create_table "users", force: :cascade do |t|
@@ -72,4 +75,5 @@ ActiveRecord::Schema.define(version: 20150826205503) do
   add_foreign_key "budgets", "categories"
   add_foreign_key "spendings", "budgets"
   add_foreign_key "spendings", "categories"
+  add_foreign_key "spendings", "payment_methods"
 end

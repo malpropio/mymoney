@@ -16,6 +16,14 @@
   </div>
 </div>
 
+<div class="row">
+  <div class="col-xs-12">
+    <h3>Spendings By Payment Methods</h3>
+    <%= pie_chart spendings_by_payment_method_spendings_path, discrete: true %>
+  </div>
+</div>
+
+
 
 <h1>Listing Spendings</h1>
 <table class="filters">
@@ -40,6 +48,7 @@
       <th><%= sortable "category_id", "Category" %></th>
       <th><%= sortable "spending_date", "Date" %></th>
       <th><%= sortable "amount" %></th>
+      <th><%= sortable "payment_method_id", "Payment Method" %></th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -51,6 +60,7 @@
         <td><%= spending.category.name %></td>
         <td><%= spending.spending_date %></td>
         <td><%= number_to_currency(spending.amount) %></td>
+        <td><%= spending.payment_method.name %></td>
         <td><%= link_to 'Show', spending %></td>
         <td><%= link_to 'Edit', edit_spending_path(spending) %></td>
         <td><%= link_to 'Destroy', spending, method: :delete, data: { confirm: 'Are you sure?' } %></td>

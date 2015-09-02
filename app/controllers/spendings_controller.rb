@@ -18,14 +18,25 @@ class SpendingsController < ApplicationController
   end
   
   def spendings_by_month
-    render json: Spending.group_by_month(:spending_date, format: "%B, %Y")
+    render json: Spending.joins(:category)
+                         .where("categories.name NOT IN ('Credit Cards')")
+                         .group_by_month(:spending_date, format: "%B, %Y")
                          .sum(:amount)
   end
 
   def spendings_by_category
-    render json: Spending.joins("JOIN categories ON spendings.category_id = categories.id")
+    render json: Spending.joins(:category)
+                         .where("categories.name NOT IN ('Credit Cards')")
                          .select("spendings.*, categories.name")
                          .group(:name).sum(:amount)
+  end
+
+  def spendings_by_payment_method
+    render json: Spending.joins(:category)
+                         .where("categories.name NOT IN ('Credit Cards')")
+                         .joins(:payment_method)
+                         .select("spendings.*, payment_methods.name")
+                         .group("payment_methods.name").sum(:amount)
   end
 
   # GET /spendings/1
@@ -90,6 +101,6 @@ class SpendingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def spending_params
-      params.require(:spending).permit(:description, :category_id, :spending_date, :amount, :description_select)
+      params.require(:spending).permit(:description, :category_id, :spending_date, :amount, :description_select, :payment_method_id, :description_cc)
     end
 end
