@@ -24,21 +24,21 @@ class BudgetsController < ApplicationController
   end
   
   def budgets_by_month
-    #render json: Budget.group_by_month(:budget_month, format: "%B, %Y").sum(:amount)
-
     subquery = Spending.joins(:category)
                         .where("categories.name NOT IN ('Credit Cards')")
                         .select("SUM(amount) AS total_spending, budget_id").group(:budget_id).to_sql
 
     payments_subquery = Spending.joins(:category)
-                        .where("categories.name IN ('Credit Cards','Rent','Utilities')")
+                        .where("categories.name IN ('Credit Cards','Rent','Utilities','Loans')")
                         .select("SUM(amount) AS total_payment, budget_id").group(:budget_id).to_sql
-    
-    agg = Budget
+   
+    agg = Budget.joins("INNER JOIN categories ON categories.id = budgets.category_id")
                 .joins("LEFT OUTER JOIN (#{subquery}) spendings ON budgets.id = spendings.budget_id")
                 .joins("LEFT OUTER JOIN (#{payments_subquery}) payments ON budgets.id = payments.budget_id")
-                .select("budgets.budget_month, SUM(spendings.total_spending) AS total_spending, SUM(budgets.amount) AS total_budget, SUM(payments.total_payment) AS total_payment")
+                .select("budgets.budget_month, Sum(CASE WHEN categories.name IN ('Credit Cards') THEN 0 ELSE spendings.total_spending END) AS total_spending, Sum(CASE WHEN categories.name IN ('Credit Cards') THEN 0 ELSE budgets.amount END) AS total_budget, Sum(payments.total_payment) AS total_payment ")
+                .where("budgets.budget_month >= DATE_ADD(NOW(), INTERVAL - 24 MONTH)")
                 .group("budgets.budget_month")
+                .having("Sum(CASE WHEN categories.name IN ('Credit Cards') THEN 0 ELSE spendings.total_spending END)>0 AND Sum(CASE WHEN categories.name IN ('Credit Cards') THEN 0 ELSE budgets.amount END)>0 AND Sum(payments.total_payment)>0")
     h1 = Hash.new
 
     agg.each do |budget| 
