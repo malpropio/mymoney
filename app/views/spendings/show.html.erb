@@ -20,5 +20,10 @@
   <%= number_to_currency(@spending.amount) %>
 </p>
 
+<p>
+  <strong>Payment Method:</strong>
+  <%= @spending.payment_method.name %>
+</p>
+
 <%= link_to 'Edit', edit_spending_path(@spending) %> |
 <%= link_to 'Back', spendings_path %>

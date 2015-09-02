@@ -23,6 +23,13 @@
   </div>
 </div>
 
+<div class="row">
+  <div class="col-xs-12">
+    <h3>CC Spendings vs Payments</h3>
+    <%= line_chart cc_purchase_vs_payment_spendings_path, discrete: true, library: {vAxis: {format: '$#,###.##'}} %>
+  </div>
+</div>
+
 
 
 <h1>Listing Spendings</h1>

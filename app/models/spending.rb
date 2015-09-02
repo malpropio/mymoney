@@ -40,6 +40,7 @@ class Spending < ActiveRecord::Base
       self.description = nil if (self.category.name == 'Loans' || self.category.name == 'Credit Cards')
       self.description = self.description_select if self.category.name == 'Loans'
       self.description = self.description_cc if self.category.name == 'Credit Cards'
+      self.payment_method_id = PaymentMethod.find_by_name("Debit").id if (self.category.name == 'Loans' || self.category.name == 'Credit Cards' || self.category.name == 'Rent' || self.category.name == 'Utilities')
     end
   end
 

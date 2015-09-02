@@ -39,6 +39,17 @@ class SpendingsController < ApplicationController
                          .group("payment_methods.name").sum(:amount)
   end
 
+  def cc_purchase_vs_payment
+    render json: Spending.where("spending_date >= DATE_ADD(DATE_FORMAT(NOW(), '%Y-%m-%01'), INTERVAL - 24 MONTH) AND (categories.name = 'Credit Cards' OR payment_methods.name = 'Credit')")
+                         .joins(:category)
+                         .joins(:payment_method)
+                         .select("Sum(spendings.amount) AS sum_amount, CASE WHEN payment_methods.name = 'Credit' THEN 'Purchase' ELSE 'Payment' END AS payment_method_id, DATE_FORMAT(spending_date, '%Y-%m-01 00:00:00') AS month")
+                         .group("CASE WHEN payment_methods.name = 'Credit' THEN 'Purchase' ELSE 'Payment' END")
+                         .group_by_month(:spending_date, format: "%b %Y")
+                         .sum(:amount)
+                         .chart_json
+  end
+
   # GET /spendings/1
   # GET /spendings/1.json
   def show
