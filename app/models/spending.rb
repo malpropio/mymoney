@@ -8,6 +8,8 @@ class Spending < ActiveRecord::Base
 
   validates_presence_of :description, :category_id, :spending_date, :amount, :payment_method_id
   validates :amount, numericality: true
+  
+  DEBIT_CATEGORIES = ['Credit Cards','Loans','Rent','Utilities']
 
   before_save do
     set_budget
@@ -40,7 +42,7 @@ class Spending < ActiveRecord::Base
       self.description = nil if (self.category.name == 'Loans' || self.category.name == 'Credit Cards')
       self.description = self.description_select if self.category.name == 'Loans'
       self.description = self.description_cc if self.category.name == 'Credit Cards'
-      self.payment_method_id = PaymentMethod.find_by_name("Debit").id if (self.category.name == 'Loans' || self.category.name == 'Credit Cards' || self.category.name == 'Rent' || self.category.name == 'Utilities')
+      self.payment_method_id = PaymentMethod.find_by_name("Debit").id if (DEBIT_CATEGORIES.include? self.category.name)
       self.description = self.description.titleize unless self.description.nil?
     end
   end

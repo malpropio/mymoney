@@ -106,7 +106,7 @@ class BudgetsController < ApplicationController
     #render json: h3
 
     respond_to do |format|
-      format.html { redirect_to budgets_url, notice: 'Budget was successfully destroyed.' }
+      format.html { redirect_to budgets_url, notice: 'Budgets were successfully set.' }
       format.json { head :no_content }
     end
   end
