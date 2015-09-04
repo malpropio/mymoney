@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Debt Balances</h1>
+
+<%= will_paginate @debt_balances %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Debt</th>
+      <th>Due date</th>
+      <th>Balance</th>
+      <th>Paid</th>
+      <th>+/-</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @debt_balances.each do |debt_balance| %>
+      <tr>
+        <td><%= debt_balance.debt.name %></td>
+        <td><%= debt_balance.due_date %></td>
+        <td><%= number_to_currency(debt_balance.balance) %></td>
+        <td><%= number_to_currency(debt_balance.payments.sum(:amount)) %></td>
+        <td><%= number_to_currency(debt_balance.balance - debt_balance.payments.sum(:amount)) %></td>
+        <td><%= link_to 'Show', debt_balance %></td>
+        <td><%= link_to 'Edit', edit_debt_balance_path(debt_balance) %></td>
+        <td><%= link_to 'Destroy', debt_balance, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= will_paginate @debt_balances %>
+
+<br>
+
+<%= link_to 'New Debt balance', new_debt_balance_path %>

@@ -10,17 +10,24 @@ Spending.delete_all
 Budget.delete_all
 Category.delete_all
 PaymentMethod.delete_all
+Debt.delete_all
 
 ActiveRecord::Base.connection.execute("ALTER TABLE categories AUTO_INCREMENT = 1")
 ActiveRecord::Base.connection.execute("ALTER TABLE spendings AUTO_INCREMENT = 1")
 ActiveRecord::Base.connection.execute("ALTER TABLE budgets AUTO_INCREMENT = 1")
 ActiveRecord::Base.connection.execute("ALTER TABLE payment_methods AUTO_INCREMENT = 1")
+ActiveRecord::Base.connection.execute("ALTER TABLE debts AUTO_INCREMENT = 1")
 
+#Add Payment Methods
 PaymentMethod.create(name: "Credit", description: "Any of our cc")
 PaymentMethod.create(name: "Debit", description: "Any of our debit")
 PaymentMethod.create(name: "Gift", description: "Any gift card")
 PaymentMethod.create(name: "Cash", description: "Cash")
 PaymentMethod.create(name: "Other", description: "Any other form of payments")
+
+# Add Debts
+Debt.create(category: "Credit Cards", name: "Amex", due_day: 15)
+Debt.create(category: "Loans", sub_category: "Student Loans", name: Faker::University.name, due_day: 3)
 
 #Seed categories
 3.times do |n|
@@ -36,8 +43,8 @@ Category.create(name: "Credit Cards", description: "Credit Card Payment")
 #Sample spendings
 100.times do |n|
   description  = Faker::Commerce.product_name
-  description_loan = Faker::Commerce.product_name
-  description_cc = Faker::Commerce.product_name
+  description_loan = Debt.find_by_category("Loans").name
+  description_cc = Debt.find_by_category("Credit Cards").name
   category_id  = Faker::Number.between(1,Category.count)
   payment_method_id = Faker::Number.between(1,5)
   spending_date = Faker::Time.between("2015-05-01", DateTime.now.change(day: 28))
@@ -46,7 +53,7 @@ Category.create(name: "Credit Cards", description: "Credit Card Payment")
   	       category_id:  category_id,
                spending_date: spending_date,
                amount: amount,
-               description_loan: description_select,
+               description_loan: description_loan,
                description_cc: description_cc,
                payment_method_id: payment_method_id)
 end

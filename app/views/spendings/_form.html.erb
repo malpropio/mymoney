@@ -21,11 +21,11 @@
   </div>
   <div class="field" id="desc_loan" style="display:none;" >
     <%= f.label :description %><br>
-    <%= f.select :description_loan, [['USDOE/GLELSI', 'USDOE/GLELSI'], ['VW', 'VW'], ['Tulane', 'Tulane']], {prompt: 'Please Select'} %>
+    <%= f.collection_select :description_loan, Debt.where(category: "Loans").order(:name), :name, :name, {prompt: 'Please Select'} %>
   </div>
   <div class="field" id="desc_cc" style="display:none;" >
     <%= f.label :description %><br>
-    <%= f.select :description_cc, [['Amex', 'Amex'], ['Freedom', 'Freedom'], ['Travel', 'Travel'], ['Cash','Cash'], ['JCP','JCP'], ['Express','Express']], {prompt: 'Please Select'} %>
+    <%= f.collection_select :description_cc, Debt.where(category: "Credit Cards").order(:name), :name, :name, {prompt: 'Please Select'} %>
   </div>
   <div class="field">
     <%= f.label :spending_date, "Date"  %>

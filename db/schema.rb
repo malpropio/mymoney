@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150901174504) do
+ActiveRecord::Schema.define(version: 20150904175601) do
 
   create_table "budgets", force: :cascade do |t|
     t.integer  "category_id",  limit: 4
@@ -30,6 +30,28 @@ ActiveRecord::Schema.define(version: 20150901174504) do
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
   end
+
+  create_table "debt_balances", force: :cascade do |t|
+    t.integer  "debt_id",    limit: 4
+    t.date     "due_date",                                      null: false
+    t.decimal  "balance",              precision: 10, scale: 2, null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+  end
+
+  add_index "debt_balances", ["debt_id", "due_date"], name: "by_debt_due_date", unique: true, using: :btree
+  add_index "debt_balances", ["debt_id"], name: "index_debt_balances_on_debt_id", using: :btree
+
+  create_table "debts", force: :cascade do |t|
+    t.string   "category",     limit: 255,             null: false
+    t.string   "sub_category", limit: 255,             null: false
+    t.string   "name",         limit: 255,             null: false
+    t.integer  "due_day",      limit: 4,   default: 0, null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+  end
+
+  add_index "debts", ["category", "name"], name: "by_category_name", unique: true, using: :btree
 
   create_table "payment_methods", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -73,6 +95,7 @@ ActiveRecord::Schema.define(version: 20150901174504) do
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
   add_foreign_key "budgets", "categories"
+  add_foreign_key "debt_balances", "debts"
   add_foreign_key "spendings", "budgets"
   add_foreign_key "spendings", "categories"
   add_foreign_key "spendings", "payment_methods"

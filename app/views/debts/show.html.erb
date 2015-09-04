@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Category:</strong>
+  <%= @debt.category %>
+</p>
+
+<p>
+  <strong>Sub category:</strong>
+  <%= @debt.sub_category %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @debt.name %>
+</p>
+
+<p>
+  <strong>Due day:</strong>
+  <%= @debt.due_day.ordinalize %>
+</p>
+
+<%= link_to 'Edit', edit_debt_path(@debt) %> |
+<%= link_to 'Back', debts_path %>
