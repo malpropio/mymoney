@@ -3,7 +3,7 @@ class Spending < ActiveRecord::Base
   belongs_to :budget
   belongs_to :payment_method
 
-  attr_accessor :description_select
+  attr_accessor :description_loan
   attr_accessor :description_cc
 
   validates_presence_of :description, :category_id, :spending_date, :amount, :payment_method_id
@@ -40,7 +40,7 @@ class Spending < ActiveRecord::Base
   def clean_desc
     if !self.category.nil?
       self.description = nil if (self.category.name == 'Loans' || self.category.name == 'Credit Cards')
-      self.description = self.description_select if self.category.name == 'Loans'
+      self.description = self.description_loan if self.category.name == 'Loans'
       self.description = self.description_cc if self.category.name == 'Credit Cards'
       self.payment_method_id = PaymentMethod.find_by_name("Debit").id if (DEBIT_CATEGORIES.include? self.category.name)
       self.description = self.description.titleize unless self.description.nil?

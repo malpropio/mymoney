@@ -36,7 +36,7 @@ Category.create(name: "Credit Cards", description: "Credit Card Payment")
 #Sample spendings
 100.times do |n|
   description  = Faker::Commerce.product_name
-  description_select = Faker::Commerce.product_name
+  description_loan = Faker::Commerce.product_name
   description_cc = Faker::Commerce.product_name
   category_id  = Faker::Number.between(1,Category.count)
   payment_method_id = Faker::Number.between(1,5)
@@ -46,7 +46,7 @@ Category.create(name: "Credit Cards", description: "Credit Card Payment")
   	       category_id:  category_id,
                spending_date: spending_date,
                amount: amount,
-               description_select: description_select,
+               description_loan: description_select,
                description_cc: description_cc,
                payment_method_id: payment_method_id)
 end

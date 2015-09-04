@@ -14,15 +14,15 @@ $(document).on 'change ready page:load', ->
     if selectedOption == 'loans'
       $('form #desc_text').hide()
       $('form #desc_cc').hide()
-      $('form #desc_select').show()
+      $('form #desc_loan').show()
       #GetElementInsideContainer('desc_text', 'spending_description').setAttribute("value","");
     else if selectedOption == 'credit cards'
       $('form #desc_cc').show()
-      $('form #desc_select').hide()
+      $('form #desc_loan').hide()
       $('form #desc_text').hide()
       #GetElementInsideContainer('desc_text', 'spending_description').setAttribute("value","");
     else
-      $('form #desc_select').hide()
+      $('form #desc_loan').hide()
       $('form #desc_text').show()
       $('form #desc_cc').hide()
     return;
