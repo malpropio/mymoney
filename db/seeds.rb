@@ -11,6 +11,7 @@ Budget.delete_all
 Category.delete_all
 PaymentMethod.delete_all
 Debt.delete_all
+DebtBalance.delete_all
 
 ActiveRecord::Base.connection.execute("ALTER TABLE categories AUTO_INCREMENT = 1")
 ActiveRecord::Base.connection.execute("ALTER TABLE spendings AUTO_INCREMENT = 1")
@@ -28,6 +29,14 @@ PaymentMethod.create(name: "Other", description: "Any other form of payments")
 # Add Debts
 Debt.create(category: "Credit Cards", name: "Amex", due_day: 15)
 Debt.create(category: "Loans", sub_category: "Student Loans", name: Faker::University.name, due_day: 3)
+
+# Sample debt balances
+25.times do |n|
+  debt_id  = Faker::Number.between(1,Debt.count)
+  balance = Faker::Commerce.price
+  due_date = Faker::Time.between("2015-05-01", DateTime.now.change(day: 28))
+  DebtBalance.create(debt_id: debt_id, balance: balance, due_date: due_date)
+end
 
 #Seed categories
 3.times do |n|

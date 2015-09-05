@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :debt_balances
   root               		'static_pages#home'
   get	'home'		=>	'static_pages#home'
   get	'signup'	=> 	'users#new'
@@ -36,6 +35,12 @@ Rails.application.routes.draw do
   end
   
   resources :debts
+
+  resources :debt_balances do
+    collection do
+      get :balance_by_debt
+    end
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

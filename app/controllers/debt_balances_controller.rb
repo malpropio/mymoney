@@ -8,6 +8,14 @@ class DebtBalancesController < ApplicationController
                      .paginate(:per_page => 25, :page => params[:page])
   end
 
+  def balance_by_debt
+    render json: DebtBalance.joins(:debt)
+                         .group("debts.name")
+                         .group_by_month(:due_date, format: "%b %Y")
+                         .sum(:balance)
+                         .chart_json
+  end
+  
   # GET /debt_balances/1
   # GET /debt_balances/1.json
   def show
