@@ -4,8 +4,15 @@
 
 <div class="row">
   <div class="col-xs-12">
-    <h3>Balances By Month</h3>
-    <%= line_chart balance_by_debt_debt_balances_path, discrete: true, library: {vAxis: {format: '$#,###.##'}} %>
+    <h3>Credit Card Balances By Month</h3>
+    <%= line_chart ccs_by_month_debt_balances_path, discrete: true, library: {vAxis: {format: '$#,###.##'}} %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-12">
+    <h3>Loan Balances By Month</h3>
+    <%= line_chart loans_by_month_debt_balances_path, discrete: true, library: {vAxis: {format: '$#,###.##'}} %>
   </div>
 </div>
 

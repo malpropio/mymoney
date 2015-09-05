@@ -8,8 +8,18 @@ class DebtBalancesController < ApplicationController
                      .paginate(:per_page => 25, :page => params[:page])
   end
 
-  def balance_by_debt
+  def ccs_by_month
     render json: DebtBalance.joins(:debt)
+                         .where("debts.category = 'Credit Cards'")
+                         .group("debts.name")
+                         .group_by_month(:due_date, format: "%b %Y")
+                         .sum(:balance)
+                         .chart_json
+  end
+
+  def loans_by_month
+    render json: DebtBalance.joins(:debt)
+                         .where("debts.category = 'Loans'")
                          .group("debts.name")
                          .group_by_month(:due_date, format: "%b %Y")
                          .sum(:balance)

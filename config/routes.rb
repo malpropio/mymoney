@@ -38,7 +38,8 @@ Rails.application.routes.draw do
 
   resources :debt_balances do
     collection do
-      get :balance_by_debt
+      get :ccs_by_month
+      get :loans_by_month
     end
   end
 
