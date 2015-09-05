@@ -30,19 +30,18 @@
   </div>
 </div>
 
-
-
 <h1>Listing Spendings</h1>
-<table class="filters">
+
 <%= form_tag spendings_path, :method => 'get', :id => "spendings_search" do %>
+  <table class="filters">
     <tr>
         <%= hidden_field_tag :direction, params[:direction] %>
         <%= hidden_field_tag :sort, params[:sort] %>
         <td><%= text_field_tag :search, params[:search] %></td>
         <td><%= submit_tag "Search", :name => nil %></td>
     </tr>
+  </table>
 <% end %>
-</table>
 
 <%= link_to 'New Spending', new_spending_path %>
 
