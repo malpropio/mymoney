@@ -60,6 +60,10 @@ class BudgetsController < ApplicationController
     ActiveRecord::Base.connection.execute("#{str}")
 
     Budget.delete_all
+    
+    ## Reset the index on the budget table
+    ActiveRecord::Base.connection.execute("ALTER TABLE budgets AUTO_INCREMENT = 1")
+    
       ## The average up to the previous month is used as budget for the current month
     str = <<-END_SQL
         INSERT INTO budgets (category_id, budget_month, amount, created_at, updated_at)
@@ -100,16 +104,70 @@ class BudgetsController < ApplicationController
    
     ActiveRecord::Base.connection.execute("#{str}")
  
-    #a3 = ActiveRecord::Base.connection.select_all("#{str}").rows
-    #h3 = Hash[a3.map {|key, value| [key, value]}]
-
-    #render json: h3
-
     respond_to do |format|
       format.html { redirect_to budgets_url, notice: 'Budgets were successfully set.' }
       format.json { head :no_content }
     end
   end
+
+
+  # Reset current month's budgets
+  def reset_current_month
+
+    str = <<-END_SQL
+       UPDATE spendings s JOIN budgets b ON s.budget_id = b.id SET budget_id = null WHERE DATE_FORMAT(b.budget_month, '%Y-%m')=DATE_FORMAT(NOW(), '%Y-%m');
+    END_SQL
+
+    ActiveRecord::Base.connection.execute("#{str}")
+
+    str = <<-END_SQL
+       DELETE FROM budgets WHERE DATE_FORMAT(budget_month, '%Y-%m')=DATE_FORMAT(NOW(), '%Y-%m');
+    END_SQL
+
+    ActiveRecord::Base.connection.execute("#{str}")
+
+      ## The average up to the previous month is used as budget for the current month
+    str = <<-END_SQL
+    INSERT INTO budgets (category_id, budget_month, amount, created_at, updated_at)
+    SELECT dr.category_id, dr.month, COALESCE(AVG(base.sum_amount),0), NOW(), NOW()
+    FROM
+    (
+    SELECT DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00') AS month, 
+    categories.id AS category_id
+    FROM categories
+    ) dr
+    LEFT OUTER JOIN
+    (
+    SELECT DATE_FORMAT(spending_date, '%Y-%m-01 00:00:00') AS month, 
+    category_id,
+    SUM(spendings.amount) AS sum_amount
+    FROM spendings 
+    GROUP BY DATE_FORMAT(spending_date, '%Y-%m-01 00:00:00'), category_id
+    ) base
+    ON base.month <= dr.month
+    AND base.category_id = dr.category_id
+    GROUP BY dr.month, dr.category_id;
+    END_SQL
+    
+    ActiveRecord::Base.connection.execute("#{str}")
+   
+    str = <<-END_SQL
+      UPDATE spendings AS s
+      JOIN budgets AS b
+      ON s.category_id = b.category_id 
+      AND DATE_FORMAT(s.spending_date, '%Y-%m') = DATE_FORMAT(b.budget_month, '%Y-%m')
+      SET budget_id = b.id
+      WHERE DATE_FORMAT(spending_date, '%Y-%m')=DATE_FORMAT(NOW(), '%Y-%m');
+    END_SQL
+   
+    ActiveRecord::Base.connection.execute("#{str}")
+ 
+    respond_to do |format|
+      format.html { redirect_to budgets_url, notice: 'Budgets were successfully set.' }
+      format.json { head :no_content }
+    end
+  end
+
 
   # POST /budgets
   # POST /budgets.json

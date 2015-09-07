@@ -11,7 +11,8 @@
   </div>
 </div>
 
-<%= link_to 'Reset All Budgets', reset_budgets_path, :data => {:confirm => 'Are you sure?'} %>
+<%= link_to 'Reset All Budgets', reset_budgets_path, :data => {:confirm => 'Are you sure?'} %> |
+<%= link_to "Reset Current Month's Budgets", reset_current_month_budgets_path, :data => {:confirm => 'Are you sure?'} %>
 
 <%= will_paginate @budgets %>
 
