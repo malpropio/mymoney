@@ -14,6 +14,14 @@ class IncomeDistribution < ActiveRecord::Base
   CHASE_BUFFER = 10
   AMEX_MAX = 500
 
+  def boa_total_distribution
+    amex_alloc + BOA_BUFFER + rent_alloc + car_alloc + express_alloc + jcp_alloc + cash_alloc + travel_alloc + savings_alloc
+  end
+
+  def chase_total_distribution
+    freedom_alloc + CHASE_BUFFER + student_alloc
+  end
+
   def amex_alloc
     [self.boa_chk - BOA_BUFFER - rent_alloc - car_alloc - express_alloc - jcp_alloc - cash_alloc - travel_alloc - savings_alloc, 0 ].max
   end
