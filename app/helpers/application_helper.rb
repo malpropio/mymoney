@@ -27,8 +27,12 @@ VALID = ["Amex","Freedom","Travel","Cash","Jcp","Express"]
     #link_to title, :sort => column, :direction => direction 
   end
 
-  def good_pos_cell_color(amount = 0)
-    amount < 0 ? "#FF0000" : "#FFFFFF"
+  def good_pos_cell_color(amount = 0, debt_name = "")
+    if debt_name == "Credit Cards"
+       good_neg_cell_color(amount)
+     else
+       amount < 0 ? "#FF0000" : "#FFFFFF"
+     end
   end
 
   def good_neg_cell_color(amount = 0, debt_name = nil)
