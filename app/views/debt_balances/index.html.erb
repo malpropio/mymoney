@@ -37,7 +37,7 @@
         <td><%= debt_balance.due_date %></td>
         <td><%= number_to_currency(debt_balance.balance) %></td>
         <td><%= number_to_currency(debt_balance.payments.sum(:amount)) %></td>
-        <td><%= number_to_currency(debt_balance.balance - debt_balance.payments.sum(:amount)) %></td>
+        <td style="background-color:<%= good_neg_cell_color(debt_balance.balance - debt_balance.payments.sum(:amount), debt_balance.debt.name)%>"><%= number_to_currency(debt_balance.balance - debt_balance.payments.sum(:amount)) %></td>
         <td><%= link_to 'Show', debt_balance %></td>
         <td><%= link_to 'Edit', edit_debt_balance_path(debt_balance) %></td>
         <td><%= link_to 'Destroy', debt_balance, method: :delete, data: { confirm: 'Are you sure?' } %></td>

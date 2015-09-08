@@ -1,5 +1,7 @@
 module ApplicationHelper
 
+VALID = ["Amex","Freedom","Travel","Cash","Jcp","Express"]
+
 # Returns the full title on a per-page basis.
   def full_title(page_title = '')
     base_title = "My Money"
@@ -23,6 +25,19 @@ module ApplicationHelper
     direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
     link_to title, params.merge(:sort => column, :direction => direction, :page => nil), {:class => css_class}
     #link_to title, :sort => column, :direction => direction 
- end
+  end
 
+  def good_pos_cell_color(amount = 0)
+    amount < 0 ? "#FF0000" : "#FFFFFF"
+  end
+
+  def good_neg_cell_color(amount = 0, debt_name = nil)
+    debt = Debt.find_by_name(debt_name)
+
+    if !debt.nil?
+      (amount > 0 && VALID.include?(debt.name) )? "#FF0000" : "#FFFFFF"
+     else
+        "#FFFFFF"
+     end
+  end
 end

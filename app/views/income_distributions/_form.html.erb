@@ -1,0 +1,53 @@
+<%= form_for(@income_distribution) do |f| %>
+  <% if @income_distribution.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@income_distribution.errors.count, "error") %> prohibited this income_distribution from being saved:</h2>
+
+      <ul>
+      <% @income_distribution.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :distribution_date %><br>
+    <%= f.calendar_field :distribution_date %>
+  </div>
+  <div class="field">
+    <%= f.label :amex %><br>
+    <%= f.number_field :amex %>
+  </div>
+  <div class="field">
+    <%= f.label :freedom %><br>
+    <%= f.number_field :freedom %>
+  </div>
+  <div class="field">
+    <%= f.label :travel %><br>
+    <%= f.number_field :travel %>
+  </div>
+  <div class="field">
+    <%= f.label :cash %><br>
+    <%= f.number_field :cash %>
+  </div>
+  <div class="field">
+    <%= f.label :jcp %><br>
+    <%= f.number_field :jcp %>
+  </div>
+  <div class="field">
+    <%= f.label :express %><br>
+    <%= f.number_field :express %>
+  </div>
+  <div class="field">
+    <%= f.label :boa_chk %><br>
+    <%= f.number_field :boa_chk %>
+  </div>
+  <div class="field">
+    <%= f.label :chase_chk %><br>
+    <%= f.number_field :chase_chk %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,2 @@
+module IncomeDistributionsHelper
+end

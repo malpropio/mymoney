@@ -1,0 +1,86 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Income Distributions</h1>
+
+<h2>Balances</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Distribution date</th>
+      <th>Amex</th>
+      <th>Freedom</th>
+      <th>Travel</th>
+      <th>Cash</th>
+      <th>Jcp</th>
+      <th>Express</th>
+      <th>Boa chk</th>
+      <th>Chase chk</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @income_distributions.each do |income_distribution| %>
+      <tr>
+        <td><%= income_distribution.distribution_date %></td>
+        <td><%= number_to_currency( income_distribution.amex) %></td>
+        <td><%= number_to_currency( income_distribution.freedom) %></td>
+        <td><%= number_to_currency( income_distribution.travel) %></td>
+        <td><%= number_to_currency( income_distribution.cash) %></td>
+        <td><%= number_to_currency( income_distribution.jcp) %></td>
+        <td><%= number_to_currency( income_distribution.express) %></td>
+        <td><%= number_to_currency( income_distribution.boa_chk) %></td>
+        <td><%= number_to_currency( income_distribution.chase_chk) %></td>
+        <td><%= link_to 'Show', income_distribution %></td>
+        <td><%= link_to 'Edit', edit_income_distribution_path(income_distribution) %></td>
+        <td><%= link_to 'Destroy', income_distribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<h2>Distributions</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Distribution date</th>
+      <th>Amex</th>
+      <th>Freedom</th>
+      <th>Travel</th>
+      <th>Cash</th>
+      <th>Jcp</th>
+      <th>Express</th>
+      <th>Rent</th>
+      <th>Student Loans</th>
+      <th>Car Loans</th>
+      <th>BoA Status</th>
+      <th>Chase Status</th>
+      <th>Savings</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @income_distributions.each do |income_distribution| %>
+      <tr>
+        <td><%= income_distribution.distribution_date %></td>
+        <td style="background-color:<%= good_pos_cell_color(income_distribution.freedom_alloc)%>"><%= number_to_currency( income_distribution.amex_alloc) %></td>
+        <td style="background-color:<%= good_pos_cell_color(income_distribution.freedom_alloc)%>"><%= number_to_currency( income_distribution.freedom_alloc) %></td>
+        <td style="background-color:<%= good_pos_cell_color(income_distribution.travel_alloc)%>"><%= number_to_currency( income_distribution.travel_alloc) %></td>
+        <td style="background-color:<%= good_pos_cell_color(income_distribution.cash_alloc)%>"><%= number_to_currency( income_distribution.cash_alloc) %></td>
+        <td style="background-color:<%= good_pos_cell_color(income_distribution.jcp_alloc)%>"><%= number_to_currency( income_distribution.jcp_alloc) %></td>
+        <td style="background-color:<%= good_pos_cell_color(income_distribution.express_alloc)%>"><%= number_to_currency( income_distribution.express_alloc) %></td>
+        <td style="background-color:<%= good_pos_cell_color(income_distribution.rent_alloc)%>"><%= number_to_currency( income_distribution.rent_alloc) %></td>
+        <td style="background-color:<%= good_pos_cell_color(income_distribution.student_alloc)%>"><%= number_to_currency( income_distribution.student_alloc) %></td>
+        <td style="background-color:<%= good_pos_cell_color(income_distribution.car_alloc)%>"><%= number_to_currency( income_distribution.car_alloc) %></td>
+        <td style="background-color:<%= good_pos_cell_color(income_distribution.boa_balance_left)%>"><%= number_to_currency( income_distribution.boa_balance_left) %></td>
+        <td style="background-color:<%= good_pos_cell_color(income_distribution.chase_balance_left)%>"><%= number_to_currency( income_distribution.chase_balance_left) %></td>
+        <td style="background-color:<%= good_pos_cell_color(income_distribution.savings_alloc)%>"><%= number_to_currency( income_distribution.savings_alloc) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'New Income distribution', new_income_distribution_path %>

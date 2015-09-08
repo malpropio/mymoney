@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Distribution date:</strong>
+  <%= @income_distribution.distribution_date %>
+</p>
+
+<p>
+  <strong>Amex:</strong>
+  <%= @income_distribution.amex %>
+</p>
+
+<p>
+  <strong>Freedom:</strong>
+  <%= @income_distribution.freedom %>
+</p>
+
+<p>
+  <strong>Travel:</strong>
+  <%= @income_distribution.travel %>
+</p>
+
+<p>
+  <strong>Cash:</strong>
+  <%= @income_distribution.cash %>
+</p>
+
+<p>
+  <strong>Jcp:</strong>
+  <%= @income_distribution.jcp %>
+</p>
+
+<p>
+  <strong>Express:</strong>
+  <%= @income_distribution.express %>
+</p>
+
+<p>
+  <strong>Boa chk:</strong>
+  <%= @income_distribution.boa_chk %>
+</p>
+
+<p>
+  <strong>Chase chk:</strong>
+  <%= @income_distribution.chase_chk %>
+</p>
+
+<%= link_to 'Edit', edit_income_distribution_path(@income_distribution) %> |
+<%= link_to 'Back', income_distributions_path %>
