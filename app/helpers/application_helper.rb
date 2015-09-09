@@ -1,6 +1,9 @@
 module ApplicationHelper
 
 VALID = ["Amex","Freedom","Travel","Cash","Jcp","Express"]
+ERROR = "#FF0000"
+NEUTRAL = "#FFFFFF"
+SUCCESS = "#00FFFF"
 
 # Returns the full title on a per-page basis.
   def full_title(page_title = '')
@@ -31,7 +34,7 @@ VALID = ["Amex","Freedom","Travel","Cash","Jcp","Express"]
     if debt_name == "Credit Cards"
        good_neg_cell_color(amount)
      else
-       amount < 0 ? "#FF0000" : "#FFFFFF"
+       amount < 0 ? ERROR : NEUTRAL
      end
   end
 
@@ -39,9 +42,15 @@ VALID = ["Amex","Freedom","Travel","Cash","Jcp","Express"]
     debt = Debt.find_by_name(debt_name)
 
     if !debt.nil?
-      (amount > 0 && VALID.include?(debt.name) )? "#FF0000" : "#FFFFFF"
+      (amount > 0 && VALID.include?(debt.name) )? ERROR : NEUTRAL
      else
-        "#FFFFFF"
+        NEUTRAL
      end
+  end
+
+  def equal_cell_color(amount_1 = nil, amount_2 = nil)
+    if !(amount_1.nil? || amount_2.nil?)
+      amount_1 == amount_2 ? SUCCESS : ERROR
+    end
   end
 end

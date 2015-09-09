@@ -14,8 +14,12 @@ class IncomeDistribution < ActiveRecord::Base
   CHASE_BUFFER = 10
   AMEX_MAX = 500
 
+  def boa_total_fixed
+    BOA_BUFFER + rent_alloc + car_alloc + travel_alloc + cash_alloc + jcp_alloc + express_alloc + savings_alloc
+  end
+
   def boa_total_distribution
-    amex_alloc + BOA_BUFFER + rent_alloc + car_alloc + express_alloc + jcp_alloc + cash_alloc + travel_alloc + savings_alloc
+    boa_total_fixed + amex_alloc + extra_savings_alloc
   end
 
   def chase_total_distribution
@@ -23,11 +27,15 @@ class IncomeDistribution < ActiveRecord::Base
   end
 
   def amex_alloc
-    [self.boa_chk - BOA_BUFFER - rent_alloc - car_alloc - express_alloc - jcp_alloc - cash_alloc - travel_alloc - savings_alloc, 0 ].max
+    [self.amex, [self.boa_chk - boa_total_fixed, 0 ].max].min
   end
 
-  def savings_alloc
-    SAVING/fridays
+  def savings_alloc 
+    SAVING/fridays 
+  end
+
+  def extra_savings_alloc
+    [0, self.boa_chk - boa_total_fixed - amex_alloc].max
   end
 
   def freedom_alloc
@@ -63,11 +71,11 @@ class IncomeDistribution < ActiveRecord::Base
   end
 
   def boa_balance_left
-    self.boa_chk - rent_alloc - car_alloc - express_alloc - jcp_alloc - cash_alloc - travel_alloc - amex_alloc - savings_alloc
+    self.boa_chk - boa_total_distribution + BOA_BUFFER
   end
 
   def chase_balance_left
-    self.chase_chk - student_alloc - freedom_alloc
+    self.chase_chk - chase_total_distribution + CHASE_BUFFER
   end
 
   private

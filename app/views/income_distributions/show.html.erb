@@ -40,7 +40,7 @@
       </tr>
       <tr>
         <td>BoA</td>
-        <td><%= number_to_currency(@income_distribution.boa_chk) %></td>
+        <td style="background-color:<%= equal_cell_color(@income_distribution.boa_chk,@income_distribution.boa_total_distribution)%>"><%= number_to_currency(@income_distribution.boa_chk) %></td>
         <td style="background-color:<%= good_pos_cell_color(@income_distribution.boa_balance_left)%>"><%= number_to_currency( @income_distribution.boa_balance_left) %></td>
       </tr>
        <tr>
@@ -59,9 +59,14 @@
         <td style="background-color:<%= good_pos_cell_color(@income_distribution.savings_alloc)%>"><%= number_to_currency( @income_distribution.savings_alloc) %></td>
       </tr>
       <tr>
+        <td>Extra Savings</td>
+        <td></td>
+        <td style="background-color:<%= good_pos_cell_color(@income_distribution.extra_savings_alloc)%>"><%= number_to_currency( @income_distribution.extra_savings_alloc) %></td>
+      </tr>
+      <tr>
         <td></td>
         <td><strong>Total</strong></td>
-        <td><%= number_to_currency(@income_distribution.boa_total_distribution) %></td>
+        <td style="background-color:<%= equal_cell_color(@income_distribution.boa_chk,@income_distribution.boa_total_distribution)%>"><%= number_to_currency(@income_distribution.boa_total_distribution) %></td>
       </tr>
   </tbody>
 </table>
@@ -85,7 +90,7 @@
       </tr>
       <tr>
         <td>Chase</td>
-        <td><%= number_to_currency(@income_distribution.chase_chk) %></td>
+        <td style="background-color:<%= equal_cell_color(@income_distribution.chase_chk,@income_distribution.chase_total_distribution)%>"><%= number_to_currency(@income_distribution.chase_chk) %></td>
         <td style="background-color:<%= good_pos_cell_color(@income_distribution.chase_balance_left)%>"><%= number_to_currency( @income_distribution.chase_balance_left) %></td>
       </tr>
       <tr>
@@ -96,7 +101,7 @@
       <tr>
         <td></td>
         <td><strong>Total</strong></td>
-        <td><%= number_to_currency(@income_distribution.chase_total_distribution) %></td>
+        <td style="background-color:<%= equal_cell_color(@income_distribution.chase_chk,@income_distribution.chase_total_distribution)%>"><%= number_to_currency(@income_distribution.chase_total_distribution) %></td>
       </tr>
   </tbody>
 </table>
