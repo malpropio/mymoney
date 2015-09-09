@@ -99,6 +99,11 @@
         <td style="background-color:<%= good_pos_cell_color(@income_distribution.student_alloc)%>"><%= number_to_currency( @income_distribution.student_alloc) %></td>
       </tr>
       <tr>
+        <td>Extra Savings</td>
+        <td></td>
+        <td style="background-color:<%= good_pos_cell_color(@income_distribution.chase_extra)%>"><%= number_to_currency( @income_distribution.chase_extra) %></td>
+      </tr>
+      <tr>
         <td></td>
         <td><strong>Total</strong></td>
         <td style="background-color:<%= equal_cell_color(@income_distribution.chase_chk,@income_distribution.chase_total_distribution)%>"><%= number_to_currency(@income_distribution.chase_total_distribution) %></td>

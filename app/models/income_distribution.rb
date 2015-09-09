@@ -22,8 +22,16 @@ class IncomeDistribution < ActiveRecord::Base
     boa_total_fixed + amex_alloc + extra_savings_alloc
   end
 
+  def chase_total_fixed
+    CHASE_BUFFER + student_alloc
+  end
+
   def chase_total_distribution
-    freedom_alloc + CHASE_BUFFER + student_alloc
+    chase_total_fixed + freedom_alloc + chase_extra
+  end
+
+  def chase_extra
+    [0, self.chase_chk - chase_total_fixed - freedom_alloc].max
   end
 
   def amex_alloc
@@ -39,7 +47,7 @@ class IncomeDistribution < ActiveRecord::Base
   end
 
   def freedom_alloc
-    [self.chase_chk - CHASE_BUFFER - student_alloc, 0 ].max
+    [self.freedom, [self.chase_chk - chase_total_fixed, 0 ].max].min
   end
 
   def travel_alloc
