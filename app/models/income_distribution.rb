@@ -87,48 +87,48 @@ class IncomeDistribution < ActiveRecord::Base
   end
 
   def amex
-    result = DebtBalance.joins(:debt).where("due_date>='#{self.distribution_date}' AND due_date<'#{self.distribution_date + 30.days}' AND debts.name = 'Amex'")
-    result.nil? ? 0 : result.count > 0 ? result.first.balance : 0
+    result = DebtBalance.joins(:debt).where("due_date>'#{self.distribution_date}' AND due_date<='#{self.distribution_date + 30.days}' AND debts.name = 'Amex'")
+    result.nil? ? 0 : result.count > 0 ? result.first.balance/fridays(result.first.due_date - 1.months, result.first.due_date) : 0
   end
 
   def freedom
-    result = DebtBalance.joins(:debt).where("due_date>='#{self.distribution_date}' AND due_date<'#{self.distribution_date + 30.days}' AND debts.name = 'Freedom'")
-    result.nil? ? 0 : result.count > 0 ? result.first.balance : 0
+    result = DebtBalance.joins(:debt).where("due_date>'#{self.distribution_date}' AND due_date<='#{self.distribution_date + 30.days}' AND debts.name = 'Freedom'")
+    result.nil? ? 0 : result.count > 0 ? result.first.balance/fridays(result.first.due_date - 1.months, result.first.due_date) : 0
   end
 
   def travel
-    result = DebtBalance.joins(:debt).where("due_date>='#{self.distribution_date}' AND due_date<'#{self.distribution_date + 30.days}' AND debts.name = 'Travel'")
-    result.nil? ? 0 : result.count > 0 ? result.first.balance : 0
+    result = DebtBalance.joins(:debt).where("due_date>'#{self.distribution_date}' AND due_date<='#{self.distribution_date + 30.days}' AND debts.name = 'Travel'")
+    result.nil? ? 0 : result.count > 0 ? result.first.balance/fridays(result.first.due_date - 1.months, result.first.due_date) : 0
   end
 
   def cash
-    result = DebtBalance.joins(:debt).where("due_date>='#{self.distribution_date}' AND due_date<'#{self.distribution_date + 30.days}' AND debts.name = 'Cash'")
-    result.nil? ? 0 : result.count > 0 ? result.first.balance : 0
+    result = DebtBalance.joins(:debt).where("due_date>'#{self.distribution_date}' AND due_date<='#{self.distribution_date + 30.days}' AND debts.name = 'Cash'")
+    result.nil? ? 0 : result.count > 0 ? result.first.balance/fridays(result.first.due_date - 1.months, result.first.due_date) : 0
   end
 
   def express
-    result = DebtBalance.joins(:debt).where("due_date>='#{self.distribution_date}' AND due_date<'#{self.distribution_date + 30.days}' AND debts.name = 'Express'")
-    result.nil? ? 0 : result.count > 0 ? result.first.balance : 0
+    result = DebtBalance.joins(:debt).where("due_date>'#{self.distribution_date}' AND due_date<='#{self.distribution_date + 30.days}' AND debts.name = 'Express'")
+    result.nil? ? 0 : result.count > 0 ? result.first.balance/fridays(result.first.due_date - 1.months, result.first.due_date) : 0
   end
 
   def jcp
-    result = DebtBalance.joins(:debt).where("due_date>='#{self.distribution_date}' AND due_date<'#{self.distribution_date + 30.days}' AND debts.name = 'Jcp'")
-    result.nil? ? 0 : result.count > 0 ? result.first.balance : 0
+    result = DebtBalance.joins(:debt).where("due_date>'#{self.distribution_date}' AND due_date<='#{self.distribution_date + 30.days}' AND debts.name = 'Jcp'")
+    result.nil? ? 0 : result.count > 0 ? result.first.balance/fridays(result.first.due_date - 1.months, result.first.due_date) : 0
   end
 
   
 
   private
-  def fridays
-    start_date = self.distribution_date.at_beginning_of_month # your start
-    end_date = self.distribution_date.at_end_of_month # your end
+  def fridays(start_arg = nil, end_arg = nil)
+    start_date = start_arg || self.distribution_date.at_beginning_of_month # your start
+    end_date = end_arg || self.distribution_date.at_end_of_month # your end
     my_days = [5] # day of the week in 0-6. Sunday is day-of-week 0; Saturday is day-of-week 6.
     result = (start_date..end_date).to_a.select {|k| my_days.include?(k.wday)}
     result.count
   end
 
-  def fridays_to_date
-    start_date = self.distribution_date.at_beginning_of_month # your start
+  def fridays_to_date(start_arg = nil)
+    start_date = start_arg || self.distribution_date.at_beginning_of_month # your start
     end_date = self.distribution_date# your end
     my_days = [5] # day of the week in 0-6. Sunday is day-of-week 0; Saturday is day-of-week 6.
     result = (start_date..end_date).to_a.select {|k| my_days.include?(k.wday)}
