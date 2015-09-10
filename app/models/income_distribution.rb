@@ -12,7 +12,6 @@ class IncomeDistribution < ActiveRecord::Base
   CAR_LOAN = 186.19
   BOA_BUFFER = 10
   CHASE_BUFFER = 10
-  AMEX_MAX = 500
 
   def boa_total_fixed
     BOA_BUFFER + rent_alloc + car_alloc + travel_alloc + cash_alloc + jcp_alloc + express_alloc + savings_alloc
@@ -93,7 +92,7 @@ class IncomeDistribution < ActiveRecord::Base
 
   def freedom
     result = DebtBalance.joins(:debt).where("due_date>'#{self.distribution_date}' AND due_date<='#{self.distribution_date + 30.days}' AND debts.name = 'Freedom'")
-    result.nil? ? 0 : result.count > 0 ? result.first.balance/fridays(result.first.due_date - 1.months, result.first.due_date) : 0
+    result.nil? ? 0 : result.count > 0 ? result.first.balance/chase_fridays(result.first.due_date - 1.months, result.first.due_date) : 0
   end
 
   def travel
@@ -132,6 +131,22 @@ class IncomeDistribution < ActiveRecord::Base
     end_date = self.distribution_date# your end
     my_days = [5] # day of the week in 0-6. Sunday is day-of-week 0; Saturday is day-of-week 6.
     result = (start_date..end_date).to_a.select {|k| my_days.include?(k.wday)}
+    result.count
+  end
+
+  def chase_fridays(start_arg = nil, end_arg = nil)
+    start_date = start_arg || self.distribution_date.at_beginning_of_month # your start
+    end_date = end_arg || self.distribution_date.at_end_of_month # your end
+    my_days = [5] # day of the week in 0-6. Sunday is day-of-week 0; Saturday is day-of-week 6.
+    result = (start_date..end_date).to_a.select {|k| my_days.include?(k.wday) && k.cweek % 2 == 0}
+    result.count
+  end
+
+  def chase_fridays_to_date(start_arg = nil)
+    start_date = start_arg || self.distribution_date.at_beginning_of_month # your start
+    end_date = self.distribution_date# your end
+    my_days = [5] # day of the week in 0-6. Sunday is day-of-week 0; Saturday is day-of-week 6.
+    result = (start_date..end_date).to_a.select {|k| my_days.include?(k.wday) && k.cweek % 2 == 0}
     result.count
   end
 
