@@ -86,6 +86,38 @@ class IncomeDistribution < ActiveRecord::Base
     self.chase_chk - chase_total_distribution + CHASE_BUFFER
   end
 
+  def amex
+    result = DebtBalance.joins(:debt).where("due_date>='#{self.distribution_date}' AND due_date<'#{self.distribution_date + 30.days}' AND debts.name = 'Amex'")
+    result.nil? ? 0 : result.count > 0 ? result.first.balance : 0
+  end
+
+  def freedom
+    result = DebtBalance.joins(:debt).where("due_date>='#{self.distribution_date}' AND due_date<'#{self.distribution_date + 30.days}' AND debts.name = 'Freedom'")
+    result.nil? ? 0 : result.count > 0 ? result.first.balance : 0
+  end
+
+  def travel
+    result = DebtBalance.joins(:debt).where("due_date>='#{self.distribution_date}' AND due_date<'#{self.distribution_date + 30.days}' AND debts.name = 'Travel'")
+    result.nil? ? 0 : result.count > 0 ? result.first.balance : 0
+  end
+
+  def cash
+    result = DebtBalance.joins(:debt).where("due_date>='#{self.distribution_date}' AND due_date<'#{self.distribution_date + 30.days}' AND debts.name = 'Cash'")
+    result.nil? ? 0 : result.count > 0 ? result.first.balance : 0
+  end
+
+  def express
+    result = DebtBalance.joins(:debt).where("due_date>='#{self.distribution_date}' AND due_date<'#{self.distribution_date + 30.days}' AND debts.name = 'Express'")
+    result.nil? ? 0 : result.count > 0 ? result.first.balance : 0
+  end
+
+  def jcp
+    result = DebtBalance.joins(:debt).where("due_date>='#{self.distribution_date}' AND due_date<'#{self.distribution_date + 30.days}' AND debts.name = 'Jcp'")
+    result.nil? ? 0 : result.count > 0 ? result.first.balance : 0
+  end
+
+  
+
   private
   def fridays
     start_date = self.distribution_date.at_beginning_of_month # your start
