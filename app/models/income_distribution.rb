@@ -115,8 +115,6 @@ class IncomeDistribution < ActiveRecord::Base
     result.nil? ? 0 : result.count > 0 ? result.first.balance/fridays(result.first.due_date - 1.months, result.first.due_date) : 0
   end
 
-  
-
   private
   def fridays(start_arg = nil, end_arg = nil)
     start_date = start_arg || self.distribution_date.at_beginning_of_month # your start
