@@ -1,11 +1,15 @@
 class BudgetsController < ApplicationController
   before_action :set_budget, only: [:show, :edit, :update, :destroy]
   
+  FLOOR = "2014-01-01"  
+
+
   # GET /budgets
   # GET /budgets.json
   def index
     @budgets = Budget.order(:budget_month => :desc)
                      .order(:category_id)
+                     .where("budget_month >= '#{FLOOR}'")
                      .paginate(:per_page => Category.count, :page => params[:page])
   end
 
