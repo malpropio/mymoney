@@ -1,6 +1,7 @@
 module ApplicationHelper
 
 VALID = ["Amex","Freedom","Travel","Cash","Jcp","Express"]
+VALID_GOOD_NEG = ["Credit Cards","Savings"]
 ERROR = "#FF0000"
 NEUTRAL = "#FFFFFF"
 SUCCESS = "#00FFFF"
@@ -27,11 +28,10 @@ SUCCESS = "#00FFFF"
     css_class = column == sort_column ? "current #{sort_direction}" : nil
     direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
     link_to title, params.merge(:sort => column, :direction => direction, :page => nil), {:class => css_class}
-    #link_to title, :sort => column, :direction => direction 
   end
 
   def good_pos_cell_color(amount = 0, debt_name = "")
-    if debt_name == "Credit Cards"
+    if VALID_GOOD_NEG.include?(debt_name)
        good_neg_cell_color(amount)
      else
        amount < 0 ? ERROR : NEUTRAL
