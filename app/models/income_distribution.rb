@@ -1,7 +1,7 @@
 class IncomeDistribution < ActiveRecord::Base
 
-  validates_presence_of :distribution_date, :amex, :freedom, :travel, :cash, :jcp, :express, :boa_chk, :chase_chk
-  validates_numericality_of :amex, :freedom, :travel, :cash, :jcp, :express, :boa_chk, :chase_chk
+  validates_presence_of :distribution_date, :boa_chk, :chase_chk
+  validates_numericality_of :boa_chk, :chase_chk
   validates_uniqueness_of :distribution_date
 
   validate :validate_date_is_friday

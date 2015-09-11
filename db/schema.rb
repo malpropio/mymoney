@@ -55,16 +55,11 @@ ActiveRecord::Schema.define(version: 20150907154819) do
 
   create_table "income_distributions", force: :cascade do |t|
     t.date     "distribution_date"
-    t.decimal  "amex",              precision: 8, scale: 2, null: false
-    t.decimal  "freedom",           precision: 8, scale: 2, null: false
-    t.decimal  "travel",            precision: 8, scale: 2, null: false
-    t.decimal  "cash",              precision: 8, scale: 2, null: false
-    t.decimal  "jcp",               precision: 8, scale: 2, null: false
-    t.decimal  "express",           precision: 8, scale: 2, null: false
-    t.decimal  "boa_chk",           precision: 8, scale: 2, null: false
-    t.decimal  "chase_chk",         precision: 8, scale: 2, null: false
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
+    t.decimal  "boa_chk",           precision: 8, scale: 2,                 null: false
+    t.decimal  "chase_chk",         precision: 8, scale: 2,                 null: false
+    t.boolean  "paid",                                      default: false
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
   end
 
   add_index "income_distributions", ["distribution_date"], name: "index_income_distributions_on_distribution_date", unique: true, using: :btree

@@ -112,4 +112,9 @@
 </table>
 
 <%= link_to 'Edit', edit_income_distribution_path(@income_distribution) %> |
-<%= link_to 'Back', income_distributions_path %>
+<%= link_to 'Back', income_distributions_path %> |
+<% if !@income_distribution.paid %> 
+  <%= link_to 'Make Payments', make_payments_income_distribution_path(@income_distribution) %>
+<% else %>
+  <%= link_to 'Undo Payments', undo_payments_income_distribution_path(@income_distribution) %>
+<% end %>

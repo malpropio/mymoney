@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
 
-  resources :income_distributions
+  resources :income_distributions do
+    member do
+         get :make_payments
+         get :undo_payments
+       end
+  end
+
   root               		'static_pages#home'
   get	'home'		=>	'static_pages#home'
   get	'signup'	=> 	'users#new'
