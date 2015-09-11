@@ -1,6 +1,6 @@
 class BudgetsController < ApplicationController
   before_action :set_budget, only: [:show, :edit, :update, :destroy]
-
+  
   # GET /budgets
   # GET /budgets.json
   def index
@@ -22,7 +22,7 @@ class BudgetsController < ApplicationController
   # GET /budgets/1/edit
   def edit
   end
-  
+
   def budgets_by_month
     subquery = Spending.joins(:category)
                         .where("categories.name NOT IN ('Credit Cards')")
@@ -39,6 +39,7 @@ class BudgetsController < ApplicationController
                 .where("budgets.budget_month >= DATE_ADD(NOW(), INTERVAL - 24 MONTH)")
                 .group("budgets.budget_month")
                 .having("Sum(CASE WHEN categories.name IN ('Credit Cards') THEN 0 ELSE spendings.total_spending END)>0 AND Sum(CASE WHEN categories.name IN ('Credit Cards') THEN 0 ELSE budgets.amount END)>0 AND Sum(payments.total_payment)>0")
+    
     h1 = Hash.new
 
     agg.each do |budget| 
@@ -218,5 +219,10 @@ class BudgetsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def budget_params
       params.require(:budget).permit(:category_id, :budget_month, :amount)
+    end
+
+    def get_month
+      number = params[:page].nil ? 0 : params[:page] - 1
+      Time.new.to_date.change(day: 1) - number.months
     end
 end
