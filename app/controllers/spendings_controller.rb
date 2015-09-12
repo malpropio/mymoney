@@ -3,12 +3,15 @@ class SpendingsController < ApplicationController
 
   before_action :set_spending, only: [:show, :edit, :update, :destroy]
 
+  FLOOR = "2014-01-01"
+
   # GET /spendings
   # GET /spendings.json
   def index
     @spendings = Spending.search(params[:search])
                          .order(sort_column + " " + sort_direction)
                          .order(updated_at: :desc)
+                         .where("spending_date >= '#{FLOOR}'")
                          .paginate(page: params[:page])
   end
   
