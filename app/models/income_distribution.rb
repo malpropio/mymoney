@@ -6,7 +6,7 @@ class IncomeDistribution < ActiveRecord::Base
 
   validate :validate_date_is_friday
 
-  SAVING = 1500
+  SAVING = 1500 
   RENT = 1550
   STUDENT_LOAN = 300
   CAR_LOAN = 186.19
@@ -86,33 +86,33 @@ class IncomeDistribution < ActiveRecord::Base
   end
 
   def amex
-    result = DebtBalance.joins(:debt).where("due_date>'#{self.distribution_date}' AND due_date<='#{self.distribution_date + 30.days}' AND debts.name = 'Amex'")
-    result.nil? ? 0 : result.count > 0 ? result.first.balance/fridays(result.first.due_date - 1.months, result.first.due_date) : 0
+    result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = 'Amex'")
+    result.exists? ? result.first.balance/fridays(result.first.payment_start_date, result.first.due_date) : 0
   end
 
   def freedom
-    result = DebtBalance.joins(:debt).where("due_date>'#{self.distribution_date}' AND due_date<='#{self.distribution_date + 30.days}' AND debts.name = 'Freedom'")
-    result.nil? ? 0 : result.count > 0 ? result.first.balance/chase_fridays(result.first.due_date - 1.months, result.first.due_date) : 0
+    result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = 'Freedom'")
+    result.exists? ? result.first.balance/chase_fridays(result.first.payment_start_date, result.first.due_date) : 0
   end
 
   def travel
-    result = DebtBalance.joins(:debt).where("due_date>'#{self.distribution_date}' AND due_date<='#{self.distribution_date + 30.days}' AND debts.name = 'Travel'")
-    result.nil? ? 0 : result.count > 0 ? result.first.balance/fridays(result.first.due_date - 1.months, result.first.due_date) : 0
+    result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = 'Travel'")
+    result.exists? ? result.first.balance/fridays(result.first.payment_start_date, result.first.due_date) : 0
   end
 
   def cash
-    result = DebtBalance.joins(:debt).where("due_date>'#{self.distribution_date}' AND due_date<='#{self.distribution_date + 30.days}' AND debts.name = 'Cash'")
-    result.nil? ? 0 : result.count > 0 ? result.first.balance/fridays(result.first.due_date - 1.months, result.first.due_date) : 0
+    result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = 'Cash'")
+    result.exists? ? result.first.balance/fridays(result.first.payment_start_date, result.first.due_date) : 0
   end
 
   def express
-    result = DebtBalance.joins(:debt).where("due_date>'#{self.distribution_date}' AND due_date<='#{self.distribution_date + 30.days}' AND debts.name = 'Express'")
-    result.nil? ? 0 : result.count > 0 ? result.first.balance/fridays(result.first.due_date - 1.months, result.first.due_date) : 0
+    result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = 'Express'")
+    result.exists? ? result.first.balance/fridays(result.first.payment_start_date, result.first.due_date) : 0
   end
 
   def jcp
-    result = DebtBalance.joins(:debt).where("due_date>'#{self.distribution_date}' AND due_date<='#{self.distribution_date + 30.days}' AND debts.name = 'Jcp'")
-    result.nil? ? 0 : result.count > 0 ? result.first.balance/fridays(result.first.due_date - 1.months, result.first.due_date) : 0
+    result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = 'Jcp'")
+    result.exists? ? result.first.balance/fridays(result.first.payment_start_date, result.first.due_date) : 0
   end
 
   private

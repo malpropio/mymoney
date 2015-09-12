@@ -9,12 +9,13 @@
   </div>
 </div>
 
-<div class="row">
+<div class="row" style="display:none;">
   <div class="col-xs-12">
     <h3>Loan Balances By Month</h3>
     <%= line_chart loans_by_month_debt_balances_path, discrete: true, library: {vAxis: {format: '$#,###.##'}} %>
   </div>
 </div>
+
 
 <%= will_paginate @debt_balances %>
 
@@ -22,6 +23,7 @@
   <thead>
     <tr>
       <th>Debt</th>
+      <th>Payment Start Date</th>
       <th>Due date</th>
       <th>Balance</th>
       <th>Paid</th>
@@ -34,6 +36,7 @@
     <% @debt_balances.each do |debt_balance| %>
       <tr>
         <td><%= debt_balance.debt.name %></td>
+        <td><%= debt_balance.payment_start_date %></td>
         <td><%= debt_balance.due_date %></td>
         <td><%= number_to_currency(debt_balance.balance) %></td>
         <td><%= number_to_currency(debt_balance.payments.sum(:amount)) %></td>

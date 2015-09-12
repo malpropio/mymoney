@@ -11,7 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150907154819) do
+ActiveRecord::Schema.define(version: 20150912200636) do
+
+  create_table "allocations", force: :cascade do |t|
+    t.decimal  "savings",      precision: 8, scale: 2
+    t.decimal  "rent",         precision: 8, scale: 2
+    t.decimal  "student_loan", precision: 8, scale: 2
+    t.decimal  "car_loan",     precision: 8, scale: 2
+    t.decimal  "chase_buffer", precision: 8, scale: 2
+    t.decimal  "boa_buffer",   precision: 8, scale: 2
+    t.date     "start_date"
+    t.date     "end_date"
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+  end
+
+  add_index "allocations", ["end_date"], name: "index_allocations_on_end_date", using: :btree
+  add_index "allocations", ["start_date"], name: "index_allocations_on_start_date", unique: true, using: :btree
 
   create_table "budgets", force: :cascade do |t|
     t.integer  "category_id",  limit: 4
@@ -32,15 +48,17 @@ ActiveRecord::Schema.define(version: 20150907154819) do
   end
 
   create_table "debt_balances", force: :cascade do |t|
-    t.integer  "debt_id",    limit: 4
-    t.date     "due_date",                                      null: false
-    t.decimal  "balance",              precision: 10, scale: 2, null: false
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
+    t.integer  "debt_id",            limit: 4
+    t.date     "due_date",                                              null: false
+    t.decimal  "balance",                      precision: 10, scale: 2, null: false
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
+    t.date     "payment_start_date"
   end
 
   add_index "debt_balances", ["debt_id", "due_date"], name: "by_debt_due_date", unique: true, using: :btree
   add_index "debt_balances", ["debt_id"], name: "index_debt_balances_on_debt_id", using: :btree
+  add_index "debt_balances", ["payment_start_date"], name: "index_debt_balances_on_payment_start_date", using: :btree
 
   create_table "debts", force: :cascade do |t|
     t.string   "category",     limit: 255,             null: false

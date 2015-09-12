@@ -4,7 +4,7 @@
 
 
 $(document).on 'change ready page:load', ->
-  $('.datepicker').datepicker({format: 'yyyy-mm-dd', autoclose: true, weekStart: 0, todayHighlight: true})
+  $('.datepicker').datepicker({format: 'yyyy-mm-dd', autoclose: true, weekStart: 0, todayHighlight: true});
 
   $('#spending_category_id').ready ->
     # get value from dropdown

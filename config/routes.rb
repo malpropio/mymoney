@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  resources :allocations
+  
+
   resources :income_distributions do
     member do
          get :make_payments
@@ -13,6 +16,8 @@ Rails.application.routes.draw do
   get    'login'   	=> 	'sessions#new'
   post   'login'   	=> 	'sessions#create'
   delete 'logout'  	=> 	'sessions#destroy'
+  get	'curr_alloc'  =>      'allocations#show_curr'
+
 
   resources :categories
   

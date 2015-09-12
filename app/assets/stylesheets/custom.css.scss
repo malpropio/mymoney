@@ -16,7 +16,7 @@ html {
 }
 
 body {
-  padding-top: 60px;
+  padding-top: 65px;
 }
 
 section {
@@ -77,6 +77,13 @@ p {
 
 
 /* header */
+
+header {
+    height: 65px;
+    top: 0;
+    width: 100%;
+    transition: top 0.2s ease-in-out;
+}
 
 #logo {
   float: left;
@@ -321,3 +328,4 @@ th, td {
 .pretty th .desc {
   background-image: url(arrow_down.png);
 }
+
