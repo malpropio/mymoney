@@ -37,10 +37,12 @@ class IncomeDistributionsController < ApplicationController
     Spending.create(description:  "Express", category_id: cc_category_id, spending_date: spending_date, amount: @income_distribution.express_alloc, description_loan: "", description_cc: "Express", payment_method_id: payment_method_id)
     Spending.create(description:  "Jcp", category_id: cc_category_id, spending_date: spending_date, amount: @income_distribution.jcp_alloc, description_loan: "", description_cc: "Jcp", payment_method_id: payment_method_id)
 
-    Spending.create(description:  "", category_id: loan_category_id, spending_date: spending_date, amount: @income_distribution.student_alloc/2, description_loan: "Tulane", description_cc: "", payment_method_id: payment_method_id)
-    Spending.create(description:  "", category_id: loan_category_id, spending_date: spending_date, amount: @income_distribution.car_alloc, description_loan: "Vw", description_cc: "", payment_method_id: payment_method_id)
-    Spending.create(description:  "", category_id: loan_category_id, spending_date: spending_date, amount: @income_distribution.student_alloc/2, description_loan: "Usdoe/Glelsi", description_cc: "", payment_method_id: payment_method_id)
+    @income_distribution.student_loans.each do |loan|
+      Spending.create(description:  "", category_id: loan_category_id, spending_date: spending_date, amount: loan.chase_payment_due, description_loan: loan.debt.name, description_cc: "", payment_method_id: payment_method_id)
+    end
 
+    Spending.create(description:  "", category_id: loan_category_id, spending_date: spending_date, amount: @income_distribution.car_alloc, description_loan: "Vw", description_cc: "", payment_method_id: payment_method_id)
+    
     Spending.create(description:  "Boa Savings", category_id: savings_category_id, spending_date: spending_date, amount: @income_distribution.savings_alloc, description_loan: "", description_cc: "", payment_method_id: payment_method_id)
     Spending.create(description:  "Boa Extra Savings", category_id: savings_category_id, spending_date: spending_date, amount: @income_distribution.extra_savings_alloc, description_loan: "", description_cc: "", payment_method_id: payment_method_id)
     Spending.create(description:  "Chase Extra", category_id: savings_category_id, spending_date: spending_date, amount: @income_distribution.chase_extra, description_loan: "", description_cc: "", payment_method_id: payment_method_id)
@@ -132,10 +134,12 @@ class IncomeDistributionsController < ApplicationController
       destroy_spending(Spending.find_by(description: "Express", category_id: cc_category_id, spending_date: spending_date, payment_method_id: payment_method_id))
       destroy_spending(Spending.find_by(description: "Jcp", category_id: cc_category_id, spending_date: spending_date, payment_method_id: payment_method_id))
 
-      destroy_spending(Spending.find_by(description: "Tulane", category_id: loan_category_id, spending_date: spending_date, payment_method_id: payment_method_id))
-      destroy_spending(Spending.find_by(description: "Vw", category_id: loan_category_id, spending_date: spending_date, payment_method_id: payment_method_id))
-      destroy_spending(Spending.find_by(description: "Usdoe/Glelsi", category_id: loan_category_id, spending_date: spending_date, payment_method_id: payment_method_id))
+      @income_distribution.student_loans.each do |loan|
+        destroy_spending(Spending.find_by(description: loan.debt.name, category_id: loan_category_id, spending_date: spending_date, payment_method_id: payment_method_id))
+      end
 
+      destroy_spending(Spending.find_by(description: "Vw", category_id: loan_category_id, spending_date: spending_date, payment_method_id: payment_method_id))
+      
       destroy_spending(Spending.find_by(description: "Boa Savings", category_id: savings_category_id, spending_date: spending_date, payment_method_id: payment_method_id))
       destroy_spending(Spending.find_by(description: "Boa Extra Savings", category_id: savings_category_id, spending_date: spending_date, payment_method_id: payment_method_id))
       destroy_spending(Spending.find_by(description: "Chase Extra", category_id: savings_category_id, spending_date: spending_date, payment_method_id: payment_method_id))

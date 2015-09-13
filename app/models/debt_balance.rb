@@ -1,4 +1,6 @@
 class DebtBalance < ActiveRecord::Base
+  include DateModule
+
   belongs_to :debt
 
   validates_presence_of :debt_id, :due_date, :balance
@@ -18,6 +20,14 @@ class DebtBalance < ActiveRecord::Base
             .where("spending_date>'#{self.payment_start_date}' AND spending_date<='#{self.due_date}'")
   end
 
+  def chase_payment_due
+    self.balance/chase_fridays(self.payment_start_date, self.due_date)
+  end
+
+  def boa_payment_due
+    self.balance/boa_fridays(self.payment_start_date, self.due_date)
+  end
+
   private
   def budget_not_set_for_month
     errors.add(:debt, "balance already set for #{self.due_date.strftime('%B %Y')}") if DebtBalance.where("id != #{self.id || 0} AND debt_id = #{self.debt_id} AND DATE_FORMAT(due_date, '%Y-%m-%01') = DATE_FORMAT('#{self.due_date}', '%Y-%m-%01')").exists? 
@@ -35,4 +45,5 @@ class DebtBalance < ActiveRecord::Base
       end
     end
   end
+
 end

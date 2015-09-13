@@ -1,4 +1,5 @@
 class IncomeDistribution < ActiveRecord::Base
+  include DateModule
 
   validates_presence_of :distribution_date, :boa_chk, :chase_chk
   validates_numericality_of :boa_chk, :chase_chk
@@ -8,7 +9,6 @@ class IncomeDistribution < ActiveRecord::Base
 
   SAVING = 1500 
   RENT = 1550
-  STUDENT_LOAN = 300
   CAR_LOAN = 186.19
   BOA_BUFFER = 10
   CHASE_BUFFER = 10
@@ -70,7 +70,13 @@ class IncomeDistribution < ActiveRecord::Base
   end
 
   def student_alloc
-    self.distribution_date.cweek % 2 == 0 ? STUDENT_LOAN : 0 
+    result = 0
+    student_loans.each {|loan| result += loan.chase_payment_due }
+    self.distribution_date.cweek % 2 == 0 ? result : 0 
+  end
+
+  def student_loans
+    self.distribution_date.cweek % 2 == 0 ? DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.sub_category = 'Student Loans'") : []
   end
   
   def rent_alloc
@@ -87,32 +93,32 @@ class IncomeDistribution < ActiveRecord::Base
 
   def amex
     result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = 'Amex'")
-    result.exists? ? result.first.balance/fridays(result.first.payment_start_date, result.first.due_date) : 0
+    result.exists? ? result.first.boa_payment_due : 0
   end
 
   def freedom
     result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = 'Freedom'")
-    result.exists? ? result.first.balance/chase_fridays(result.first.payment_start_date, result.first.due_date) : 0
+    result.exists? ? result.first.chase_payment_due : 0
   end
 
   def travel
     result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = 'Travel'")
-    result.exists? ? result.first.balance/fridays(result.first.payment_start_date, result.first.due_date) : 0
+    result.exists? ? result.first.boa_payment_due : 0
   end
 
   def cash
     result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = 'Cash'")
-    result.exists? ? result.first.balance/fridays(result.first.payment_start_date, result.first.due_date) : 0
+    result.exists? ? result.first.boa_payment_due : 0
   end
 
   def express
     result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = 'Express'")
-    result.exists? ? result.first.balance/fridays(result.first.payment_start_date, result.first.due_date) : 0
+    result.exists? ? result.first.boa_payment_due : 0
   end
 
   def jcp
     result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = 'Jcp'")
-    result.exists? ? result.first.balance/fridays(result.first.payment_start_date, result.first.due_date) : 0
+    result.exists? ? result.first.boa_payment_due : 0
   end
 
   private

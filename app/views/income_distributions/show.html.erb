@@ -93,11 +93,13 @@
         <td style="background-color:<%= equal_cell_color(@income_distribution.chase_chk,@income_distribution.chase_total_distribution)%>"><%= number_to_currency(@income_distribution.chase_chk) %></td>
         <td style="background-color:<%= good_pos_cell_color(@income_distribution.chase_balance_left)%>"><%= number_to_currency( @income_distribution.chase_balance_left) %></td>
       </tr>
-      <tr>
-        <td>Student</td>
-        <td></td>
-        <td style="background-color:<%= good_pos_cell_color(@income_distribution.student_alloc)%>"><%= number_to_currency( @income_distribution.student_alloc) %></td>
-      </tr>
+      <% @income_distribution.student_loans.each do |loan| %>
+        <tr>
+          <td><%= loan.debt.name %></td>
+          <td></td>
+          <td style="background-color:<%= good_pos_cell_color(loan.chase_payment_due)%>"><%= number_to_currency(loan.chase_payment_due) %></td>
+        </tr>
+      <% end %>
       <tr>
         <td>Extra Savings</td>
         <td></td>
