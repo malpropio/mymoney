@@ -17,15 +17,19 @@ class DebtBalance < ActiveRecord::Base
   def payments
     Spending.joins(:category)
             .where("spendings.description = '#{self.debt.name}' AND categories.name = '#{self.debt.category}'")
-            .where("spending_date>'#{self.payment_start_date}' AND spending_date<='#{self.due_date}'")
+            .where("spending_date>='#{self.payment_start_date}' AND spending_date<='#{self.due_date}'")
+  end
+
+  def balance_of_interest
+    current_balance = self.debt.is_asset? ? self.target_balance - self.balance : self.balance
   end
 
   def chase_payment_due
-    self.balance/chase_fridays(self.payment_start_date, self.due_date)
+    self.balance_of_interest/chase_fridays(self.payment_start_date, self.due_date)
   end
 
   def boa_payment_due
-    self.balance/boa_fridays(self.payment_start_date, self.due_date)
+    self.balance_of_interest/boa_fridays(self.payment_start_date, self.due_date)
   end
 
   private

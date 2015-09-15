@@ -53,11 +53,13 @@
         <td></td>
         <td style="background-color:<%= good_pos_cell_color(@income_distribution.car_alloc)%>"><%= number_to_currency( @income_distribution.car_alloc) %></td>
       </tr>
-      <tr>
-        <td>Savings</td>
-        <td></td>
-        <td style="background-color:<%= good_pos_cell_color(@income_distribution.savings_alloc)%>"><%= number_to_currency( @income_distribution.savings_alloc) %></td>
-      </tr>
+      <% @income_distribution.savings.each do |loan| %>
+        <tr>
+          <td><%= loan.debt.name %></td>
+          <td></td>
+          <td style="background-color:<%= good_pos_cell_color(loan.boa_payment_due)%>"><%= number_to_currency(loan.boa_payment_due) %></td>
+        </tr>
+      <% end %>
       <tr>
         <td>Extra Savings</td>
         <td></td>

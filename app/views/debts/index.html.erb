@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Debts</h1>
+<h1>Listing Debts/Assets</h1>
 
 <table>
   <thead>
@@ -8,7 +8,7 @@
       <th>Category</th>
       <th>Sub category</th>
       <th>Name</th>
-      <th>Due day</th>
+      <th>Asset?</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -19,7 +19,7 @@
         <td><%= debt.category %></td>
         <td><%= debt.sub_category %></td>
         <td><%= debt.name %></td>
-        <td><%= debt.due_day.ordinalize %></td>
+        <td><%= debt.is_asset %></td>
         <td><%= link_to 'Show', debt %></td>
         <td><%= link_to 'Edit', edit_debt_path(debt) %></td>
         <td><%= link_to 'Destroy', debt, method: :delete, data: { confirm: 'Are you sure?' } %></td>

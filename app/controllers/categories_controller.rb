@@ -74,8 +74,10 @@ class CategoriesController < ApplicationController
     end
 
     def add_budgets_to_date
-      start = Budget.order(:budget_month => "asc").first.budget_month
-      end_date = Time.new.to_date
-      (start...end_date).each {|k| Budget.create(category_id: @category.id, budget_month: k, amount: 0) if k.day==1}
+      if Budget.exists?
+        start = Budget.order(:budget_month => "asc").first.budget_month
+        end_date = Time.new.to_date
+        (start...end_date).each {|k| Budget.create(category_id: @category.id, budget_month: k, amount: 0) if k.day==1}
+      end
     end
 end

@@ -16,8 +16,8 @@
 </p>
 
 <p>
-  <strong>Due day:</strong>
-  <%= @debt.due_day.ordinalize %>
+  <strong>Asset?:</strong>
+  <%= @debt.is_asset %>
 </p>
 
 <%= link_to 'Edit', edit_debt_path(@debt) %> |
