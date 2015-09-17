@@ -24,30 +24,7 @@ class IncomeDistributionsController < ApplicationController
 
   # Make the payments
   def make_payments
-    cc_category_id = Category.find_by_name("Credit Cards").id
-    loan_category_id = Category.find_by_name("Loans").id
-    savings_category_id = Category.find_by_name("Savings").id
-    spending_date = @income_distribution.distribution_date
-    payment_method_id = PaymentMethod.find_by_name("Debit").id
-
-    Spending.create(description:  "Amex", category_id: cc_category_id, spending_date: spending_date, amount: @income_distribution.amex_alloc, description_loan: "", description_cc: "Amex", payment_method_id: payment_method_id)
-    Spending.create(description:  "Freedom", category_id: cc_category_id, spending_date: spending_date, amount: @income_distribution.freedom_alloc, description_loan: "", description_cc: "Freedom", payment_method_id: payment_method_id)
-    Spending.create(description:  "Cash", category_id: cc_category_id, spending_date: spending_date, amount: @income_distribution.cash_alloc, description_loan: "", description_cc: "Cash", payment_method_id: payment_method_id)
-    Spending.create(description:  "Travel", category_id: cc_category_id, spending_date: spending_date, amount: @income_distribution.travel_alloc, description_loan: "", description_cc: "Travel", payment_method_id: payment_method_id)
-    Spending.create(description:  "Express", category_id: cc_category_id, spending_date: spending_date, amount: @income_distribution.express_alloc, description_loan: "", description_cc: "Express", payment_method_id: payment_method_id)
-    Spending.create(description:  "Jcp", category_id: cc_category_id, spending_date: spending_date, amount: @income_distribution.jcp_alloc, description_loan: "", description_cc: "Jcp", payment_method_id: payment_method_id)
-
-    @income_distribution.student_loans.each do |loan|
-      Spending.create(description:  "", category_id: loan_category_id, spending_date: spending_date, amount: loan.chase_payment_due, description_loan: loan.debt.name, description_cc: "", payment_method_id: payment_method_id)
-    end
-
-    Spending.create(description:  "", category_id: loan_category_id, spending_date: spending_date, amount: @income_distribution.car_alloc, description_loan: "Vw", description_cc: "", payment_method_id: payment_method_id)
-    
-    Spending.create(description:  "Boa Savings", category_id: savings_category_id, spending_date: spending_date, amount: @income_distribution.savings_alloc, description_loan: "", description_cc: "", payment_method_id: payment_method_id)
-    Spending.create(description:  "Boa Extra Savings", category_id: savings_category_id, spending_date: spending_date, amount: @income_distribution.extra_savings_alloc, description_loan: "", description_cc: "", payment_method_id: payment_method_id)
-    Spending.create(description:  "Chase Extra", category_id: savings_category_id, spending_date: spending_date, amount: @income_distribution.chase_extra, description_loan: "", description_cc: "", payment_method_id: payment_method_id)
-
-    @income_distribution.update(:paid => true)
+    make_all_payments
  
     respond_to do |format|
         format.html { redirect_to @income_distribution, notice: 'Payments successfully made.' }
@@ -119,7 +96,37 @@ class IncomeDistributionsController < ApplicationController
     def destroy_spending(spending = nil)
       spending.destroy unless spending.nil? 
     end
+    
+    def make_all_payments
+      cc_category_id = Category.find_by_name("Credit Cards").id
+      loan_category_id = Category.find_by_name("Loans").id
+      savings_category_id = Category.find_by_name("Savings").id
+      spending_date = @income_distribution.distribution_date
+      payment_method_id = PaymentMethod.find_by_name("Debit").id
 
+      Spending.create(description:  "Amex", category_id: cc_category_id, spending_date: spending_date, amount: @income_distribution.amex_alloc, description_loan: "", description_cc: "Amex", payment_method_id: payment_method_id)
+      Spending.create(description:  "Freedom", category_id: cc_category_id, spending_date: spending_date, amount: @income_distribution.freedom_alloc, description_loan: "", description_cc: "Freedom", payment_method_id: payment_method_id)
+      Spending.create(description:  "Cash", category_id: cc_category_id, spending_date: spending_date, amount: @income_distribution.cash_alloc, description_loan: "", description_cc: "Cash", payment_method_id: payment_method_id)
+      Spending.create(description:  "Travel", category_id: cc_category_id, spending_date: spending_date, amount: @income_distribution.travel_alloc, description_loan: "", description_cc: "Travel", payment_method_id: payment_method_id)
+      Spending.create(description:  "Express", category_id: cc_category_id, spending_date: spending_date, amount: @income_distribution.express_alloc, description_loan: "", description_cc: "Express", payment_method_id: payment_method_id)
+      Spending.create(description:  "Jcp", category_id: cc_category_id, spending_date: spending_date, amount: @income_distribution.jcp_alloc, description_loan: "", description_cc: "Jcp", payment_method_id: payment_method_id)
+
+      @income_distribution.student_loans.each do |loan|
+        Spending.create(description:  "", category_id: loan_category_id, spending_date: spending_date, amount: loan.chase_payment_due, description_loan: loan.debt.name, description_cc: "", payment_method_id: payment_method_id)
+      end
+
+      Spending.create(description:  "", category_id: loan_category_id, spending_date: spending_date, amount: @income_distribution.car_alloc, description_loan: "Vw", description_cc: "", payment_method_id: payment_method_id)
+
+      @income_distribution.savings.each do |loan|
+        Spending.create(description:  "", category_id: savings_category_id, spending_date: spending_date, amount: loan.boa_payment_due, description_loan: loan.debt.name, description_cc: "", payment_method_id: payment_method_id, description_asset: loan.debt.name)
+      end
+
+      Spending.create(description:  "Boa Extra Savings", category_id: savings_category_id, spending_date: spending_date, amount: @income_distribution.extra_savings_alloc, description_loan: "", description_cc: "", payment_method_id: payment_method_id)
+      Spending.create(description:  "Chase Extra", category_id: savings_category_id, spending_date: spending_date, amount: @income_distribution.chase_extra, description_loan: "", description_cc: "", payment_method_id: payment_method_id)
+
+      @income_distribution.update(:paid => true)
+    end
+    
     def undo_all_payments
       cc_category_id = Category.find_by_name("Credit Cards").id
       loan_category_id = Category.find_by_name("Loans").id
@@ -139,8 +146,11 @@ class IncomeDistributionsController < ApplicationController
       end
 
       destroy_spending(Spending.find_by(description: "Vw", category_id: loan_category_id, spending_date: spending_date, payment_method_id: payment_method_id))
-      
-      destroy_spending(Spending.find_by(description: "Boa Savings", category_id: savings_category_id, spending_date: spending_date, payment_method_id: payment_method_id))
+     
+      @income_distribution.savings.each do |loan|
+        destroy_spending(Spending.find_by(description: loan.debt.name, category_id: savings_category_id, spending_date: spending_date, payment_method_id: payment_method_id))
+      end
+ 
       destroy_spending(Spending.find_by(description: "Boa Extra Savings", category_id: savings_category_id, spending_date: spending_date, payment_method_id: payment_method_id))
       destroy_spending(Spending.find_by(description: "Chase Extra", category_id: savings_category_id, spending_date: spending_date, payment_method_id: payment_method_id))
     

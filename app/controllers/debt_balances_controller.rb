@@ -1,5 +1,5 @@
 class DebtBalancesController < ApplicationController
-  before_action :set_debt_balance, only: [:show, :edit, :update, :destroy]
+  before_action :set_debt_balance, only: [:show, :edit, :update, :destroy, :close]
 
   # GET /debt_balances
   # GET /debt_balances.json
@@ -80,6 +80,15 @@ class DebtBalancesController < ApplicationController
     end
   end
 
+  # Close a goal/debt/balance
+  def close
+    @debt_balance.close
+    respond_to do |format|
+      format.html { redirect_to @debt_balance, notice: 'Debt/Asset balance was successfully closed.' }
+      format.json { head :no_content }
+    end    
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_debt_balance
@@ -88,6 +97,6 @@ class DebtBalancesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def debt_balance_params
-      params.require(:debt_balance).permit(:debt_id, :due_date, :balance, :payment_start_date)
+      params.require(:debt_balance).permit(:debt_id, :due_date, :balance, :payment_start_date, :target_balance)
     end
 end

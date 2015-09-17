@@ -7,7 +7,6 @@ class IncomeDistribution < ActiveRecord::Base
 
   validate :validate_date_is_friday
 
-  SAVING = 1500 
   RENT = 1550
   CAR_LOAN = 186.19
   BOA_BUFFER = 10
@@ -35,10 +34,6 @@ class IncomeDistribution < ActiveRecord::Base
 
   def amex_alloc
     [self.amex, [self.boa_chk - boa_total_fixed, 0 ].max].min
-  end
-
-  def savings_alloc 
-    SAVING/fridays 
   end
 
   def extra_savings_alloc
@@ -78,9 +73,19 @@ class IncomeDistribution < ActiveRecord::Base
   def student_loans
     self.distribution_date.cweek % 2 == 0 ? DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.sub_category = 'Student Loans'") : []
   end
+
+  def savings_alloc
+    result = 0
+    savings.each {|saving| result += saving.boa_payment_due }
+    result
+  end
+
+  def savings
+    DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.sub_category = 'Savings'")
+  end
   
   def rent_alloc
-    (RENT*fridays_to_date)/fridays
+    (RENT*boa_fridays(self.distribution_date.at_beginning_of_month,self.distribution_date))/boa_fridays(self.distribution_date.at_beginning_of_month,self.distribution_date.at_end_of_month)
   end
 
   def boa_balance_left
@@ -122,38 +127,6 @@ class IncomeDistribution < ActiveRecord::Base
   end
 
   private
-  def fridays(start_arg = nil, end_arg = nil)
-    start_date = start_arg || self.distribution_date.at_beginning_of_month # your start
-    end_date = end_arg || self.distribution_date.at_end_of_month # your end
-    my_days = [5] # day of the week in 0-6. Sunday is day-of-week 0; Saturday is day-of-week 6.
-    result = (start_date..end_date).to_a.select {|k| my_days.include?(k.wday)}
-    result.count
-  end
-
-  def fridays_to_date(start_arg = nil)
-    start_date = start_arg || self.distribution_date.at_beginning_of_month # your start
-    end_date = self.distribution_date# your end
-    my_days = [5] # day of the week in 0-6. Sunday is day-of-week 0; Saturday is day-of-week 6.
-    result = (start_date..end_date).to_a.select {|k| my_days.include?(k.wday)}
-    result.count
-  end
-
-  def chase_fridays(start_arg = nil, end_arg = nil)
-    start_date = start_arg || self.distribution_date.at_beginning_of_month # your start
-    end_date = end_arg || self.distribution_date.at_end_of_month # your end
-    my_days = [5] # day of the week in 0-6. Sunday is day-of-week 0; Saturday is day-of-week 6.
-    result = (start_date..end_date).to_a.select {|k| my_days.include?(k.wday) && k.cweek % 2 == 0}
-    result.count
-  end
-
-  def chase_fridays_to_date(start_arg = nil)
-    start_date = start_arg || self.distribution_date.at_beginning_of_month # your start
-    end_date = self.distribution_date# your end
-    my_days = [5] # day of the week in 0-6. Sunday is day-of-week 0; Saturday is day-of-week 6.
-    result = (start_date..end_date).to_a.select {|k| my_days.include?(k.wday) && k.cweek % 2 == 0}
-    result.count
-  end
-
   def validate_date_is_friday
     errors.add(:distribution_date, "must be a Friday") unless self.distribution_date.wday == 5
   end

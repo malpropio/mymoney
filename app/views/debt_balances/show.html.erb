@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Debt:</strong>
+  <strong>Debt/Asset:</strong>
   <%= @debt_balance.debt.name %>
 </p>
 
@@ -11,7 +11,7 @@
 </p>
 
 <p>
-  <strong>Due date:</strong>
+  <strong>Due/Target date:</strong>
   <%= @debt_balance.due_date %>
 </p>
 
@@ -21,18 +21,31 @@
 </p>
 
 <p>
- <strong>Payments needed to payoff by the due date:</strong>
+  <strong>Target Balance:</strong>
+  <%= number_to_currency(@debt_balance.target_balance) %>
+</p>
+
+<p>
+  <strong>Payments so far:</strong>
+  <%= number_to_currency(@debt_balance.payments.sum(:amount)) %>
+</p>
+
+<p>
+ <strong>Payments needed to payoff/reach target by the due date:</strong>
 </p>
 
 <p style="text-indent: 2em;">
   <strong>Weekly:</strong>
-  <%= number_to_currency(@debt_balance.balance/fridays(@debt_balance.payment_start_date, @debt_balance.due_date)) %>
+  <%= number_to_currency(@debt_balance.boa_payment_due) %>
 </p>
 
 <p style="text-indent: 2em;">
   <strong>Bi-Weekly:</strong>
-  <%= number_to_currency(@debt_balance.balance/chase_fridays(@debt_balance.payment_start_date, @debt_balance.due_date)) %>
+  <%= number_to_currency(@debt_balance.chase_payment_due) %>
 </p>
 
 <%= link_to 'Edit', edit_debt_balance_path(@debt_balance) %> |
 <%= link_to 'Back', debt_balances_path %>
+<% if @debt_balance.due_date > Time.now.to_date %> |
+  <%= link_to 'Close', close_debt_balance_path(@debt_balance) %>
+<% end %>

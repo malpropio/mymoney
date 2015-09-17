@@ -1,1 +1,1 @@
-json.extract! @debt, :id, :category, :sub_category, :name, :due_day, :created_at, :updated_at
+json.extract! @debt, :id, :category, :sub_category, :name, :is_asset, :created_at, :updated_at

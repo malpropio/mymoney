@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150912200636) do
+ActiveRecord::Schema.define(version: 20150914213216) do
 
   create_table "allocations", force: :cascade do |t|
     t.decimal  "savings",      precision: 8, scale: 2
@@ -49,11 +49,12 @@ ActiveRecord::Schema.define(version: 20150912200636) do
 
   create_table "debt_balances", force: :cascade do |t|
     t.integer  "debt_id",            limit: 4
-    t.date     "due_date",                                              null: false
-    t.decimal  "balance",                      precision: 10, scale: 2, null: false
-    t.datetime "created_at",                                            null: false
-    t.datetime "updated_at",                                            null: false
+    t.date     "due_date",                                                            null: false
+    t.decimal  "balance",                      precision: 10, scale: 2,               null: false
+    t.datetime "created_at",                                                          null: false
+    t.datetime "updated_at",                                                          null: false
     t.date     "payment_start_date"
+    t.decimal  "target_balance",               precision: 10, scale: 2, default: 0.0, null: false
   end
 
   add_index "debt_balances", ["debt_id", "due_date"], name: "by_debt_due_date", unique: true, using: :btree
@@ -61,12 +62,12 @@ ActiveRecord::Schema.define(version: 20150912200636) do
   add_index "debt_balances", ["payment_start_date"], name: "index_debt_balances_on_payment_start_date", using: :btree
 
   create_table "debts", force: :cascade do |t|
-    t.string   "category",     limit: 255,             null: false
-    t.string   "sub_category", limit: 255,             null: false
-    t.string   "name",         limit: 255,             null: false
-    t.integer  "due_day",      limit: 4,   default: 0, null: false
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+    t.string   "category",     limit: 255,                 null: false
+    t.string   "sub_category", limit: 255,                 null: false
+    t.string   "name",         limit: 255,                 null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.boolean  "is_asset",                 default: false
   end
 
   add_index "debts", ["category", "name"], name: "by_category_name", unique: true, using: :btree

@@ -27,10 +27,10 @@ PaymentMethod.create(name: "Cash", description: "Cash")
 PaymentMethod.create(name: "Other", description: "Any other form of payments")
 
 # Add Debts
-Debt.create(category: "Credit Cards", name: "Amex", due_day: 15)
-Debt.create(category: "Loans", sub_category: "Student Loans", name: Faker::University.name, due_day: 3)
-Debt.create(category: "Credit Cards", name: "Freedom", due_day: 23)
-Debt.create(category: "Loans", sub_category: "Car Loans", name: Faker::University.name, due_day: 5)
+Debt.create(category: "Credit Cards", name: "Amex", is_asset: false)
+Debt.create(category: "Loans", sub_category: "Student Loans", name: Faker::University.name, is_asset: false)
+Debt.create(category: "Credit Cards", name: "Freedom", is_asset: false)
+Debt.create(category: "Loans", sub_category: "Car Loans", name: Faker::University.name, is_asset: false)
 
 # Sample debt balances
 25.times do |n|

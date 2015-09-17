@@ -54,6 +54,10 @@ Rails.application.routes.draw do
       get :ccs_by_month
       get :loans_by_month
     end
+
+    member do
+      get :close
+    end
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

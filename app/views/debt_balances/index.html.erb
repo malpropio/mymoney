@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Debt Balances</h1>
+<h1>Listing Debt/Asset Balances</h1>
 
 <div class="row">
   <div class="col-xs-12">
@@ -22,9 +22,9 @@
 <table>
   <thead>
     <tr>
-      <th>Debt</th>
+      <th>Debt/Asset</th>
       <th>Payment Start Date</th>
-      <th>Due date</th>
+      <th>Due/Target date</th>
       <th>Balance</th>
       <th>Paid</th>
       <th>+/-</th>
@@ -38,9 +38,9 @@
         <td><%= debt_balance.debt.name %></td>
         <td><%= debt_balance.payment_start_date %></td>
         <td><%= debt_balance.due_date %></td>
-        <td><%= number_to_currency(debt_balance.balance) %></td>
+        <td><%= number_to_currency(debt_balance.balance_of_interest) %></td>
         <td><%= number_to_currency(debt_balance.payments.sum(:amount)) %></td>
-        <td style="background-color:<%= good_neg_cell_color(debt_balance.balance - debt_balance.payments.sum(:amount), debt_balance.debt.name)%>"><%= number_to_currency(debt_balance.balance - debt_balance.payments.sum(:amount)) %></td>
+        <td style="background-color:<%= good_neg_cell_color(debt_balance.balance_of_interest - debt_balance.payments.sum(:amount), debt_balance.debt.name)%>"><%= number_to_currency(debt_balance.balance_of_interest - debt_balance.payments.sum(:amount)) %></td>
         <td><%= link_to 'Show', debt_balance %></td>
         <td><%= link_to 'Edit', edit_debt_balance_path(debt_balance) %></td>
         <td><%= link_to 'Destroy', debt_balance, method: :delete, data: { confirm: 'Are you sure?' } %></td>

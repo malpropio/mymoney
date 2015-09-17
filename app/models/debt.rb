@@ -1,8 +1,7 @@
 class Debt < ActiveRecord::Base
   has_many :debt_balances
   
-  validates_presence_of :category, :name, :due_day
-  validates :due_day, numericality: {only_integer: true, greater_than: 0, less_than: 31}
+  validates_presence_of :category, :name
 
   validates_uniqueness_of :category, :scope => :name, message: "already taken for this name"
 

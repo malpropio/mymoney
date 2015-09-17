@@ -27,6 +27,10 @@
     <%= f.label :description %><br>
     <%= f.collection_select :description_cc, Debt.where(category: "Credit Cards").order(:name), :name, :name, {prompt: 'Please Select'} %>
   </div>
+  <div class="field" id="desc_asset" style="display:none;" >
+    <%= f.label :description %><br>
+    <%= f.collection_select :description_asset, Debt.where(category: "Savings").order(:name), :name, :name, {prompt: 'Please Select'} %>
+  </div>
   <div class="field">
     <%= f.label :spending_date, "Date"  %>
     <%= f.calendar_field :spending_date %>
