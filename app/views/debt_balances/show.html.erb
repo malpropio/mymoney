@@ -26,6 +26,11 @@
 </p>
 
 <p>
+  <strong>Payments so far:</strong>
+  <%= number_to_currency(@debt_balance.payments.sum(:amount)) %>
+</p>
+
+<p>
  <strong>Payments needed to payoff/reach target by the due date:</strong>
 </p>
 
@@ -41,3 +46,6 @@
 
 <%= link_to 'Edit', edit_debt_balance_path(@debt_balance) %> |
 <%= link_to 'Back', debt_balances_path %>
+<% if @debt_balance.due_date > Time.now.to_date %> |
+  <%= link_to 'Close', close_debt_balance_path(@debt_balance) %>
+<% end %>

@@ -1,5 +1,5 @@
 class DebtBalancesController < ApplicationController
-  before_action :set_debt_balance, only: [:show, :edit, :update, :destroy]
+  before_action :set_debt_balance, only: [:show, :edit, :update, :destroy, :close]
 
   # GET /debt_balances
   # GET /debt_balances.json
@@ -78,6 +78,15 @@ class DebtBalancesController < ApplicationController
       format.html { redirect_to debt_balances_url, notice: 'Debt balance was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  # Close a goal/debt/balance
+  def close
+    @debt_balance.close
+    respond_to do |format|
+      format.html { redirect_to @debt_balance, notice: 'Debt/Asset balance was successfully closed.' }
+      format.json { head :no_content }
+    end    
   end
 
   private
