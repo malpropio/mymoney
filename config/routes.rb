@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :allocations
   
 
   resources :income_distributions do
