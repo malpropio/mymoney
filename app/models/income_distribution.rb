@@ -97,8 +97,9 @@ class IncomeDistribution < ActiveRecord::Base
   end
 
   def amex
-    result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = 'Amex'")
-    result.exists? ? result.first.boa_payment_due : 0
+    #result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = 'Amex'")
+    #result.exists? ? result.first.boa_payment_due : 0
+    amout_due('Amex','Bank Of America')
   end
 
   def freedom
@@ -124,6 +125,15 @@ class IncomeDistribution < ActiveRecord::Base
   def jcp
     result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = 'Jcp'")
     result.exists? ? result.first.boa_payment_due : 0
+  end
+
+  def amout_due(debt_name = nil, account = nil)
+    if debt_name && account
+      result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = '#{debt_name}'")
+      if result.exists?
+        account == 'Chase' ? result.first.chase_payment_due : result.first.boa_payment_due
+      end
+    end
   end
 
   private
