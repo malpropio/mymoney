@@ -1,4 +1,6 @@
 class BudgetsController < ApplicationController
+  include SpendingsHelper
+
   before_action :set_budget, only: [:show, :edit, :update, :destroy]
   
   FLOOR = "2014-01-01"  
@@ -16,6 +18,9 @@ class BudgetsController < ApplicationController
   # GET /budgets/1
   # GET /budgets/1.json
   def show
+    @spendings = @budget.spendings
+                        .order(sort_column + " " + sort_direction)
+                        .order(updated_at: :desc)
   end
 
   # GET /budgets/new

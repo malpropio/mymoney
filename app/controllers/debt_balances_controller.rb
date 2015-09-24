@@ -1,4 +1,6 @@
 class DebtBalancesController < ApplicationController
+  include SpendingsHelper  
+
   before_action :set_debt_balance, only: [:show, :edit, :update, :destroy, :close]
 
   # GET /debt_balances
@@ -29,6 +31,9 @@ class DebtBalancesController < ApplicationController
   # GET /debt_balances/1
   # GET /debt_balances/1.json
   def show
+    @spendings = @debt_balance.payments
+                        .order(sort_column + " " + sort_direction)
+                        .order(updated_at: :desc)
   end
 
   # GET /debt_balances/new
