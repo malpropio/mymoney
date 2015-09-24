@@ -14,52 +14,27 @@
   </thead>
   <tbody>
       <tr>
-        <td>Amex</td>
-        <td><%= number_to_currency(@income_distribution.amex) %></td>
-        <td style="background-color:<%= good_pos_cell_color(@income_distribution.amex_alloc)%>"><%= number_to_currency( @income_distribution.amex_alloc) %></td>
-      </tr>
-      <tr>
-        <td>Travel</td>
-        <td><%= number_to_currency(@income_distribution.travel) %></td>
-        <td style="background-color:<%= good_pos_cell_color(@income_distribution.travel_alloc)%>"><%= number_to_currency( @income_distribution.travel_alloc) %></td>
-      </tr>
-      <tr>
-        <td>Cash</td>
-        <td><%= number_to_currency(@income_distribution.cash) %></td>
-        <td style="background-color:<%= good_pos_cell_color(@income_distribution.cash_alloc)%>"><%= number_to_currency( @income_distribution.cash_alloc) %></td>
-      </tr>
-      <tr>
-        <td>Jcp</td>
-        <td><%= number_to_currency(@income_distribution.jcp) %></td>
-        <td style="background-color:<%= good_pos_cell_color(@income_distribution.jcp_alloc)%>"><%= number_to_currency( @income_distribution.jcp_alloc) %></td>
-      </tr>
-      <tr>
-        <td>Express</td>
-        <td><%= number_to_currency(@income_distribution.express) %></td>
-        <td style="background-color:<%= good_pos_cell_color(@income_distribution.express_alloc)%>"><%= number_to_currency( @income_distribution.express_alloc) %></td>
-      </tr>
-      <tr>
         <td>BoA</td>
         <td style="background-color:<%= equal_cell_color(@income_distribution.boa_chk,@income_distribution.boa_total_distribution)%>"><%= number_to_currency(@income_distribution.boa_chk) %></td>
-        <td style="background-color:<%= good_pos_cell_color(@income_distribution.boa_balance_left)%>"><%= number_to_currency( @income_distribution.boa_balance_left) %></td>
+        <td style="background-color:<%= good_pos_cell_color(@income_distribution.boa_balance_left)%>"><%= number_to_currency(@income_distribution.boa_balance_left) %></td>
       </tr>
-       <tr>
+      <% @income_distribution.boa_debts.each do |account| %>
+        <tr>
+          <td><%= account.debt.name %></td>
+          <td style="background-color:<%= good_pos_cell_color(account.payment_due)%>"><%= number_to_currency(account.payment_due) %></td>
+          <td></td>
+        </tr>
+      <% end %>
+      <tr>
         <td>Rent</td>
         <td></td>
-        <td style="background-color:<%= good_pos_cell_color(@income_distribution.rent_alloc)%>"><%= number_to_currency( @income_distribution.rent_alloc) %></td>
+        <td style="background-color:<%= good_pos_cell_color(@income_distribution.rent_alloc)%>"><%= number_to_currency(@income_distribution.rent_alloc) %></td>
       </tr>
       <tr>
         <td>Car</td>
         <td></td>
-        <td style="background-color:<%= good_pos_cell_color(@income_distribution.car_alloc)%>"><%= number_to_currency( @income_distribution.car_alloc) %></td>
+        <td style="background-color:<%= good_pos_cell_color(@income_distribution.car_alloc)%>"><%= number_to_currency(@income_distribution.car_alloc) %></td>
       </tr>
-      <% @income_distribution.savings.each do |loan| %>
-        <tr>
-          <td><%= loan.debt.name %></td>
-          <td></td>
-          <td style="background-color:<%= good_pos_cell_color(loan.boa_payment_due)%>"><%= number_to_currency(loan.boa_payment_due) %></td>
-        </tr>
-      <% end %>
       <tr>
         <td>Extra Savings</td>
         <td></td>
@@ -86,20 +61,15 @@
   </thead>
   <tbody>
       <tr>
-        <td>Freedom</td>
-        <td><%= number_to_currency(@income_distribution.freedom) %></td>
-        <td style="background-color:<%= good_pos_cell_color(@income_distribution.freedom_alloc)%>"><%= number_to_currency( @income_distribution.freedom_alloc) %></td>
-      </tr>
-      <tr>
         <td>Chase</td>
         <td style="background-color:<%= equal_cell_color(@income_distribution.chase_chk,@income_distribution.chase_total_distribution)%>"><%= number_to_currency(@income_distribution.chase_chk) %></td>
         <td style="background-color:<%= good_pos_cell_color(@income_distribution.chase_balance_left)%>"><%= number_to_currency( @income_distribution.chase_balance_left) %></td>
       </tr>
-      <% @income_distribution.student_loans.each do |loan| %>
+      <% @income_distribution.chase_debts.each do |account| %>
         <tr>
-          <td><%= loan.debt.name %></td>
+          <td><%= account.debt.name %></td>
+          <td style="background-color:<%= good_pos_cell_color(account.payment_due)%>"><%= number_to_currency(account.payment_due) %></td>
           <td></td>
-          <td style="background-color:<%= good_pos_cell_color(loan.chase_payment_due)%>"><%= number_to_currency(loan.chase_payment_due) %></td>
         </tr>
       <% end %>
       <tr>

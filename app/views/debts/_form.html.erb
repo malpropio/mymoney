@@ -24,6 +24,10 @@
     <%= f.text_field :name %>
   </div>
   <div class="field">
+    <%= f.label :pay_from %><br>
+    <%= f.select :pay_from , options_for_select([['Bank Of America', 'Bank Of America'], ['Chase', 'Chase']]) %>
+  </div>
+  <div class="field">
     <%= f.label :is_asset %><br>
     <%= f.check_box :is_asset %>
   </div>

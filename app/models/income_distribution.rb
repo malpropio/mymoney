@@ -97,43 +97,50 @@ class IncomeDistribution < ActiveRecord::Base
   end
 
   def amex
-    #result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = 'Amex'")
-    #result.exists? ? result.first.boa_payment_due : 0
-    amout_due('Amex','Bank Of America')
+    amount_due('Amex')
   end
 
   def freedom
-    result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = 'Freedom'")
-    result.exists? ? result.first.chase_payment_due : 0
+    amount_due('Freedom')
   end
 
   def travel
-    result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = 'Travel'")
-    result.exists? ? result.first.boa_payment_due : 0
+    amount_due('Travel')
   end
 
   def cash
-    result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = 'Cash'")
-    result.exists? ? result.first.boa_payment_due : 0
+    amount_due('Cash')
   end
 
   def express
-    result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = 'Express'")
-    result.exists? ? result.first.boa_payment_due : 0
+    amount_due('Express')
   end
 
   def jcp
-    result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = 'Jcp'")
-    result.exists? ? result.first.boa_payment_due : 0
+    amount_due('Jcp')
   end
 
-  def amout_due(debt_name = nil, account = nil)
-    if debt_name && account
+  def credit_cards
+    DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.sub_category = 'Credit Cards'")
+  end
+
+  def amount_due(debt_name = nil)
+    amount = 0
+    if debt_name 
       result = DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.name = '#{debt_name}'")
       if result.exists?
-        account == 'Chase' ? result.first.chase_payment_due : result.first.boa_payment_due
+        amount = result.first.payment_due
       end
     end
+    amount
+  end
+
+  def boa_debts
+    DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.pay_from = 'Bank Of America'")
+  end
+
+  def chase_debts
+    DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.pay_from = 'Chase'")
   end
 
   private

@@ -16,6 +16,18 @@
     <%= f.collection_select :debt_id, Debt.all.order(:name), :id, :name%>
   </div>
   <div class="field">
+    <%= f.label :fixed %>:
+    <%= f.check_box :fixed %>
+  </div>
+  <div class="field"> 
+    <%= f.label :frequency %>: 
+    <%= f.select :frequency, options_for_select([['Weekly', 'Weekly'], ['Bi-Weekly', 'Bi-Weekly'], ['Monthly', 'Monthly']]) %>    
+  </div>
+  <div class="field">
+    <%= f.label :fix_amount %>:
+    <%= f.number_field :fix_amount %>
+  </div>
+  <div class="field">
     <%= f.label :balance %><br>
     <%= f.number_field :balance %>
   </div>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150914213216) do
+ActiveRecord::Schema.define(version: 20150919031028) do
 
   create_table "allocations", force: :cascade do |t|
     t.decimal  "savings",      precision: 8, scale: 2
@@ -62,12 +62,13 @@ ActiveRecord::Schema.define(version: 20150914213216) do
   add_index "debt_balances", ["payment_start_date"], name: "index_debt_balances_on_payment_start_date", using: :btree
 
   create_table "debts", force: :cascade do |t|
-    t.string   "category",     limit: 255,                 null: false
-    t.string   "sub_category", limit: 255,                 null: false
-    t.string   "name",         limit: 255,                 null: false
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
+    t.string   "category",     limit: 255,                             null: false
+    t.string   "sub_category", limit: 255,                             null: false
+    t.string   "name",         limit: 255,                             null: false
+    t.datetime "created_at",                                           null: false
+    t.datetime "updated_at",                                           null: false
     t.boolean  "is_asset",                 default: false
+    t.string   "pay_from",     limit: 255, default: "Bank Of America"
   end
 
   add_index "debts", ["category", "name"], name: "by_category_name", unique: true, using: :btree
