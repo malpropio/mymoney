@@ -34,7 +34,7 @@ class BudgetsController < ApplicationController
 
   def budgets_by_month
     subquery = Spending.joins(:category)
-                        .where("categories.name NOT IN ('Credit Cards')")
+                        .where("categories.name NOT IN ('Credit Cards','Savings')")
                         .select("SUM(amount) AS total_spending, budget_id").group(:budget_id).to_sql
 
     payments_subquery = Spending.joins(:category)
@@ -44,17 +44,17 @@ class BudgetsController < ApplicationController
     agg = Budget.joins("INNER JOIN categories ON categories.id = budgets.category_id")
                 .joins("LEFT OUTER JOIN (#{subquery}) spendings ON budgets.id = spendings.budget_id")
                 .joins("LEFT OUTER JOIN (#{payments_subquery}) payments ON budgets.id = payments.budget_id")
-                .select("budgets.budget_month, Sum(CASE WHEN categories.name IN ('Credit Cards') THEN 0 ELSE spendings.total_spending END) AS total_spending, Sum(CASE WHEN categories.name IN ('Credit Cards') THEN 0 ELSE budgets.amount END) AS total_budget, Sum(payments.total_payment) AS total_payment ")
+                .select("budgets.budget_month, Sum(CASE WHEN categories.name IN ('Credit Cards','Savings') THEN 0 ELSE spendings.total_spending END) AS total_spending, Sum(CASE WHEN categories.name IN ('Credit Cards','Savings') THEN 0 ELSE budgets.amount END) AS total_budget, Sum(payments.total_payment) AS total_payment ")
                 .where("budgets.budget_month >= DATE_ADD(NOW(), INTERVAL - 24 MONTH)")
                 .group("budgets.budget_month")
-                .having("Sum(CASE WHEN categories.name IN ('Credit Cards') THEN 0 ELSE spendings.total_spending END)>0 AND Sum(CASE WHEN categories.name IN ('Credit Cards') THEN 0 ELSE budgets.amount END)>0 AND Sum(payments.total_payment)>0")
+                .having("Sum(CASE WHEN categories.name IN ('Credit Cards','Savings') THEN 0 ELSE spendings.total_spending END)>0 AND Sum(CASE WHEN categories.name IN ('Credit Cards','Savings') THEN 0 ELSE budgets.amount END)>0 AND Sum(payments.total_payment)>0")
     
     h1 = Hash.new
 
     agg.each do |budget| 
       h1.store(["Budget", budget.budget_month.strftime('%b %Y')],budget.total_budget) 
       h1.store(["Spending", budget.budget_month.strftime('%b %Y')],budget.total_spending)
-      h1.store(["Payment", budget.budget_month.strftime('%b %Y')],budget.total_payment)
+#      h1.store(["Payment", budget.budget_month.strftime('%b %Y')],budget.total_payment)
     end
     
     render json: h1.chart_json

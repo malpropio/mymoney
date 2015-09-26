@@ -3,10 +3,6 @@ class DebtBalance < ActiveRecord::Base
 
   belongs_to :debt
 
-  attr_accessor :fixed
-  attr_accessor :frequency
-  attr_accessor :fix_amount
-
   validates_presence_of :debt_id, :due_date, :balance
   validates :balance, numericality: true
 
@@ -15,23 +11,7 @@ class DebtBalance < ActiveRecord::Base
   validate :start_pay_date
 
   before_validation do 
-    self.payment_start_date = self.due_date - 1.months + 1.days if !self.due_date.blank? && self.payment_start_date.blank?
-    set_fix_balance if self.fixed == 1 
-  end
-
-  def set_fix_balance
-    self.target_balance = 0
-    if self.frequency == 'Weekly'
-      self.balance = self.fix_amount.to_f * boa_fridays(self.payment_start_date, self.due_date)
-   # elsif self.frequency == 'Bi-Weekly'
-   #   self.balance = self.fix_amount.to_f * boa_fridays(self.payment_start_date, self.due_date)
-    end
-
-    if self.debt.is_asset?
-      tmp = self.balance
-      self.balance = self.target_balance
-      self.target_balance = tmp
-    end
+    self.payment_start_date = self.due_date - 1.months + 1.days if !self.due_date.blank? && self.payment_start_date.blank?  
   end
 
   def payments
@@ -42,10 +22,6 @@ class DebtBalance < ActiveRecord::Base
 
   def balance_of_interest
     current_balance = self.debt.is_asset? ? self.target_balance - self.balance : self.balance
-  end
-
-  def payment_due
-    self.debt.pay_from == 'Chase' ? chase_payment_due : boa_payment_due
   end
 
   def chase_payment_due
