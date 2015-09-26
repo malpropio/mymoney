@@ -1,4 +1,6 @@
 module ApplicationHelper
+include Att::Codekit
+
 
 VALID = ["Amex","Freedom","Travel","Cash","Jcp","Express"]
 VALID_GOOD_NEG = ["Credit Cards","Savings"]
@@ -54,16 +56,24 @@ SUCCESS = "#00FFFF"
     end
   end
 
-# Date functions
-  def fridays(start_date, end_date)
-    my_days = [5] # day of the week in 0-6. Sunday is day-of-week 0; Saturday is day-of-week 6.
-    result = (start_date..end_date).to_a.select {|k| my_days.include?(k.wday)}
-    result.count
+  def auth_service
+    service = Auth::AuthCode.new(ATT_CONFIG['fqdn'], ATT_CONFIG['client_id'], ATT_CONFIG['client_secret'], :redirect => root_url, :scope => ATT_CONFIG['scope'])
   end
 
-  def chase_fridays(start_date, end_date)
-    my_days = [5] # day of the week in 0-6. Sunday is day-of-week 0; Saturday is day-of-week 6.
-    result = (start_date..end_date).to_a.select {|k| my_days.include?(k.wday) && k.cweek % 2 == 0}
-    result.count
+  def text_token
+    token = Auth::OAuthToken.open_token(ATT_CONFIG['token_file']) if File.exist?(ATT_CONFIG['token_file'])
+  end
+
+  def store_token(code = nil)
+    if code
+      token = auth_service.createToken(code)
+      Auth::OAuthToken.save_token(ATT_CONFIG['token_file'], token)
+    end
+  end
+
+  def text_service
+    if text_token
+      Service::IMMNService.new(ATT_CONFIG['fqdn'], text_token)
+    end
   end
 end

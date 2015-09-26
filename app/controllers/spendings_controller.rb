@@ -2,6 +2,8 @@ class SpendingsController < ApplicationController
   include SpendingsHelper
 
   before_action :set_spending, only: [:show, :edit, :update, :destroy]
+  after_action :send_alert, only: [:create]
+
 
   FLOOR = "2014-01-01"
 
@@ -116,5 +118,12 @@ class SpendingsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def spending_params
       params.require(:spending).permit(:description, :category_id, :spending_date, :amount, :description_loan, :payment_method_id, :description_cc, :description_asset)
+    end
+
+    def send_alert
+      if @spending.budget.alert_message && text_service
+        #text_service.sendMessage(ATT_CONFIG['addresses'], :message => "Je t'aimmmmeeeee (sent from the website) whooohooo")
+        text_service.sendMessage(ATT_CONFIG['addresses'], :message => @spending.budget.alert_message)
+      end
     end
 end

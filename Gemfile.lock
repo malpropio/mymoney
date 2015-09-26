@@ -1,5 +1,6 @@
 GEM
   remote: https://rubygems.org/
+  remote: http://lprod.code-api-att.com:8808/
   specs:
     actionmailer (4.2.3)
       actionpack (= 4.2.3)
@@ -39,6 +40,10 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     arel (6.0.3)
+    att-codekit (5.0.0)
+      immutable_struct
+      json
+      rest-client
     bcrypt (3.1.7)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
@@ -67,6 +72,8 @@ GEM
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
+    domain_name (0.5.24)
+      unf (>= 0.0.5, < 1.0.0)
     erubis (2.7.0)
     execjs (2.6.0)
     faker (1.5.0)
@@ -75,7 +82,10 @@ GEM
       activesupport (>= 4.1.0)
     groupdate (2.4.0)
       activesupport (>= 3)
+    http-cookie (1.0.2)
+      domain_name (~> 0.5)
     i18n (0.7.0)
+    immutable_struct (1.1.1)
     jbuilder (2.3.1)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
@@ -93,6 +103,7 @@ GEM
     minitest (5.8.0)
     multi_json (1.11.2)
     mysql2 (0.3.20)
+    netrc (0.10.3)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
     orm_adapter (0.5.0)
@@ -130,6 +141,10 @@ GEM
     rdoc (4.2.0)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
+    rest-client (1.8.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
     rspec-core (3.3.2)
       rspec-support (~> 3.3.0)
     rspec-expectations (3.3.1)
@@ -174,6 +189,9 @@ GEM
     uglifier (2.7.2)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.1)
     warden (1.2.3)
       rack (>= 1.0)
     web-console (2.2.1)
@@ -188,6 +206,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_median
+  att-codekit!
   bcrypt (= 3.1.7)
   bootstrap-datepicker-rails
   bootstrap-sass (= 3.2.0.0)
