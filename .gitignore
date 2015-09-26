@@ -18,3 +18,4 @@
 
 #ignore key files
 config/secrets.yml
+config/att.yml
