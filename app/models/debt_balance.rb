@@ -11,7 +11,7 @@ class DebtBalance < ActiveRecord::Base
   validate :start_pay_date
 
   before_validation do 
-    self.payment_start_date = self.due_date - 1.months + 1.days if !self.due_date.blank? && self.payment_start_date.blank?  
+    self.payment_start_date = self.due_date - 1.months + 1.days if !self.due_date.blank? && self.payment_start_date.blank?
   end
 
   def payments
@@ -22,6 +22,10 @@ class DebtBalance < ActiveRecord::Base
 
   def balance_of_interest
     current_balance = self.debt.is_asset? ? self.target_balance - self.balance : self.balance
+  end
+
+  def payment_due
+    self.debt.pay_from == 'Chase' ? chase_payment_due : boa_payment_due
   end
 
   def chase_payment_due
