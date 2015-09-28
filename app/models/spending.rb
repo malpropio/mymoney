@@ -8,7 +8,7 @@ class Spending < ActiveRecord::Base
   attr_accessor :description_asset
 
   validates_presence_of :description, :category_id, :spending_date, :amount, :payment_method_id
-  validates :amount, numericality: {greater_than: 0}
+  validates :amount, numericality: true
   
   DEBIT_CATEGORIES = ['Credit Cards','Loans','Rent','Utilities','Savings']
 
