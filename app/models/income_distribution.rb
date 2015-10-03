@@ -8,7 +8,10 @@ class IncomeDistribution < ActiveRecord::Base
   validate :validate_date_is_friday
 
   RENT = 1550
+  CAR_BASE_PAY_DAY = Date.new(2015,1,2)
   CAR_LOAN = 186.19
+
+  CHASE_BASE_PAY_DAY = Date.new(2015,1,9)
   BOA_BUFFER = 10
   CHASE_BUFFER = 10
 
@@ -61,17 +64,17 @@ class IncomeDistribution < ActiveRecord::Base
   end
 
   def car_alloc
-    self.distribution_date.cweek % 2 == 1 ? CAR_LOAN : 0
+    bi_weekly_due(CAR_BASE_PAY_DAY,self.distribution_date) ? CAR_LOAN : 0
   end
 
   def student_alloc
     result = 0
     student_loans.each {|loan| result += loan.chase_payment_due }
-    self.distribution_date.cweek % 2 == 0 ? result : 0 
+    bi_weekly_due(CHASE_BASE_PAY_DAY,self.distribution_date) ? result : 0
   end
 
   def student_loans
-    self.distribution_date.cweek % 2 == 0 ? DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.sub_category = 'Student Loans'") : []
+    bi_weekly_due(CHASE_BASE_PAY_DAY,self.distribution_date) ? DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.sub_category = 'Student Loans'") : []
   end
 
   def savings_alloc
