@@ -31,6 +31,15 @@ module BudgetsHelper
     result
   end
 
+  def credit_payment_budget_notes(date = nil)
+    savings = DebtBalance.joins(:debt).where("payment_start_date<='#{date}' AND due_date>='#{date}' AND debts.sub_category = 'Credit Cards'")
+    result = "Estimated payments needed to payoff all credit card balances: "
+    if savings.exists?
+      savings.each {|saving| result += "#{saving.debt.name} => #{number_to_currency(saving.payment_due)} x #{paychecks(saving.debt.pay_from,date)}; "  }
+    end
+    result
+  end
+
   def savings_budget(date = nil)
     savings = DebtBalance.joins(:debt).where("payment_start_date<='#{date}' AND due_date>='#{date}' AND debts.sub_category = 'Savings'")
     result = 0
@@ -54,6 +63,20 @@ module BudgetsHelper
 
     result += savings_budget(date)
     result += loans_budget(date)
+
+    result
+  end
+
+  def fixed_budget_notes(date = nil)
+    result = "Fixed budgets: "
+    result += "Other => #{number_to_currency(Budget.joins(:category)
+                   .where("categories.name NOT IN ('Credit Cards')")
+                   .where("categories.name IN ('Rent','Utilities','Insurance','Phone/TV/Internet')")
+                   .where(budget_month: date)
+                   .sum(:amount))}; "
+
+    result += "Savings => #{number_to_currency(savings_budget(date))}; "
+    result += "Loans => #{number_to_currency(loans_budget(date))}; "
 
     result
   end
