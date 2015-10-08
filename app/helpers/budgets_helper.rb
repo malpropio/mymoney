@@ -6,7 +6,9 @@ module BudgetsHelper
   end
 
   def student_loan_budget(date = nil)
-    savings = DebtBalance.joins(:debt).where("payment_start_date<='#{date}' AND due_date>='#{date}' AND debts.sub_category = 'Student Loans'")
+    start_date = date.nil? ? Date.new(1864,1,1) : date.change(day: 1)
+    end_date = date.nil? ? Date.new(1864,1,1) : date.end_of_month
+    savings = DebtBalance.joins(:debt).where("payment_start_date<='#{start_date}' AND due_date>='#{end_date}' AND debts.sub_category = 'Student Loans'")
     result = 0
     if savings.exists?
       savings.each {|saving| result += saving.payment_due * paychecks(saving.debt.pay_from,date)  }
