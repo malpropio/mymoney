@@ -14,6 +14,10 @@ class Budget < ActiveRecord::Base
     self.budget_month = self.budget_month.change(day: 1) unless self.budget_month.blank? 
   end 
 
+  #def overall_budget
+    
+  #end
+
   def alert_message
     message = nil
     header = "=== Budget Alert ===\n\n"
