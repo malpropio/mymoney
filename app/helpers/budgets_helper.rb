@@ -8,10 +8,10 @@ module BudgetsHelper
   end
 
   def student_loan_budget(date = nil)
-    savings = DebtBalance.joins(:debt).where("payment_start_date<='#{date}' AND due_date>='#{date}' AND payment_start_date>='#{THRESHOLD}' AND debts.sub_category = 'Student Loans'")
+    savings = DebtBalance.joins(:debt).where("payment_start_date<='#{date}' AND due_date>='#{date}' AND debts.sub_category = 'Student Loans'")
     result = 0
     if savings.exists?
-      savings.each {|saving| result += saving.payment_due * paychecks(saving.debt.pay_from,date)  }
+      savings.each {|saving| result += saving.payment_due * (date >= Date.new(2015,10,1) ? paychecks(saving.debt.pay_from,date) : 0) }
     end
     result
   end
