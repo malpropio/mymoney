@@ -21,6 +21,15 @@ module BudgetsHelper
     end_date = date.nil? ? Date.new(1864,1,1) : date.end_of_month
     date >= Date.new(2014,7,1) ? 186.19 * (boa_fridays(start_date,end_date)-chase_fridays(start_date,end_date)) : 0
   end
+  
+  def credit_payment_budget(date = nil)
+    savings = DebtBalance.joins(:debt).where("payment_start_date<='#{date}' AND due_date>='#{date}' AND debts.sub_category = 'Credit Cards'")
+    result = 0
+    if savings.exists?
+      savings.each {|saving| result += saving.payment_due * paychecks(saving.debt.pay_from,date)  }
+    end
+    result
+  end
 
   def savings_budget(date = nil)
     savings = DebtBalance.joins(:debt).where("payment_start_date<='#{date}' AND due_date>='#{date}' AND debts.sub_category = 'Savings'")

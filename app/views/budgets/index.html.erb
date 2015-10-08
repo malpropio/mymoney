@@ -21,11 +21,12 @@
 <p>
   Expected Income: <%= number_to_currency(potential_income(@budgets.first.budget_month)) %><br>
   Total Budget: <%= number_to_currency(overall_budget(@budgets.first.budget_month)) %><br>
-  Fixed Budgets: <%= number_to_currency(fixed_budget(@budgets.first.budget_month)) %><br>
-  Variable Budgets: <%= "#{number_to_currency(variable_budget(@budgets.first.budget_month))} of #{number_to_currency(potential_income(@budgets.first.budget_month)-fixed_budget(@budgets.first.budget_month))}" %><br>
-  Debit Budgets: <%= number_to_currency(debit_budget(@budgets.first.budget_month)) %><br>
-  Credit Budgets: <%= "#{number_to_currency(credit_budget(@budgets.first.budget_month))} of #{number_to_currency(potential_income(@budgets.first.budget_month)-debit_budget(@budgets.first.budget_month)
+  Fixed Budget: <%= number_to_currency(fixed_budget(@budgets.first.budget_month)) %><br>
+  Variable Budget: <%= "#{number_to_currency(variable_budget(@budgets.first.budget_month))} of #{number_to_currency(potential_income(@budgets.first.budget_month)-fixed_budget(@budgets.first.budget_month))}" %><br>
+  Debit Budget: <%= number_to_currency(debit_budget(@budgets.first.budget_month)) %><br>
+  Credit Budget: <%= "#{number_to_currency(credit_budget(@budgets.first.budget_month))} of #{number_to_currency(potential_income(@budgets.first.budget_month)-debit_budget(@budgets.first.budget_month)
 )}" %><br>
+  Estimated CC Payments Budget (based on current cc balances): <%= number_to_currency(credit_payment_budget(@budgets.first.budget_month)) %><br>
   Savings: <%= number_to_currency(savings_budget(@budgets.first.budget_month)) %><br>
   Loans: <%= number_to_currency(loans_budget(@budgets.first.budget_month)) %>
 </p>
