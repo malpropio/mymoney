@@ -22,7 +22,7 @@
   Expected Income: <%= number_to_currency(potential_income(@budgets.first.budget_month)) %><br>
   Total Budget: <%= number_to_currency(overall_budget(@budgets.first.budget_month)) %><br>
   Fixed Budgets: <%= number_to_currency(fixed_budget(@budgets.first.budget_month)) %><br>
-  Variable Budgets: <%= number_to_currency(variable_budget(@budgets.first.budget_month)) %><br>
+  Variable Budgets: <%= "#{number_to_currency(variable_budget(@budgets.first.budget_month))} of #{number_to_currency(potential_income(@budgets.first.budget_month)-fixed_budget(@budgets.first.budget_month))}" %><br>
   Savings: <%= number_to_currency(savings_budget(@budgets.first.budget_month)) %><br>
   Loans: <%= number_to_currency(loans_budget(@budgets.first.budget_month)) %>
 </p>
