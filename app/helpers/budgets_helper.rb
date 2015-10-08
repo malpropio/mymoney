@@ -1,12 +1,14 @@
 module BudgetsHelper
   include DateModule
 
+  THRESHOLD="2015-10-01"
+
   def overall_budget(date = nil)
     Budget.joins(:category).where("categories.name NOT IN ('Credit Cards')").where(budget_month: date).sum(:amount) 
   end
 
   def student_loan_budget(date = nil)
-    savings = DebtBalance.joins(:debt).where("payment_start_date<='#{date}' AND due_date>='#{date}' AND debts.sub_category = 'Student Loans'")
+    savings = DebtBalance.joins(:debt).where("payment_start_date<='#{date}' AND due_date>='#{date}' AND payment_start_date>='#{THRESHOLD}' AND debts.sub_category = 'Student Loans'")
     result = 0
     if savings.exists?
       savings.each {|saving| result += saving.payment_due * paychecks(saving.debt.pay_from,date)  }
@@ -17,7 +19,7 @@ module BudgetsHelper
   def car_loan_budget(date = nil)
     start_date = date.nil? ? Date.new(1864,1,1) : date.change(day: 1)
     end_date = date.nil? ? Date.new(1864,1,1) : date.end_of_month
-    186.19 * (boa_fridays(start_date,end_date)-chase_fridays(start_date,end_date))
+    date >= Date.new(2014,7,1) ? 186.19 * (boa_fridays(start_date,end_date)-chase_fridays(start_date,end_date)) : 0
   end
 
   def savings_budget(date = nil)
