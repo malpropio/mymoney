@@ -53,6 +53,18 @@ module BudgetsHelper
     overall_budget(date)-fixed_budget(date)
   end
 
+  def credit_budget(date = nil)
+    overall_budget(date) - debit_budget(date)
+  end
+
+  def debit_budget(date = nil)
+    fixed_budget(date) - Budget.joins(:category)
+                   .where("categories.name NOT IN ('Credit Cards')")
+                   .where("categories.name IN ('Insurance','Phone/TV/Internet')")
+                   .where(budget_month: date)
+                   .sum(:amount)
+  end
+
   def potential_income(curr_month = nil)
     if !curr_month.nil?
       start_date = curr_month.change(day: 1)
