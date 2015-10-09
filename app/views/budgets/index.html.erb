@@ -13,8 +13,23 @@
   </div>
 </div>
 
-<%= link_to 'Reset All Budgets', reset_budgets_path, :data => {:confirm => 'Are you sure?'} %> |
-<%= link_to "Reset Current Month's Budgets", reset_current_month_budgets_path, :data => {:confirm => 'Are you sure?'} %>
+<p>
+  <%= link_to 'Reset All Budgets', reset_budgets_path, :data => {:confirm => 'Are you sure?'} %> |
+  <%= link_to "Reset Current Month's Budgets", reset_current_month_budgets_path, :data => {:confirm => 'Are you sure?'} %>
+</p>
+
+<p>
+  Expected Income: <%= number_to_currency(potential_income(@budgets.first.budget_month)) %><br>
+  Total Budget: <%= number_to_currency(overall_budget(@budgets.first.budget_month)) %><br>
+  Fixed Budget<sup><a href="#fn1" id="ref1"> 1</a></sup>: <%= number_to_currency(fixed_budget(@budgets.first.budget_month)) %><br>
+  Variable Budget: <%= "#{number_to_currency(variable_budget(@budgets.first.budget_month))} of #{number_to_currency(potential_income(@budgets.first.budget_month)-fixed_budget(@budgets.first.budget_month))}" %><br>
+  Debit Budget: <%= number_to_currency(debit_budget(@budgets.first.budget_month)) %><br>
+  Credit Budget: <%= "#{number_to_currency(credit_budget(@budgets.first.budget_month))} of #{number_to_currency(potential_income(@budgets.first.budget_month)-debit_budget(@budgets.first.budget_month)
+)}" %><br>
+  Estimated CC Payments Budget<sup><a href="#fn2" id="ref2"> 2</a></sup>: <%= number_to_currency(credit_payment_budget(@budgets.first.budget_month)) %><br>
+  <!-- Savings: <%= number_to_currency(savings_budget(@budgets.first.budget_month)) %><br>
+  Loans: <%= number_to_currency(loans_budget(@budgets.first.budget_month)) %> -->
+</p>
 
 <%= will_paginate @budgets %>
 
@@ -51,3 +66,10 @@
 <br>
 
 <%= link_to 'New Budget', new_budget_path %>
+
+<hr></hr>
+
+<p>
+<sup id="fn1">1. <%= fixed_budget_notes(@budgets.first.budget_month) %><a href="#ref1" title="Jump back to footnote 1 in the text.">↩</a></sup><br>
+<sup id="fn2">2. <%= credit_payment_budget_notes(@budgets.first.budget_month) %><a href="#ref2" title="Jump back to footnote 2 in the text.">↩</a></sup><br>
+</p>

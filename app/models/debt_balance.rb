@@ -3,35 +3,15 @@ class DebtBalance < ActiveRecord::Base
 
   belongs_to :debt
 
-  attr_accessor :fixed
-  attr_accessor :frequency
-  attr_accessor :fix_amount
-
   validates_presence_of :debt_id, :due_date, :balance
   validates :balance, numericality: true
 
   validates_uniqueness_of :debt_id, :scope => :due_date, message: "balance already due on this date"
-  validate :budget_not_set_for_month
+  #validate :budget_not_set_for_month
   validate :start_pay_date
 
   before_validation do 
     self.payment_start_date = self.due_date - 1.months + 1.days if !self.due_date.blank? && self.payment_start_date.blank?
-    set_fix_balance if self.fixed == 1 
-  end
-
-  def set_fix_balance
-    self.target_balance = 0
-    if self.frequency == 'Weekly'
-      self.balance = self.fix_amount.to_f * boa_fridays(self.payment_start_date, self.due_date)
-   # elsif self.frequency == 'Bi-Weekly'
-   #   self.balance = self.fix_amount.to_f * boa_fridays(self.payment_start_date, self.due_date)
-    end
-
-    if self.debt.is_asset?
-      tmp = self.balance
-      self.balance = self.target_balance
-      self.target_balance = tmp
-    end
   end
 
   def payments
@@ -41,11 +21,16 @@ class DebtBalance < ActiveRecord::Base
   end
 
   def balance_of_interest
-    current_balance = self.debt.is_asset? ? self.target_balance - self.balance : self.balance
+    #current_balance = self.debt.is_asset? ? self.target_balance - self.balance : self.balance - self.target_balance
+    current_balance = ( self.target_balance - self.balance ).abs
   end
 
   def payment_due
     self.debt.pay_from == 'Chase' ? chase_payment_due : boa_payment_due
+  end
+
+  def payments_to_date
+    self.debt.pay_from == 'Chase' ? chase_fridays(self.payment_start_date, Time.now.to_date) : boa_fridays(self.payment_start_date, Time.now.to_date)
   end
 
   def chase_payment_due
@@ -58,9 +43,9 @@ class DebtBalance < ActiveRecord::Base
 
   def close
     if self.debt.is_asset?
-      new_target_balance = self.balance + (boa_payment_due * boa_fridays(self.payment_start_date, Time.now.to_date))
+      new_target_balance = self.balance + ( payment_due * payments_to_date )
     else
-      new_target_balance = self.balance - (boa_payment_due * boa_fridays(self.payment_start_date, Time.now.to_date))
+      new_target_balance = self.balance - ( payment_due * payments_to_date )
     end
     
     update_attribute(:target_balance, new_target_balance)    

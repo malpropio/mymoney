@@ -1,5 +1,9 @@
 source 'https://rubygems.org'
 
+source 'http://lprod.code-api-att.com:8808' do
+  gem 'att-codekit'  
+end
+
 # Add bootstrap
 gem 'bootstrap-sass', '3.2.0.0'
 gem 'bootstrap-datepicker-rails'
@@ -54,6 +58,11 @@ gem 'jbuilder', '~> 2.0'
 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
+
+# for text messages
+# gem 'sms-easy'
+
+#gem 'twilio-ruby'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

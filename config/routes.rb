@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   post   'login'   	=> 	'sessions#create'
   delete 'logout'  	=> 	'sessions#destroy'
   get	'curr_alloc'  =>      'allocations#show_curr'
-
+  get 'authorize' => 'application#authorize'
 
   resources :categories
   

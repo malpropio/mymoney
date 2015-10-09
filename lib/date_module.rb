@@ -10,4 +10,13 @@ module DateModule
     result = (start_date..end_date).to_a.select {|k| my_days.include?(k.wday) && k.cweek % 2 == 0}
     result.count
   end
+
+  def bi_weekly_due(base_date, curr_date)
+    reference_date = Date.new(2009,1,1)
+    
+    ref_count = boa_fridays(reference_date, base_date)
+    curr_count = boa_fridays(reference_date, curr_date)
+  
+    (curr_count - ref_count) % 2 == 0
+  end
 end 
