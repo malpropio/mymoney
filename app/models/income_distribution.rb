@@ -19,17 +19,17 @@ class IncomeDistribution < ActiveRecord::Base
     BOA_BUFFER + rent_alloc + car_alloc + travel_alloc + cash_alloc + jcp_alloc + express_alloc + savings_alloc
   end
 
-  def boa_total_distribution
-    boa_total_fixed + amex_alloc + extra_savings_alloc
-  end
+  #def boa_total_distribution
+  #  boa_total_fixed + amex_alloc + extra_savings_alloc
+  #end
 
   def chase_total_fixed
     CHASE_BUFFER + student_alloc
   end
 
-  def chase_total_distribution
-    chase_total_fixed + freedom_alloc + chase_extra
-  end
+  #def chase_total_distribution
+  #  chase_total_fixed + freedom_alloc + chase_extra
+  #end
 
   def chase_extra
     [0, self.chase_chk - chase_total_fixed - freedom_alloc].max
@@ -50,7 +50,7 @@ class IncomeDistribution < ActiveRecord::Base
   def travel_alloc
     self.travel
   end
-
+ 
   def cash_alloc
     self.cash
   end
@@ -69,7 +69,7 @@ class IncomeDistribution < ActiveRecord::Base
 
   def student_alloc
     result = 0
-    student_loans.each {|loan| result += loan.chase_payment_due }
+    student_loans.each {|loan| result += loan.payment_due }
     bi_weekly_due(CHASE_BASE_PAY_DAY,self.distribution_date) ? result : 0
   end
 
@@ -79,7 +79,7 @@ class IncomeDistribution < ActiveRecord::Base
 
   def savings_alloc
     result = 0
-    savings.each {|saving| result += saving.boa_payment_due }
+    savings.each {|saving| result += saving.payment_due }
     result
   end
 
@@ -144,6 +144,60 @@ class IncomeDistribution < ActiveRecord::Base
 
   def chase_debts
     DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.pay_from = 'Chase'")
+  end
+
+  def boa_debts_hash
+    left_over = "Amex"
+    left_over_total = self.boa_chk
+
+    result = {}
+    
+    result["BoA"] = [self.boa_chk, BOA_BUFFER]
+    left_over_total -= BOA_BUFFER
+    
+    boa_debts.map do |d|
+      amount = d.debt.sub_category == "Car Loans" ? car_alloc : d.payment_due
+      result[d.debt.name] = [amount, amount] unless amount == 0
+      left_over_total -= amount unless d.debt.name == left_over
+    end
+
+    result["Rent"] = [rent_alloc, rent_alloc]
+    left_over_total -= rent_alloc
+
+    result[left_over][1] = left_over_total unless result[left_over].nil?
+    
+    result
+  end
+
+  def chase_debts_hash
+    left_over = "Freedom"
+    left_over_total = self.chase_chk
+    result = {}
+  
+    result["Chase"] = [self.chase_chk, CHASE_BUFFER]
+    left_over_total -= CHASE_BUFFER
+ 
+    chase_debts.map do |d|
+      amount =  bi_weekly_due(CHASE_BASE_PAY_DAY,self.distribution_date) ? d.payment_due : 0
+      result[d.debt.name] = [amount, amount] unless amount == 0
+      left_over_total -= amount unless d.debt.name == left_over
+    end
+
+    result[left_over][1] = left_over_total unless result[left_over].nil?
+    
+    result
+  end
+
+  def boa_total_distribution
+    total = 0
+    boa_debts_hash.map{|k,v| total+=v[1].abs}
+    total
+  end
+
+  def chase_total_distribution
+    total = 0
+    chase_debts_hash.map{|k,v| total+=v[1].abs}
+    total
   end
 
   private
