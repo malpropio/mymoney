@@ -2,7 +2,7 @@ class IncomeDistributionsController < ApplicationController
   include IncomeDistributionsHelper
 
   before_action :set_income_distribution, only: [:show, :edit, :update, :destroy, :make_payments, :undo_payments]
-  before_action :undo_all_payments, only: [:edit, :destroy]
+  before_action :undo_all_payments, only: [:destroy]
 
   # GET /income_distributions
   # GET /income_distributions.json
