@@ -23,6 +23,14 @@
     <%= f.label :chase_chk %><br>
     <%= f.number_field :chase_chk %>
   </div>
+  <div class="field">
+    <%= f.label :boa_focus %><br>
+    <%= f.select :boa_focus, focus_hash("Bank Of America") %>
+  </div>
+  <div class="field">
+    <%= f.label :chase_focus %><br>
+    <%= f.select :chase_focus, focus_hash("Chase")  %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>

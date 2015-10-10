@@ -1,4 +1,6 @@
 class IncomeDistributionsController < ApplicationController
+  include IncomeDistributionsHelper
+
   before_action :set_income_distribution, only: [:show, :edit, :update, :destroy, :make_payments, :undo_payments]
   before_action :undo_all_payments, only: [:edit, :destroy]
 
@@ -89,7 +91,7 @@ class IncomeDistributionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def income_distribution_params
-      params.require(:income_distribution).permit(:distribution_date, :boa_chk, :chase_chk)
+      params.require(:income_distribution).permit(:distribution_date, :boa_chk, :chase_chk, :boa_focus, :chase_focus)
     end 
 
     # Destroy spending

@@ -50,9 +50,9 @@ SUCCESS = "#00FFFF"
      end
   end
 
-  def equal_cell_color(amount_1 = nil, amount_2 = nil)
+  def equal_cell_color(amount_1 = nil, amount_2 = nil, alert = true)
     if !(amount_1.nil? || amount_2.nil?)
-      amount_1 == amount_2 ? SUCCESS : ERROR
+      amount_1 == amount_2 ? alert ? SUCCESS : NEUTRAL : ERROR
     end
   end
 

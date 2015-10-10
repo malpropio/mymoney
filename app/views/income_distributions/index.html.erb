@@ -21,7 +21,7 @@
 
   <tbody>
     <% @income_distributions.each do |income_distribution| %>
-      <tr style="background-color:<%= good_pos_cell_color([income_distribution.chase_balance_left, income_distribution.boa_balance_left].min)%>">
+      <tr style="background-color:<%= equal_cell_color(income_distribution.total_chk, income_distribution.total_distribution, false) %>">
         <td><%= income_distribution.distribution_date %></td>
         <td><%= number_to_currency( income_distribution.amex) %></td>
         <td><%= number_to_currency( income_distribution.freedom) %></td>
@@ -62,7 +62,7 @@
 
   <tbody>
     <% @income_distributions.each do |income_distribution| %>
-      <tr style="background-color:<%= good_pos_cell_color([income_distribution.chase_balance_left, income_distribution.boa_balance_left].min)%>">
+      <tr style="background-color:<%= equal_cell_color(income_distribution.total_chk, income_distribution.total_distribution, false) %>">
         <td><%= income_distribution.distribution_date %></td>
         <td><%= number_to_currency( income_distribution.amex_alloc) %></td>
         <td><%= number_to_currency( income_distribution.freedom_alloc) %></td>

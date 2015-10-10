@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150919031028) do
+ActiveRecord::Schema.define(version: 20151010193457) do
 
   create_table "allocations", force: :cascade do |t|
     t.decimal  "savings",      precision: 8, scale: 2
@@ -75,11 +75,13 @@ ActiveRecord::Schema.define(version: 20150919031028) do
 
   create_table "income_distributions", force: :cascade do |t|
     t.date     "distribution_date"
-    t.decimal  "boa_chk",           precision: 8, scale: 2,                 null: false
-    t.decimal  "chase_chk",         precision: 8, scale: 2,                 null: false
-    t.boolean  "paid",                                      default: false
-    t.datetime "created_at",                                                null: false
-    t.datetime "updated_at",                                                null: false
+    t.decimal  "boa_chk",                       precision: 8, scale: 2,                 null: false
+    t.decimal  "chase_chk",                     precision: 8, scale: 2,                 null: false
+    t.boolean  "paid",                                                  default: false
+    t.datetime "created_at",                                                            null: false
+    t.datetime "updated_at",                                                            null: false
+    t.string   "chase_focus",       limit: 255
+    t.string   "boa_focus",         limit: 255
   end
 
   add_index "income_distributions", ["distribution_date"], name: "index_income_distributions_on_distribution_date", unique: true, using: :btree

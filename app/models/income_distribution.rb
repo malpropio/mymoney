@@ -147,7 +147,7 @@ class IncomeDistribution < ActiveRecord::Base
   end
 
   def boa_debts_hash
-    left_over = "Amex"
+    left_over = self.boa_focus
     left_over_total = self.boa_chk
 
     result = {}
@@ -170,7 +170,7 @@ class IncomeDistribution < ActiveRecord::Base
   end
 
   def chase_debts_hash
-    left_over = "Freedom"
+    left_over = self.chase_focus
     left_over_total = self.chase_chk
     result = {}
   
@@ -198,6 +198,14 @@ class IncomeDistribution < ActiveRecord::Base
     total = 0
     chase_debts_hash.map{|k,v| total+=v[1].abs}
     total
+  end
+
+  def total_chk
+    self.chase_chk + self.boa_chk
+  end
+
+  def total_distribution
+    boa_total_distribution + chase_total_distribution
   end
 
   private
