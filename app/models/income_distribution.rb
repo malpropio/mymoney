@@ -216,7 +216,7 @@ class IncomeDistribution < ActiveRecord::Base
 
   def allocation(debt = nil)
     if debt
-      debts_hash[debt] ? debts_hash[debt][0] : 0
+      debts_hash[debt] ? debts_hash[debt][1] : 0
     end
   end
 
