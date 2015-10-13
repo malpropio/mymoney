@@ -2,6 +2,7 @@
 
 <h1>Listing Income Distributions</h1>
 
+<h2>Balances<sup><a href="#fn1" id="ref1"> 1</a></sup></h2>
 <table>
   <thead>
     <tr>
@@ -22,7 +23,7 @@
         <td><%= number_to_currency(income_distribution.boa_chk) %></td>
         <td><%= number_to_currency(income_distribution.chase_chk) %></td>
         <% distro_list.each do |debt| %>
-          <td><%= number_to_currency(income_distribution.allocation(debt[1])) %></td>
+          <td><%= number_to_currency(income_distribution.allocation(debt[0])) %></td>
         <% end %>
         <td><%= link_to 'Show', income_distribution %></td>
         <td><%= link_to 'Edit', edit_income_distribution_path(income_distribution) %></td>
