@@ -13,7 +13,7 @@
 
   <div class="field">
     <%= f.label :category %><br>
-    <%= f.text_field :category %>
+    <%= f.select :category, options_for_select([['Credit Cards', 'Credit Cards'], ['Savings', 'Savings'], ['Loans','Loans']]) %>
   </div>
   <div class="field">
     <%= f.label :sub_category %><br>

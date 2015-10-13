@@ -157,7 +157,7 @@ class IncomeDistribution < ActiveRecord::Base
     
     boa_debts.map do |d|
       amount = d.debt.sub_category == "Car Loans" ? car_alloc : d.payment_due
-      result[d.debt.name] = [amount, amount] unless amount == 0
+      result[d.debt.name] = [amount, amount] #unless amount == 0
       left_over_total -= amount unless d.debt.name == left_over
     end
 
@@ -179,13 +179,19 @@ class IncomeDistribution < ActiveRecord::Base
  
     chase_debts.map do |d|
       amount =  bi_weekly_due(CHASE_BASE_PAY_DAY,self.distribution_date) ? d.payment_due : 0
-      result[d.debt.name] = [amount, amount] unless amount == 0
+      result[d.debt.name] = [amount, amount] #unless amount == 0
       left_over_total -= amount unless d.debt.name == left_over
     end
 
     result[left_over][1] = left_over_total unless result[left_over].nil?
     
     result
+  end
+
+  def debts_hash
+      result = boa_debts_hash
+      b = chase_debts_hash
+      result = result.merge(b)
   end
 
   def boa_total_distribution
@@ -206,6 +212,12 @@ class IncomeDistribution < ActiveRecord::Base
 
   def total_distribution
     boa_total_distribution + chase_total_distribution
+  end
+
+  def allocation(debt = nil)
+    if debt
+      debts_hash[debt] ? debts_hash[debt][0] : 0
+    end
   end
 
   private

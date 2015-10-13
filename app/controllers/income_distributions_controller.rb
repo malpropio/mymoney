@@ -103,9 +103,7 @@ class IncomeDistributionsController < ApplicationController
       spending_date = @income_distribution.distribution_date
       payment_method_id = PaymentMethod.find_by_name("Debit").id
 
-      a = @income_distribution.boa_debts_hash
-      b = @income_distribution.chase_debts_hash
-      c = a.merge(b)
+      c = @income_distribution.debts_hash
 
       c.map do |k,v|
         unless ["Rent","BoA","Chase"].include? k 
@@ -122,10 +120,8 @@ class IncomeDistributionsController < ApplicationController
       spending_date = @income_distribution.distribution_date
       payment_method_id = PaymentMethod.find_by_name("Debit").id
 
-      a = @income_distribution.boa_debts_hash
-      b = @income_distribution.chase_debts_hash
-      c = a.merge(b)
-
+      c = @income_distribution.debts_hash
+      
       c.map do |k,v|
         unless ["Rent","BoA","Chase"].include? k
           id = nil || Category.find_by_name(k).id if Category.exists?(name: k)

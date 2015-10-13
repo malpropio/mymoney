@@ -7,14 +7,11 @@
   <thead>
     <tr>
       <th>Distribution date</th>
-      <th>Amex</th>
-      <th>Freedom</th>
-      <th>Travel</th>
-      <th>Cash</th>
-      <th>Jcp</th>
-      <th>Express</th>
-      <th>Boa chk</th>
-      <th>Chase chk</th>
+      <th>Bank of America</th>
+      <th>Chase</th>
+      <% distro_list.each do |debt| %>
+        <th><%= debt[0] %></th>
+      <% end %>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -23,14 +20,11 @@
     <% @income_distributions.each do |income_distribution| %>
       <tr style="background-color:<%= equal_cell_color(income_distribution.total_chk, income_distribution.total_distribution, false) %>">
         <td><%= income_distribution.distribution_date %></td>
-        <td><%= number_to_currency( income_distribution.amex) %></td>
-        <td><%= number_to_currency( income_distribution.freedom) %></td>
-        <td><%= number_to_currency( income_distribution.travel) %></td>
-        <td><%= number_to_currency( income_distribution.cash) %></td>
-        <td><%= number_to_currency( income_distribution.jcp) %></td>
-        <td><%= number_to_currency( income_distribution.express) %></td>
-        <td><%= number_to_currency( income_distribution.boa_chk) %></td>
-        <td><%= number_to_currency( income_distribution.chase_chk) %></td>
+        <td><%= number_to_currency(income_distribution.boa_chk) %></td>
+        <td><%= number_to_currency(income_distribution.chase_chk) %></td>
+        <% distro_list.each do |debt| %>
+          <td><%= number_to_currency(income_distribution.allocation(debt[0])) %></td>
+        <% end %>
         <td><%= link_to 'Show', income_distribution %></td>
         <td><%= link_to 'Edit', edit_income_distribution_path(income_distribution) %></td>
         <td><%= link_to 'Destroy', income_distribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -39,45 +33,6 @@
   </tbody>
 </table>
 
-<br>
-
-<h2>Distributions</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>Distribution date</th>
-      <th>Amex</th>
-      <th>Freedom</th>
-      <th>Travel</th>
-      <th>Cash</th>
-      <th>Jcp</th>
-      <th>Express</th>
-      <th>Rent</th>
-      <th>Student Loans</th>
-      <th>Car Loans</th>
-      <th>Savings</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @income_distributions.each do |income_distribution| %>
-      <tr style="background-color:<%= equal_cell_color(income_distribution.total_chk, income_distribution.total_distribution, false) %>">
-        <td><%= income_distribution.distribution_date %></td>
-        <td><%= number_to_currency( income_distribution.amex_alloc) %></td>
-        <td><%= number_to_currency( income_distribution.freedom_alloc) %></td>
-        <td><%= number_to_currency( income_distribution.travel_alloc) %></td>
-        <td><%= number_to_currency( income_distribution.cash_alloc) %></td>
-        <td><%= number_to_currency( income_distribution.jcp_alloc) %></td>
-        <td><%= number_to_currency( income_distribution.express_alloc) %></td>
-        <td><%= number_to_currency( income_distribution.rent_alloc) %></td>
-        <td><%= number_to_currency( income_distribution.student_alloc) %></td>
-        <td><%= number_to_currency( income_distribution.car_alloc) %></td>
-        <td><%= number_to_currency( income_distribution.savings_alloc) %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
 <%= link_to 'New Income distribution', new_income_distribution_path %>
 

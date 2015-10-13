@@ -14,11 +14,13 @@
   </thead>
   <tbody>
     <% @income_distribution.boa_debts_hash.each do |debt| %>
-      <tr>
-        <td><%= debt[0] %></td>
-        <td><%= number_to_currency(debt[1][0]) %></td>
-        <td style="background-color:<%= good_pos_cell_color(debt[1][1])%>"><%= number_to_currency(debt[1][1]) %></td>
-      </tr>
+      <% unless debt[1][1] == 0 %>
+        <tr>
+          <td><%= debt[0] %></td>
+          <td><%= number_to_currency(debt[1][0]) %></td>
+          <td style="background-color:<%= good_pos_cell_color(debt[1][1])%>"><%= number_to_currency(debt[1][1]) %></td>
+        </tr>
+      <% end %>
     <% end %>
     <tr>
       <td></td>
@@ -42,11 +44,13 @@
   </thead>
   <tbody>
     <% @income_distribution.chase_debts_hash.each do |debt| %>
-      <tr>
-        <td><%= debt[0] %></td>
-        <td><%= number_to_currency(debt[1][0]) %></td>
-        <td style="background-color:<%= good_pos_cell_color(debt[1][1])%>"><%= number_to_currency(debt[1][1]) %></td>
-      </tr>
+      <% unless debt[1][1] == 0 %>
+        <tr>
+          <td><%= debt[0] %></td>
+          <td><%= number_to_currency(debt[1][0]) %></td>
+          <td style="background-color:<%= good_pos_cell_color(debt[1][1])%>"><%= number_to_currency(debt[1][1]) %></td>
+        </tr>
+      <% end %>
     <% end %>
     <tr>
       <td></td>

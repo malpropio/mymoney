@@ -11,4 +11,13 @@ module IncomeDistributionsHelper
     end
     result
   end
+
+  def distro_list
+    result = {}
+
+    Debt.pluck(:name).map { |name| result[name] = name }
+    result["Rent"] = "Rent"
+
+    result
+  end
 end
