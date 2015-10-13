@@ -15,9 +15,15 @@ module IncomeDistributionsHelper
   def distro_list
     result = {}
 
-    Debt.pluck(:name).map { |name| result[name] = name }
-    result["Rent"] = "Rent"
+    Debt.all.map { |d| result[d.name] = [d.name,d.category] }
+    result["Rent"] = ["Rent","Rent"]
 
     result
+  end
+
+  def distro_list_categories
+    result = {}
+    distro_list.map {|d| result[d[1][1]] = [d[1][1]]}
+    result.sort
   end
 end
