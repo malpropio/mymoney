@@ -52,6 +52,14 @@ class DebtBalance < ActiveRecord::Base
     update_attribute(:due_date, Time.now.to_date)
   end
 
+  def self.search(search)
+    if search
+      search[:debt_id].blank? ? all : where(debt_id: search[:debt_id])
+    else
+      all
+    end
+  end
+
   private
   def budget_not_set_for_month
     errors.add(:debt, "balance already set for #{self.due_date.strftime('%B %Y')}") if DebtBalance.where("id != #{self.id || 0} AND debt_id = #{self.debt_id} AND DATE_FORMAT(due_date, '%Y-%m-%01') = DATE_FORMAT('#{self.due_date}', '%Y-%m-%01')").exists? 

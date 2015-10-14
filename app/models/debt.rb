@@ -12,6 +12,14 @@ class Debt < ActiveRecord::Base
     self.sub_category = self.category if self.sub_category.blank?
   end
 
+  def self.search(search)
+    if search
+      where('name LIKE ?', "%#{search}%")
+    else
+      all
+    end
+  end
+
   private
   def clean_fields
     self.category = self.category.titleize unless self.category.nil?

@@ -16,6 +16,16 @@
   </div>
 </div>
 
+<%= form_tag debt_balances_path, :method => 'get', :id => "debt_balances_search" do %>
+  <table class="filters">
+    <tr>
+        <%= hidden_field_tag :direction, params[:direction] %>
+        <%= hidden_field_tag :sort, params[:sort] %>
+        <td><%= collection_select(:debt_balance, :debt_id, Debt.all, :id, :name, {include_blank: true})  %></td>
+        <td><%= submit_tag "Search", :name => nil %></td>
+    </tr>
+  </table>
+<% end %>
 
 <%= will_paginate @debt_balances %>
 
