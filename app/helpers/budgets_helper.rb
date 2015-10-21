@@ -101,7 +101,13 @@ module BudgetsHelper
     if !curr_month.nil?
       start_date = curr_month.change(day: 1)
       end_date = curr_month.end_of_month
-      chase_fridays(start_date,end_date) * 1837.09 + (boa_fridays(start_date,end_date)-chase_fridays(start_date,end_date)) * 1137.31
+      if start_date < Date.new(2015,10,1)
+        chase_fridays(start_date,end_date) * 1837.09 + nih_fridays(start_date,end_date) * 1137.31
+      elsif start_date >= Date.new(2015,10,1) && start_date < Date.new(2015,11,1)
+        chase_fridays(start_date,Date.new(2015,10,14)) * 1837.09 + nih_fridays(start_date,Date.new(2015,10,14)) * 1137.31 + nih_fridays(Date.new(2015,10,15),end_date) * 1085.31
+      else
+        chase_fridays(start_date,end_date) * 0 + nih_fridays(start_date,end_date) * 1085.31
+      end
     end
   end
 
