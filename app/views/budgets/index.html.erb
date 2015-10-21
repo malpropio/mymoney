@@ -13,10 +13,14 @@
   </div>
 </div>
 
-<p>
-  <%= link_to 'Reset All Budgets', reset_budgets_path, :data => {:confirm => 'Are you sure?'} %> |
-  <%= link_to "Reset Current Month's Budgets", reset_current_month_budgets_path, :data => {:confirm => 'Are you sure?'} %>
-</p>
+<%= form_tag reset_current_month_budgets_path, :method => 'get', :id => "budget_actions" do %>
+  <table class="filters">
+    <tr>
+        <td><%= select_tag :choice, options_for_select([["Current Month", "current"], ["Next Month", "next"]]) %></td>
+        <td><%= submit_tag "Reset", :data => {:confirm => 'Are you sure?'} %></td>
+    </tr>
+  </table>
+<% end %>
 
 <p>
   Expected Income: <%= number_to_currency(potential_income(@budgets.first.budget_month)) %><br>
