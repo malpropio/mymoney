@@ -17,7 +17,7 @@
   <table class="filters">
     <tr>
         <td><%= select_tag :choice, options_for_select([["Current Month", "current"], ["Next Month", "next"]]) %></td>
-        <td><%= submit_tag "Reset", :data => {:confirm => 'Are you sure?'} %></td>
+        <td><%= submit_tag "Reset", :data => {:confirm => "Are you sure? Next month's budget can be set on or after #{1.month.from_now.to_date.change(day: 1) - 5.days}."} %></td>
     </tr>
   </table>
 <% end %>
