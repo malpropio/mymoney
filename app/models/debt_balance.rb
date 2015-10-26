@@ -21,7 +21,6 @@ class DebtBalance < ActiveRecord::Base
   end
 
   def balance_of_interest
-    #current_balance = self.debt.is_asset? ? self.target_balance - self.balance : self.balance - self.target_balance
     current_balance = ( self.target_balance - self.balance ).abs
   end
 
@@ -39,6 +38,14 @@ class DebtBalance < ActiveRecord::Base
 
   def boa_payment_due
     self.balance_of_interest/boa_fridays(self.payment_start_date, self.due_date)
+  end
+
+  def after_pay_balance
+    if self.debt.is_asset?
+      self.balance + payments.sum(:amount)
+    else
+      self.balance - payments.sum(:amount)
+    end
   end
 
   def close
