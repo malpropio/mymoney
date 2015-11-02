@@ -39,14 +39,27 @@
  <strong>Payments needed to payoff/reach target by the due date:</strong>
 </p>
 
-<p style="text-indent: 2em;">
+<p style="text-indent: 2em; color:red;">
+ <strong>Before November 1st, 2015:</strong>
+</p>
+
+<p style="text-indent: 4em;">
   <strong>Weekly:</strong>
   <%= number_to_currency(@debt_balance.boa_payment_due) %>
 </p>
 
-<p style="text-indent: 2em;">
+<p style="text-indent: 4em;">
   <strong>Bi-Weekly:</strong>
   <%= number_to_currency(@debt_balance.chase_payment_due) %>
+</p>
+
+<p style="text-indent: 2em; color:green;">
+ <strong>After November 1st, 2015:</strong>
+</p>
+
+<p style="text-indent: 4em;">
+  <strong>Bi-Weekly:</strong>
+  <%= number_to_currency(@debt_balance.nih_payment_due) %>
 </p>
 
 <%= link_to 'Edit', edit_debt_balance_path(@debt_balance) %> |
