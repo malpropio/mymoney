@@ -24,8 +24,14 @@ class DebtBalance < ActiveRecord::Base
     current_balance = ( self.target_balance - self.balance ).abs
   end
 
-  def payment_due
-    self.debt.pay_from == 'Chase' ? chase_payment_due : boa_payment_due
+  def payment_due(payment_date = nil)
+    result = 0
+    if payment_date.nil?
+      result = self.debt.pay_from == 'Chase' ? chase_payment_due : boa_payment_due
+    elsif payment_date >= Date.new(2015,11,1)
+      result = nih_payment_due
+    end
+    result
   end
 
   def payments_to_date
@@ -38,6 +44,10 @@ class DebtBalance < ActiveRecord::Base
 
   def boa_payment_due
     self.balance_of_interest/boa_fridays(self.payment_start_date, self.due_date)
+  end
+
+  def nih_payment_due
+    self.balance_of_interest/nih_fridays(self.payment_start_date, self.due_date)
   end
 
   def after_pay_balance
