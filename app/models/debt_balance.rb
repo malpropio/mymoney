@@ -26,7 +26,7 @@ class DebtBalance < ActiveRecord::Base
 
   def payment_due(payment_date = nil)
     result = 0
-    if payment_date.nil?
+    if payment_date.nil? || payment_date < Date.new(2015,11,1)
       result = self.debt.pay_from == 'Chase' ? chase_payment_due : boa_payment_due
     elsif payment_date >= Date.new(2015,11,1)
       result = nih_payment_due
