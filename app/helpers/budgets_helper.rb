@@ -26,7 +26,7 @@ module BudgetsHelper
     savings = DebtBalance.joins(:debt).where("payment_start_date<='#{date}' AND due_date>='#{date}' AND debts.sub_category = 'Credit Cards'")
     result = 0
     if savings.exists?
-      savings.each {|saving| result += saving.payment_due * paychecks(saving.debt.pay_from,date)  }
+      savings.each {|saving| result += saving.payment_due(date) * paychecks(saving.debt.pay_from,date)  }
     end
     result
   end
@@ -35,7 +35,7 @@ module BudgetsHelper
     savings = DebtBalance.joins(:debt).where("payment_start_date<='#{date}' AND due_date>='#{date}' AND debts.sub_category = 'Credit Cards'")
     result = "Estimated payments needed to payoff all credit card balances: "
     if savings.exists?
-      savings.each {|saving| result += "#{saving.debt.name} => #{number_to_currency(saving.payment_due)} x #{paychecks(saving.debt.pay_from,date)}; "  }
+      savings.each {|saving| result += "#{saving.debt.name} => #{number_to_currency(saving.payment_due(date))} x #{paychecks(saving.debt.pay_from,date)}; "  }
     end
     result
   end

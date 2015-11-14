@@ -40,8 +40,12 @@ class DebtBalance < ActiveRecord::Base
     self.debt.pay_from == 'Chase' ? chase_fridays(self.payment_start_date, Time.now.to_date) : boa_fridays(self.payment_start_date, Time.now.to_date)
   end
 
-  def chase_payment_due(payment_date = Date.new(2015,1,9))
-    bi_weekly_due(CHASE_BASE_PAY_DAY,payment_date) ? self.balance_of_interest/chase_fridays(self.payment_start_date, self.due_date) : 0
+  def chase_payment_due(payment_date = nil)
+    if payment_date.nil?
+      self.balance_of_interest/chase_fridays(self.payment_start_date, self.due_date)
+    else
+      bi_weekly_due(CHASE_BASE_PAY_DAY,payment_date) ? self.balance_of_interest/chase_fridays(self.payment_start_date, self.due_date) : 0
+    end
   end
 
   def boa_payment_due
