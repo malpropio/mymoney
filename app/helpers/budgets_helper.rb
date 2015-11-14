@@ -44,7 +44,7 @@ module BudgetsHelper
     savings = DebtBalance.joins(:debt).where("payment_start_date<='#{date}' AND due_date>='#{date}' AND debts.sub_category = 'Savings'")
     result = 0
     if savings.exists?
-      savings.each {|saving| result += saving.payment_due * paychecks(saving.debt.pay_from,date)  }
+      savings.each {|saving| result += saving.payment_due(date) * paychecks(saving.debt.pay_from,date)  }
     end
     result
   end
@@ -114,10 +114,14 @@ module BudgetsHelper
   def paychecks(pay_from = nil, date = nil)
      start_date = date.nil? ? Date.new(1864,1,1) : date.change(day: 1)
      end_date = date.nil? ? Date.new(1864,1,1) : date.end_of_month
-     if pay_from == "Chase"
-       chase_fridays(start_date,end_date)
-     else
-       boa_fridays(start_date,end_date)
+     if date < Date.new(2015,10,1)
+       if pay_from == "Chase"
+         chase_fridays(start_date,end_date)
+       else
+         boa_fridays(start_date,end_date)
+       end
+     else 
+        nih_fridays(start_date,end_date)
      end
   end
 end
