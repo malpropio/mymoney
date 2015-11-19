@@ -13,8 +13,6 @@ class DebtBalance < ActiveRecord::Base
   before_validation do 
     self.payment_start_date = self.due_date - 1.months + 1.days if !self.due_date.blank? && self.payment_start_date.blank?
   end
-  
-  CHASE_BASE_PAY_DAY = Date.new(2015,1,9)
 
   def payments
     Spending.joins(:category)
@@ -29,7 +27,7 @@ class DebtBalance < ActiveRecord::Base
   def payment_due(payment_date = nil)
     result = 0
     if payment_date.nil? || payment_date < Date.new(2015,11,1)
-      result = self.debt.pay_from == 'Chase' ? chase_payment_due(payment_date) : boa_payment_due
+      result = self.debt.pay_from == 'Chase' ? chase_payment_due : boa_payment_due
     elsif payment_date >= Date.new(2015,11,1)
       result = nih_payment_due
     end
@@ -40,12 +38,8 @@ class DebtBalance < ActiveRecord::Base
     self.debt.pay_from == 'Chase' ? chase_fridays(self.payment_start_date, Time.now.to_date) : boa_fridays(self.payment_start_date, Time.now.to_date)
   end
 
-  def chase_payment_due(payment_date = nil)
-    if payment_date.nil?
-      self.balance_of_interest/chase_fridays(self.payment_start_date, self.due_date)
-    else
-      bi_weekly_due(CHASE_BASE_PAY_DAY,payment_date) ? self.balance_of_interest/chase_fridays(self.payment_start_date, self.due_date) : 0
-    end
+  def chase_payment_due
+    self.balance_of_interest/chase_fridays(self.payment_start_date, self.due_date)
   end
 
   def boa_payment_due

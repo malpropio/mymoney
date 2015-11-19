@@ -52,10 +52,12 @@ class IncomeDistribution < ActiveRecord::Base
     result["BoA"] = [self.boa_chk, BOA_BUFFER]
     left_over_total -= BOA_BUFFER
     
-    boa_debts.map do |d|
-      amount = d.debt.sub_category == "Car Loans" ? car_alloc : d.payment_due(self.distribution_date)
-      result[d.debt.name] = [amount, amount] #unless amount == 0
-      left_over_total -= amount unless d.debt.name == left_over
+    if left_over_total > 0
+		boa_debts.map do |d|
+		  amount = d.debt.sub_category == "Car Loans" ? car_alloc : d.payment_due(self.distribution_date)
+		  result[d.debt.name] = [amount, amount]
+		  left_over_total -= amount unless d.debt.name == left_over
+		end
     end
 
     result["Rent"] = [rent_alloc, rent_alloc]
@@ -76,15 +78,16 @@ class IncomeDistribution < ActiveRecord::Base
   
     result["Chase"] = [self.chase_chk, CHASE_BUFFER]
     left_over_total -= CHASE_BUFFER
- 
-    chase_debts.map do |d|
-      #amount =  bi_weekly_due(CHASE_BASE_PAY_DAY,self.distribution_date) ? d.payment_due : 0
-      amount = d.payment_due(self.distribution_date)
-      result[d.debt.name] = [amount, amount] #unless amount == 0
-      left_over_total -= amount unless d.debt.name == left_over
+	
+	if left_over_total > 0
+		chase_debts.map do |d|
+		  amount = d.payment_due(self.distribution_date)
+		  result[d.debt.name] = [amount, amount]
+		  left_over_total -= amount unless d.debt.name == left_over
+		end
     end
 
-     if left_over == "Chase"
+    if left_over == "Chase"
       result[left_over][1] += left_over_total unless result[left_over].nil?
     else
       result[left_over][1] = left_over_total unless result[left_over].nil?
