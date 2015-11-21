@@ -104,11 +104,25 @@ module BudgetsHelper
       if start_date < Date.new(2015,10,1)
         chase_fridays(start_date,end_date) * 1837.09 + nih_fridays(start_date,end_date) * 1137.31
       elsif start_date >= Date.new(2015,10,1) && start_date < Date.new(2015,11,1)
-        chase_fridays(start_date,Date.new(2015,10,14)) * 1837.09 + nih_fridays(start_date,Date.new(2015,10,14)) * 1137.31 + nih_fridays(Date.new(2015,10,15),end_date) * 1085.31
+        chase_fridays(start_date,Date.new(2015,10,14)) * 1837.09 + nih_fridays(start_date,Date.new(2015,10,14)) * 1137.31 + nih_fridays(Date.new(2015,10,15),end_date) * 1093.37
+      elsif start_date >= Date.new(2015,11,1) && start_date < Date.new(2015,12,1)
+        nih_fridays(start_date,end_date) * 1093.37 + verve_business_days(Date.new(2015,11,23),end_date) * 254
       else
-        chase_fridays(start_date,end_date) * 0 + nih_fridays(start_date,end_date) * 1085.31
+        nih_fridays(start_date,end_date) * 1093.37 + verve_business_days(start_date,end_date) * 254
       end
     end
+  end
+  
+  def potential_income_notes(curr_month = nil)
+    if !curr_month.nil?
+      result = "Expected income +/- 2 months: "
+      result += "#{(curr_month - 2.month).strftime('%B %Y')} => #{number_to_currency(potential_income(curr_month - 2.month))}; "
+      result += "#{(curr_month - 1.month).strftime('%B %Y')} => #{number_to_currency(potential_income(curr_month - 1.month))}; "
+      result += "#{curr_month.strftime('%B %Y')} => #{number_to_currency(potential_income(curr_month))}; "
+      result += "#{(curr_month + 1.month).strftime('%B %Y')} => #{number_to_currency(potential_income(curr_month + 1.month))}; "
+      result += "#{(curr_month + 2.month).strftime('%B %Y')} => #{number_to_currency(potential_income(curr_month + 2.month))}"
+    end
+    result
   end
 
   def paychecks(pay_from = nil, date = nil)

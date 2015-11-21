@@ -28,6 +28,16 @@ module DateModule
     end
     fridays
   end
+  
+  def verve_business_days(start_date, end_date)
+    fridays = 0
+    my_days = [1,2,3,4,5]
+    if start_date && end_date
+      result = (start_date..end_date).to_a.select {|k| my_days.include?(k.wday)}
+      fridays = result.count
+    end
+    fridays
+  end
 
   def bi_weekly_due(base_date, curr_date)
     reference_date = Date.new(2009,1,1)

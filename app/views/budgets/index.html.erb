@@ -23,7 +23,7 @@
 <% end %>
 
 <p>
-  Expected Income: <%= number_to_currency(potential_income(@budgets.first.budget_month)) %><br>
+  Expected Income<sup><a href="#fn3" id="ref3"> 3</a></sup>: <%= number_to_currency(potential_income(@budgets.first.budget_month)) %><br>
   Total Budget: <%= number_to_currency(overall_budget(@budgets.first.budget_month)) %><br>
   Fixed Budget<sup><a href="#fn1" id="ref1"> 1</a></sup>: <%= number_to_currency(fixed_budget(@budgets.first.budget_month)) %><br>
   Variable Budget: <%= "#{number_to_currency(variable_budget(@budgets.first.budget_month))} of #{number_to_currency(potential_income(@budgets.first.budget_month)-fixed_budget(@budgets.first.budget_month))}" %><br>
@@ -76,4 +76,5 @@
 <p>
 <sup id="fn1">1. <%= fixed_budget_notes(@budgets.first.budget_month) %><a href="#ref1" title="Jump back to footnote 1 in the text.">↩</a></sup><br>
 <sup id="fn2">2. <%= credit_payment_budget_notes(@budgets.first.budget_month) %><a href="#ref2" title="Jump back to footnote 2 in the text.">↩</a></sup><br>
+<sup id="fn3">3. <%= potential_income_notes(@budgets.first.budget_month) %><a href="#ref3" title="Jump back to footnote 3 in the text.">↩</a></sup><br>
 </p>
