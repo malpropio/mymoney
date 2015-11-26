@@ -36,6 +36,11 @@
 </p>
 
 <p>
+  <strong>Estimated Payments left:</strong>
+  <%= number_to_currency(@debt_balance.max_payment) %>
+</p>
+
+<p>
  <strong>Payments needed to payoff/reach target by the due date:</strong>
 </p>
 

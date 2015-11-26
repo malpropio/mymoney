@@ -14,10 +14,11 @@ class DebtBalance < ActiveRecord::Base
     self.payment_start_date = self.due_date - 1.months + 1.days if !self.due_date.blank? && self.payment_start_date.blank?
   end
 
-  def payments
+  def payments(up_to_date = nil)
+    threshold = "AND spending_date<'#{up_to_date}'" unless up_to_date.nil?
     Spending.joins(:category)
             .where("spendings.description = '#{self.debt.name}' AND categories.name = '#{self.debt.category}'")
-            .where("spending_date>='#{self.payment_start_date}' AND spending_date<='#{self.due_date}'")
+            .where("spending_date>='#{self.payment_start_date}' AND spending_date<='#{self.due_date}' #{threshold}")
   end
 
   def balance_of_interest
@@ -50,11 +51,19 @@ class DebtBalance < ActiveRecord::Base
     self.balance_of_interest/nih_fridays(self.payment_start_date, self.due_date)
   end
 
-  def after_pay_balance
+  def after_pay_balance(up_to_date = nil)
     if self.debt.is_asset?
-      self.balance + payments.sum(:amount)
+      self.balance + payments(up_to_date).sum(:amount)
     else
-      self.balance - payments.sum(:amount)
+      self.balance - payments(up_to_date).sum(:amount)
+    end
+  end
+  
+  def max_payment(up_to_date = nil)
+    if self.debt.is_asset?
+      self.target_balance - self.after_pay_balance(up_to_date)
+    else
+      self.after_pay_balance(up_to_date) - self.target_balance
     end
   end
 

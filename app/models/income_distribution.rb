@@ -49,24 +49,28 @@ class IncomeDistribution < ActiveRecord::Base
 
     result = {}
     
-    result["BoA"] = [self.boa_chk, BOA_BUFFER]
+    result["BoA"] = [self.boa_chk, BOA_BUFFER, self.boa_chk]
     left_over_total -= BOA_BUFFER
     
     if left_over_total > 0
 		boa_debts.map do |d|
 		  amount = d.debt.sub_category == "Car Loans" ? car_alloc : d.payment_due(self.distribution_date)
-		  result[d.debt.name] = [amount, amount]
+		  max_amount = d.debt.sub_category == "Car Loans" ? car_alloc : d.max_payment(self.distribution_date)
+		  result[d.debt.name] = [amount, amount, max_amount]
 		  left_over_total -= amount unless d.debt.name == left_over
 		end
     end
 
-    result["Rent"] = [rent_alloc, rent_alloc]
+    result["Rent"] = [rent_alloc, rent_alloc, rent_alloc]
     left_over_total -= rent_alloc
 
-    if left_over == "BoA"
-      result[left_over][1] += left_over_total unless result[left_over].nil?
-    else
-      result[left_over][1] = left_over_total unless result[left_over].nil?
+    if !result[left_over].nil?
+		if left_over == "BoA"
+		  result[left_over][1] += left_over_total
+		else
+		  result[left_over][1] = [left_over_total,result[left_over][2]].min
+		  result["BoA"][1] += (left_over_total - result[left_over][1]) #add diff between leftover and max payment allowed
+		end
     end
     result
   end
@@ -76,21 +80,25 @@ class IncomeDistribution < ActiveRecord::Base
     left_over_total = self.chase_chk
     result = {}
   
-    result["Chase"] = [self.chase_chk, CHASE_BUFFER]
+    result["Chase"] = [self.chase_chk, CHASE_BUFFER, self.chase_chk]
     left_over_total -= CHASE_BUFFER
 	
 	if left_over_total > 0
 		chase_debts.map do |d|
 		  amount = d.payment_due(self.distribution_date)
-		  result[d.debt.name] = [amount, amount]
+		  max_amount = d.max_payment(self.distribution_date)
+		  result[d.debt.name] = [amount, amount, max_amount]
 		  left_over_total -= amount unless d.debt.name == left_over
 		end
     end
 
-    if left_over == "Chase"
-      result[left_over][1] += left_over_total unless result[left_over].nil?
-    else
-      result[left_over][1] = left_over_total unless result[left_over].nil?
+    if !result[left_over].nil?
+		if left_over == "Chase"
+		  result[left_over][1] += left_over_total
+		else
+		  result[left_over][1] = [left_over_total,result[left_over][2]].min
+		  result["Chase"][1] += (left_over_total - result[left_over][1]) #add diff between leftover and max payment allowed
+		end
     end
     
     result
