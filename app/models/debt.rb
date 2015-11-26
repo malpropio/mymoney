@@ -3,7 +3,8 @@ class Debt < ActiveRecord::Base
   
   validates_presence_of :category, :name
 
-  validates_uniqueness_of :category, :scope => :name, message: "already taken for this name"
+  validate :debt_exists
+  #validates_uniqueness_of :category, :scope => :name, message: "already taken for this name"
 
   ## Titleize fields if not empty
   before_validation :clean_fields
@@ -19,8 +20,22 @@ class Debt < ActiveRecord::Base
       all
     end
   end
+  
+  def self.active
+    where(deleted_at: nil)
+  end
+  
+  def soft_delete
+    update_attribute(:deleted_at, Time.now)
+  end
 
   private
+  def debt_exists
+    if Debt.where("id != #{self.id || 0} AND category = '#{self.category}' AND name = '#{self.name}' AND deleted_at IS NULL").exists?
+      errors.add(:debt, "already exists")
+    end
+  end
+  
   def clean_fields
     self.category = self.category.titleize unless self.category.nil?
     self.sub_category = self.sub_category.titleize unless self.sub_category.nil?

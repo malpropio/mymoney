@@ -11,23 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151010193457) do
-
-  create_table "allocations", force: :cascade do |t|
-    t.decimal  "savings",      precision: 8, scale: 2
-    t.decimal  "rent",         precision: 8, scale: 2
-    t.decimal  "student_loan", precision: 8, scale: 2
-    t.decimal  "car_loan",     precision: 8, scale: 2
-    t.decimal  "chase_buffer", precision: 8, scale: 2
-    t.decimal  "boa_buffer",   precision: 8, scale: 2
-    t.date     "start_date"
-    t.date     "end_date"
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
-  end
-
-  add_index "allocations", ["end_date"], name: "index_allocations_on_end_date", using: :btree
-  add_index "allocations", ["start_date"], name: "index_allocations_on_start_date", unique: true, using: :btree
+ActiveRecord::Schema.define(version: 20151126210827) do
 
   create_table "budgets", force: :cascade do |t|
     t.integer  "category_id",  limit: 4
@@ -69,9 +53,11 @@ ActiveRecord::Schema.define(version: 20151010193457) do
     t.datetime "updated_at",                                           null: false
     t.boolean  "is_asset",                 default: false
     t.string   "pay_from",     limit: 255, default: "Bank Of America"
+    t.datetime "deleted_at"
   end
 
-  add_index "debts", ["category", "name"], name: "by_category_name", unique: true, using: :btree
+  add_index "debts", ["category", "name", "deleted_at"], name: "by_category_name", unique: true, using: :btree
+  add_index "debts", ["deleted_at"], name: "index_debts_on_deleted_at", using: :btree
 
   create_table "income_distributions", force: :cascade do |t|
     t.date     "distribution_date"
