@@ -7,7 +7,7 @@ class DebtBalancesController < ApplicationController
   # GET /debt_balances.json
   def index
       @debt_balances = DebtBalance.search(params[:debt_balance]).order(:due_date => :desc).paginate(:per_page => 25, :page => params[:page])
-      @debts = DebtBalance.joins(:debt).where("payment_start_date <= '#{Time.now.to_date}' AND '#{Time.now.to_date}' <= due_date AND is_asset=false")
+      @debts = DebtBalance.joins(:debt).where("'#{Time.now.to_date}' <= due_date AND is_asset=false")
   end
 
   def ccs_by_month
