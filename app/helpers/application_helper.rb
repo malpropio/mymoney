@@ -40,11 +40,13 @@ SUCCESS = "#00FFFF"
      end
   end
 
-  def good_neg_cell_color(amount = 0, debt_name = nil)
+  def good_neg_cell_color(amount = 0, debt_name = nil, success = nil)
     debt = Debt.find_by_name(debt_name)
 
     if !debt.nil?
       (amount > 0 && VALID.include?(debt.name) )? ERROR : NEUTRAL
+     elsif success
+       amount > 0 ? ERROR : SUCCESS
      else
         NEUTRAL
      end
