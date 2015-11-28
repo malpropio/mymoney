@@ -6,8 +6,8 @@ class IncomeDistribution < ActiveRecord::Base
   validates_numericality_of :boa_chk, :chase_chk
   validates_uniqueness_of :distribution_date
 
-  validate :validate_date_is_friday
-  validate :validate_date_is_nih_friday
+  validate :validate_date_is_friday, :if => Proc.new{|id| id.distribution_date < Date.new(2015,11,1)}
+  validate :validate_date_is_nih_friday, :if => Proc.new{|id| id.distribution_date < Date.new(2015,11,1)}
   
   CHASE_BASE_PAY_DAY = Date.new(2015,1,9)
   BOA_BUFFER = 10
@@ -123,7 +123,7 @@ class IncomeDistribution < ActiveRecord::Base
   
   def validate_date_is_nih_friday
     if self.distribution_date >= ONE_PAY_SCHEDULE && bi_weekly_due(CHASE_BASE_PAY_DAY,self.distribution_date)
-      errors.add(:distribution_date, "is not a payday. Try next friday.") #unless self.distribution_date.wday == 5
+      errors.add(:distribution_date, "is not a payday. Try next friday.")
     end
   end
 
