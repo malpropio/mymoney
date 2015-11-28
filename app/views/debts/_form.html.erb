@@ -13,7 +13,7 @@
 
   <div class="field">
     <%= f.label :category %><br>
-    <%= f.select :category, options_for_select([['Credit Cards', 'Credit Cards'], ['Savings', 'Savings'], ['Loans','Loans']]) %>
+    <%= f.select :category, options_for_select([['Credit Cards', 'Credit Cards'], ['Savings', 'Savings'], ['Loans','Loans'], ['Bill','Bill']]) %>
   </div>
   <div class="field">
     <%= f.label :sub_category %><br>
@@ -28,7 +28,23 @@
     <%= f.select :pay_from , options_for_select([['Bank Of America', 'Bank Of America'], ['Chase', 'Chase']]) %>
   </div>
   <div class="field">
-    <%= f.label :is_asset %><br>
+    <%= f.label :fix_amount %><br>
+    <%= f.number_field :fix_amount %>
+  </div>
+  <div class="field">
+    <%= f.label :schedule %><br>
+    <%= f.select :schedule , options_for_select([['Bi-Weekly', 'Bi-Weekly'], ['Monthly', 'Monthly']]) %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_start_date %><br>
+    <%= f.calendar_field :payment_start_date %>
+  </div>
+  <div class="field">
+    <%= f.label :autopay %>
+    <%= f.check_box :autopay %>
+  </div>
+  <div class="field">
+    <%= f.label :is_asset %>
     <%= f.check_box :is_asset %>
   </div>
   <div class="actions">

@@ -9,6 +9,9 @@
       <th>Sub category</th>
       <th>Name</th>
       <th>Payment Account</th>
+      <th>Fix Amount</th>
+      <th>Schedule</th>
+      <th>Payment Start Date</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -20,6 +23,9 @@
         <td><%= debt.sub_category %></td>
         <td><%= debt.name %></td>
         <td><%= debt.pay_from %></td>
+        <td><%= number_to_currency(debt.fix_amount) %></td>
+        <td><%= debt.schedule %></td>
+        <td><%= debt.payment_start_date %></td>
         <td><%= link_to 'Show', debt %></td>
         <td><%= link_to 'Edit', edit_debt_path(debt) %></td>
         <td><%= link_to 'Destroy', debt, method: :delete, data: { confirm: 'Are you sure?' } %></td>

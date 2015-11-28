@@ -27,7 +27,17 @@ class DebtBalance < ActiveRecord::Base
 
   def payment_due(payment_date = nil)
     result = 0
-    if payment_date.nil? || payment_date < Date.new(2015,11,1)
+    if self.debt.fix_amount
+      if self.debt.schedule == "Bi-Weekly"
+        result = bi_weekly_due(self.debt.payment_start_date,payment_date) ? self.debt.fix_amount  : 0
+      elsif self.debt.schedule == "Monthly"
+        if payment_date < Date.new(2015,11,1)
+          result = (self.debt.fix_amount*boa_fridays(payment_date.at_beginning_of_month,payment_date))/boa_fridays(payment_date.at_beginning_of_month,payment_date.at_end_of_month)
+        else
+          result = (self.debt.fix_amount*nih_fridays(payment_date.at_beginning_of_month,payment_date))/nih_fridays(payment_date.at_beginning_of_month,payment_date.at_end_of_month)
+        end
+      end
+    elsif payment_date.nil? || payment_date < Date.new(2015,11,1)
       result = self.debt.pay_from == 'Chase' ? chase_payment_due : boa_payment_due
     elsif payment_date >= Date.new(2015,11,1)
       result = [nih_payment_due,max_payment(payment_date)].min

@@ -8,100 +8,68 @@ class IncomeDistribution < ActiveRecord::Base
 
   validate :validate_date_is_friday
   validate :validate_date_is_nih_friday
-
-  RENT = 1550
-  CAR_BASE_PAY_DAY = Date.new(2015,1,2)
-  CAR_LOAN = 186.19
-
+  
   CHASE_BASE_PAY_DAY = Date.new(2015,1,9)
   BOA_BUFFER = 10
   CHASE_BUFFER = 10
   
   ONE_PAY_SCHEDULE = Date.new(2015,11,1)
-
-  def car_alloc
-    if self.distribution_date < ONE_PAY_SCHEDULE
-      bi_weekly_due(CAR_BASE_PAY_DAY,self.distribution_date) ? CAR_LOAN : 0
-    else
-      CAR_LOAN
+  
+  def debts(account=nil)
+    if !account.nil?
+      DebtBalance.joins(:debt).where("debt_balances.payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.pay_from = '#{account}'")
     end
   end
 
-  def rent_alloc
-    if self.distribution_date < ONE_PAY_SCHEDULE
-      (RENT*boa_fridays(self.distribution_date.at_beginning_of_month,self.distribution_date))/boa_fridays(self.distribution_date.at_beginning_of_month,self.distribution_date.at_end_of_month)
-    else
-      (RENT*nih_fridays(self.distribution_date.at_beginning_of_month,self.distribution_date))/nih_fridays(self.distribution_date.at_beginning_of_month,self.distribution_date.at_end_of_month)
+  def focus(account=nil)
+    if !account.nil?
+      account=="Chase" ? self.chase_focus : self.boa_focus
     end
   end
-
-  def boa_debts
-    DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.pay_from = 'Bank Of America'")
+  
+  def checking(account=nil)
+    if !account.nil?
+      account=="Chase" ? self.chase_chk : self.boa_chk
+    end
   end
-
-  def chase_debts
-    DebtBalance.joins(:debt).where("payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.pay_from = 'Chase'")
-  end
-
-  def boa_debts_hash
-    left_over = self.boa_focus
-    left_over_total = self.boa_chk
-
+  
+  def debts_hash_dynamic(account=nil)
     result = {}
-    
-    result["BoA"] = [self.boa_chk, BOA_BUFFER, self.boa_chk]
-    left_over_total -= BOA_BUFFER
-    
-    if left_over_total > 0
-		boa_debts.map do |d|
-		  amount = d.debt.sub_category == "Car Loans" ? car_alloc : d.payment_due(self.distribution_date)
-		  max_amount = d.debt.sub_category == "Car Loans" ? car_alloc : d.max_payment(self.distribution_date)
-		  result[d.debt.name] = [amount, amount, max_amount]
-		  left_over_total -= amount unless d.debt.name == left_over
-		end
-    end
+  
+    if !account.nil?
+	  left_over = self.focus(account)
+	  left_over_total = self.checking(account)
 
-    result["Rent"] = [rent_alloc, rent_alloc, rent_alloc]
-    left_over_total -= rent_alloc
+	  result[account] = [self.checking(account), BOA_BUFFER, self.checking(account)]
+	  left_over_total -= BOA_BUFFER
+	
+	  if left_over_total > 0
+		  debts(account).map do |d|
+			amount = d.payment_due(self.distribution_date)
+			max_amount = d.max_payment(self.distribution_date)
+			result[d.debt.name] = [amount, amount, max_amount]
+			left_over_total -= amount unless d.debt.name == left_over
+		  end
+	  end
 
-    if !result[left_over].nil?
-		if left_over == "BoA"
-		  result[left_over][1] += left_over_total
-		else
-		  result[left_over][1] = [left_over_total,result[left_over][2]].min
-		  result["BoA"][1] += (left_over_total - result[left_over][1]) #add diff between leftover and max payment allowed
-		end
+	  if !result[left_over].nil?
+		  if left_over == account
+			result[left_over][1] += left_over_total
+		  else
+			result[left_over][1] = [left_over_total,result[left_over][2]].min
+			result[account][1] += (left_over_total - result[left_over][1]) #add diff between leftover and max payment allowed
+		  end
+	  end
     end
     result
   end
 
   def chase_debts_hash
-    left_over = self.chase_focus
-    left_over_total = self.chase_chk
-    result = {}
+    debts_hash_dynamic("Chase")
+  end
   
-    result["Chase"] = [self.chase_chk, CHASE_BUFFER, self.chase_chk]
-    left_over_total -= CHASE_BUFFER
-	
-	if left_over_total > 0
-		chase_debts.map do |d|
-		  amount = d.payment_due(self.distribution_date)
-		  max_amount = d.max_payment(self.distribution_date)
-		  result[d.debt.name] = [amount, amount, max_amount]
-		  left_over_total -= amount unless d.debt.name == left_over
-		end
-    end
-
-    if !result[left_over].nil?
-		if left_over == "Chase"
-		  result[left_over][1] += left_over_total
-		else
-		  result[left_over][1] = [left_over_total,result[left_over][2]].min
-		  result["Chase"][1] += (left_over_total - result[left_over][1]) #add diff between leftover and max payment allowed
-		end
-    end
-    
-    result
+  def boa_debts_hash
+    debts_hash_dynamic("Bank Of America")
   end
 
   def debts_hash

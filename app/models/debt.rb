@@ -1,16 +1,16 @@
 class Debt < ActiveRecord::Base
   has_many :debt_balances
   
-  validates_presence_of :category, :name
+  validates_presence_of :category, :name, :schedule
 
   validate :debt_exists
-  #validates_uniqueness_of :category, :scope => :name, message: "already taken for this name"
 
   ## Titleize fields if not empty
   before_validation :clean_fields
 
   before_save do
     self.sub_category = self.category if self.sub_category.blank?
+    self.fix_amount = nil if self.fix_amount && self.fix_amount <= 0
   end
 
   def self.search(search)
