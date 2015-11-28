@@ -8,7 +8,7 @@ module BudgetsHelper
   end
 
   def student_loan_budget(date = nil)
-    savings = DebtBalance.joins(:debt).where("payment_start_date<='#{date}' AND due_date>='#{date}' AND debts.sub_category = 'Student Loans'")
+    savings = DebtBalance.joins(:debt).where("debt_balances.payment_start_date<='#{date}' AND due_date>='#{date}' AND debts.sub_category = 'Student Loans'")
     result = 0
     if savings.exists?
       savings.each {|saving| result += saving.payment_due * (date >= Date.new(2015,10,1) ? paychecks(saving.debt.pay_from,date) : 0) }
@@ -23,7 +23,7 @@ module BudgetsHelper
   end
   
   def credit_payment_budget(date = nil)
-    savings = DebtBalance.joins(:debt).where("payment_start_date<='#{date}' AND due_date>='#{date}' AND debts.sub_category = 'Credit Cards'")
+    savings = DebtBalance.joins(:debt).where("debt_balances.payment_start_date<='#{date}' AND due_date>='#{date}' AND debts.sub_category = 'Credit Cards'")
     result = 0
     if savings.exists?
       savings.each {|saving| result += saving.payment_due(date) * paychecks(saving.debt.pay_from,date)  }
@@ -32,7 +32,7 @@ module BudgetsHelper
   end
 
   def credit_payment_budget_notes(date = nil)
-    savings = DebtBalance.joins(:debt).where("payment_start_date<='#{date}' AND due_date>='#{date}' AND debts.sub_category = 'Credit Cards'")
+    savings = DebtBalance.joins(:debt).where("debt_balances.payment_start_date<='#{date}' AND due_date>='#{date}' AND debts.sub_category = 'Credit Cards'")
     result = "Estimated payments needed to payoff all credit card balances: "
     if savings.exists?
       savings.each {|saving| result += "#{saving.debt.name} => #{number_to_currency(saving.payment_due(date))} x #{paychecks(saving.debt.pay_from,date)}; "  }
@@ -41,7 +41,7 @@ module BudgetsHelper
   end
 
   def savings_budget(date = nil)
-    savings = DebtBalance.joins(:debt).where("payment_start_date<='#{date}' AND due_date>='#{date}' AND debts.sub_category = 'Savings'")
+    savings = DebtBalance.joins(:debt).where("debt_balances.payment_start_date<='#{date}' AND due_date>='#{date}' AND debts.sub_category = 'Savings'")
     result = 0
     if savings.exists?
       savings.each {|saving| result += saving.payment_due(date) * paychecks(saving.debt.pay_from,date)  }

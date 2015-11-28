@@ -40,7 +40,7 @@ class Spending < ActiveRecord::Base
 
   def clean_desc
     if !self.category.nil?
-      self.description = nil if Debt.where(category: self.category.name).exists?
+      self.description = nil if Debt.where(category: self.category.name).exists? && self.category.name != 'Rent'
       self.description = self.description_loan if self.category.name == 'Loans'
       self.description = self.description_cc if self.category.name == 'Credit Cards'
       self.description = self.description_asset if self.category.name == 'Savings'
