@@ -1,5 +1,6 @@
 class BudgetsController < ApplicationController
   include SpendingsHelper
+  include DateModule
 
   before_action :set_budget, only: [:show, :edit, :update, :destroy]
   
