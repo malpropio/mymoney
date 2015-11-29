@@ -1,6 +1,5 @@
 class BudgetsController < ApplicationController
   include SpendingsHelper
-  include DateModule
 
   before_action :set_budget, only: [:show, :edit, :update, :destroy]
   
@@ -13,7 +12,7 @@ class BudgetsController < ApplicationController
     @budgets = Budget.search(params[:search])
                      .order(:category_id)
                      .where("budget_month >= '#{FLOOR}'")
-    @curr_budget = (params[:search] || curr_month).to_date
+    @curr_budget = (params[:search] || Time.now.to_date.change(day: 1)).to_date
   end
 
   # GET /budgets/1
