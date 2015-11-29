@@ -2,9 +2,7 @@
 
 <h1>Listing Budgets</h1>
 
-<% if @budgets.count > 0 %>
-  <h2><%= @budgets.first.budget_month.strftime('%B %Y') %></h2>
-<% end %>
+<h2><%= @curr_budget.strftime('%B %Y') %></h2>
 
 <div class="row">
   <div class="col-xs-12">
@@ -17,25 +15,32 @@
   <table class="filters">
     <tr>
         <td><%= select_tag :choice, options_for_select([["Current Month", "current"], ["Next Month", "next"]]) %></td>
-        <td><%= submit_tag "Reset", :data => {:confirm => "Are you sure? Next month's budget can be set on or after #{1.month.from_now.to_date.change(day: 1) - 5.days}."} %></td>
+        <td><%= submit_tag "Reset Budget", :data => {:confirm => "Are you sure? Next month's budget can be set on or after #{1.month.from_now.to_date.change(day: 1) - 5.days}."} %></td>
     </tr>
   </table>
 <% end %>
 
 <p>
-  Expected Income<sup><a href="#fn3" id="ref3"> 3</a></sup>: <%= number_to_currency(potential_income(@budgets.first.budget_month)) %><br>
-  Total Budget: <%= number_to_currency(overall_budget(@budgets.first.budget_month)) %><br>
-  Fixed Budget<sup><a href="#fn1" id="ref1"> 1</a></sup>: <%= number_to_currency(fixed_budget(@budgets.first.budget_month)) %><br>
-  Variable Budget: <%= "#{number_to_currency(variable_budget(@budgets.first.budget_month))} of #{number_to_currency(potential_income(@budgets.first.budget_month)-fixed_budget(@budgets.first.budget_month))}" %><br>
-  Debit Budget: <%= number_to_currency(debit_budget(@budgets.first.budget_month)) %><br>
-  Credit Budget: <%= "#{number_to_currency(credit_budget(@budgets.first.budget_month))} of #{number_to_currency(potential_income(@budgets.first.budget_month)-debit_budget(@budgets.first.budget_month)
+  Expected Income<sup><a href="#fn3" id="ref3"> 3</a></sup>: <%= number_to_currency(potential_income(@curr_budget)) %><br>
+  Total Budget: <%= number_to_currency(overall_budget(@curr_budget)) %><br>
+  Fixed Budget<sup><a href="#fn1" id="ref1"> 1</a></sup>: <%= number_to_currency(fixed_budget(@curr_budget)) %><br>
+  Variable Budget: <%= "#{number_to_currency(variable_budget(@curr_budget))} of #{number_to_currency(potential_income(@curr_budget)-fixed_budget(@curr_budget))}" %><br>
+  Debit Budget: <%= number_to_currency(debit_budget(@curr_budget)) %><br>
+  Credit Budget: <%= "#{number_to_currency(credit_budget(@curr_budget))} of #{number_to_currency(potential_income(@curr_budget)-debit_budget(@curr_budget)
 )}" %><br>
-  Estimated CC Payments Budget<sup><a href="#fn2" id="ref2"> 2</a></sup>: <%= number_to_currency(credit_payment_budget(@budgets.first.budget_month)) %><br>
-  <!-- Savings: <%= number_to_currency(savings_budget(@budgets.first.budget_month)) %><br>
-  Loans: <%= number_to_currency(loans_budget(@budgets.first.budget_month)) %> -->
+  Estimated CC Payments Budget<sup><a href="#fn2" id="ref2"> 2</a></sup>: <%= number_to_currency(credit_payment_budget(@curr_budget)) %><br>
+  <!-- Savings: <%= number_to_currency(savings_budget(@curr_budget)) %><br>
+  Loans: <%= number_to_currency(loans_budget(@curr_budget)) %> -->
 </p>
 
-<%= will_paginate @budgets %>
+<%= form_tag budgets_path, :method => 'get', :id => "budgets_search" do %>
+  <table class="filters">
+    <tr>
+        <td><%= select_tag :search, options_for_select(last_12_months, @curr_budget) %></td>
+        <td><%= submit_tag "See Budget", :name => nil %></td>
+    </tr>
+  </table>
+<% end %>
 
 <table>
   <thead>
@@ -65,8 +70,6 @@
   </tbody>
 </table>
 
-<%= will_paginate @budgets %>
-
 <br>
 
 <%= link_to 'New Budget', new_budget_path %>
@@ -74,7 +77,7 @@
 <hr></hr>
 
 <p>
-<sup id="fn1">1. <%= fixed_budget_notes(@budgets.first.budget_month) %><a href="#ref1" title="Jump back to footnote 1 in the text.">↩</a></sup><br>
-<sup id="fn2">2. <%= credit_payment_budget_notes(@budgets.first.budget_month) %><a href="#ref2" title="Jump back to footnote 2 in the text.">↩</a></sup><br>
-<sup id="fn3">3. <%= potential_income_notes(@budgets.first.budget_month) %><a href="#ref3" title="Jump back to footnote 3 in the text.">↩</a></sup><br>
+<sup id="fn1">1. <%= fixed_budget_notes(@curr_budget) %><a href="#ref1" title="Jump back to footnote 1 in the text.">↩</a></sup><br>
+<sup id="fn2">2. <%= credit_payment_budget_notes(@curr_budget) %><a href="#ref2" title="Jump back to footnote 2 in the text.">↩</a></sup><br>
+<sup id="fn3">3. <%= potential_income_notes(@curr_budget) %><a href="#ref3" title="Jump back to footnote 3 in the text.">↩</a></sup><br>
 </p>

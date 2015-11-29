@@ -9,10 +9,10 @@ class BudgetsController < ApplicationController
   # GET /budgets
   # GET /budgets.json
   def index
-    @budgets = Budget.order(:budget_month => :desc)
+    @budgets = Budget.search(params[:search])
                      .order(:category_id)
                      .where("budget_month >= '#{FLOOR}'")
-                     .paginate(:per_page => Category.count, :page => params[:page])
+    @curr_budget = (params[:search] || curr_month).to_date
   end
 
   # GET /budgets/1

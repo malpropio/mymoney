@@ -14,9 +14,13 @@ class Budget < ActiveRecord::Base
     self.budget_month = self.budget_month.change(day: 1) unless self.budget_month.blank? 
   end 
 
-  #def overall_budget
-    
-  #end
+  def self.search(search)
+    if search
+      where(:budget_month => search)
+    else
+      all
+    end
+  end
 
   def alert_message
     message = nil
