@@ -54,7 +54,6 @@ class BudgetsController < ApplicationController
     agg.each do |budget| 
       h1.store(["Budget", budget.budget_month.strftime('%b %Y')],budget.total_budget) 
       h1.store(["Spending", budget.budget_month.strftime('%b %Y')],budget.total_spending)
-#      h1.store(["Payment", budget.budget_month.strftime('%b %Y')],budget.total_payment)
     end
     
     render json: h1.chart_json

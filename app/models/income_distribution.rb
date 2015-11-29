@@ -17,7 +17,9 @@ class IncomeDistribution < ActiveRecord::Base
   
   def debts(account=nil)
     if !account.nil?
-      DebtBalance.joins(:debt).where("debt_balances.payment_start_date<='#{self.distribution_date}' AND due_date>='#{self.distribution_date}' AND debts.pay_from = '#{account}'")
+      DebtBalance.joins(:debt).where("debt_balances.payment_start_date<='#{self.distribution_date}' 
+                                      AND due_date>='#{self.distribution_date}' 
+                                      AND (debts.pay_from = '#{account}' OR debts.name = '#{self.focus(account)}')")
     end
   end
 

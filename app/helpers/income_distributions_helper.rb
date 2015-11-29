@@ -2,7 +2,8 @@ module IncomeDistributionsHelper
 
   def focus_hash(account = nil)
     result = {}
-    Debt.where(pay_from: account).pluck(:name).map { |name| result[name] = name }
+    #Debt.where(pay_from: account).pluck(:name).map { |name| result[name] = name }
+    Debt.where(deleted_at: nil).pluck(:name).map { |name| result[name] = name }
     result[account] = account #checking account
     result
   end
