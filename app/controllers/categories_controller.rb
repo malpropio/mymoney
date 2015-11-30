@@ -28,7 +28,6 @@ class CategoriesController < ApplicationController
 
     respond_to do |format|
       if @category.save
-        add_budgets_to_date
         format.html { redirect_to @category, notice: 'Category was successfully created.' }
         format.json { render :show, status: :created, location: @category }
       else
@@ -71,13 +70,5 @@ class CategoriesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def category_params
       params.require(:category).permit(:name, :description)
-    end
-
-    def add_budgets_to_date
-      if Budget.exists?
-        start = Budget.order(:budget_month => "asc").first.budget_month
-        end_date = Time.new.to_date
-        (start...end_date).each {|k| Budget.create(category_id: @category.id, budget_month: k, amount: 0) if k.day==1}
-      end
     end
 end

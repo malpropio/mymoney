@@ -49,6 +49,9 @@ class IncomeDistribution < ActiveRecord::Base
 		  debts(account).map do |d|
 			amount = d.payment_due(self.distribution_date)
 			max_amount = d.max_payment(self.distribution_date)
+			if d.debt.pay_from != account
+			  max_amount -= debts_hash_dynamic(account=="Chase" ? "Bank Of America" : "Chase")[d.debt.name][1]
+			end
 			result[d.debt.name] = [amount, amount, max_amount]
 			left_over_total -= amount unless d.debt.name == left_over
 		  end
@@ -77,7 +80,7 @@ class IncomeDistribution < ActiveRecord::Base
   def debts_hash
       result = boa_debts_hash
       b = chase_debts_hash
-      result = result.merge(b)
+      result = result.merge(b){ |k, a_value, b_value| [a_value[0], a_value[1] + b_value[1], a_value[2]] }
   end
 
   def boa_total_distribution
