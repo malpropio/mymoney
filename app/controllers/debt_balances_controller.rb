@@ -14,7 +14,8 @@ class DebtBalancesController < ApplicationController
     render json: DebtBalance.joins(:debt)
                          .where("debts.category = 'Credit Cards'")
                          .group("debts.name")
-                         .group_by_month(:due_date, format: "%b %Y").having("sum(debt_balances.balance) > ?", 0)
+                         .group_by_month(:due_date, format: "%b %Y")
+                         .having("sum(debt_balances.balance) > ?", 0)
                          .sum(:balance)
                          .chart_json
   end
@@ -23,7 +24,8 @@ class DebtBalancesController < ApplicationController
     render json: DebtBalance.joins(:debt)
                          .where("debts.category = 'Loans'")
                          .group("debts.name")
-                         .group_by_month(:due_date, format: "%b %Y").having("sum(debt_balances.balance) > ?", 0)
+                         .group_by_month(:due_date, format: "%b %Y")
+                         .having("sum(debt_balances.balance) > ?", 0)
                          .sum(:balance)
                          .chart_json
   end

@@ -61,7 +61,7 @@
         <td><%= budget.budget_month.strftime('%B %Y') %></td>
         <td><%= number_to_currency(budget.amount) %></td>
         <td><%= number_to_currency(budget.spendings.sum(:amount)) %></td>
-        <td style="background-color:<%= good_pos_cell_color(budget.amount - budget.spendings.sum(:amount), budget.category.name)%>"><%= number_to_currency(budget.amount - budget.spendings.sum(:amount)) %></td>
+        <td style="background-color:<%= good_pos_cell_color_comparison(budget.amount,budget.spendings.sum(:amount), budget.category.name)%>"><%= number_to_currency(budget.amount - budget.spendings.sum(:amount)) %></td>
         <td><%= link_to 'Show', budget %></td>
         <td><%= link_to 'Edit', edit_budget_path(budget) %></td>
         <td><%= link_to 'Destroy', budget, method: :delete, data: { confirm: 'Are you sure?' } %></td>

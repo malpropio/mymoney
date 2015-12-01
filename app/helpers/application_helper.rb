@@ -3,10 +3,11 @@ include Att::Codekit
 
 
 VALID = ["Amex","Freedom","Travel","Cash","Jcp","Express"]
-VALID_GOOD_NEG = ["Credit Cards","Savings"]
+VALID_GOOD_NEG = ["Credit Cards","Savings","Loans"]
 ERROR = "#FF0000"
 NEUTRAL = "#FFFFFF"
 SUCCESS = "#00FFFF"
+WARNING = "#F7FE2E"
 
 # Returns the full title on a per-page basis.
   def full_title(page_title = '')
@@ -39,6 +40,21 @@ SUCCESS = "#00FFFF"
        amount < 0 ? ERROR : NEUTRAL
      end
   end
+  
+  def good_pos_cell_color_comparison(base = 0, actual = 0, debt_name = "")
+    if VALID_GOOD_NEG.include?(debt_name)
+       good_neg_cell_color(base)
+     else
+       diff = actual/base - 1
+       if diff <= 0
+         SUCCESS
+       elsif diff <= 0.10
+         WARNING
+       else
+         ERROR
+       end
+     end
+  end
 
   def good_neg_cell_color(amount = 0, debt_name = nil, success = nil)
     debt = Debt.find_by_name(debt_name)
@@ -51,6 +67,8 @@ SUCCESS = "#00FFFF"
         NEUTRAL
      end
   end
+  
+  
 
   def equal_cell_color(amount_1 = nil, amount_2 = nil, alert = true)
     if !(amount_1.nil? || amount_2.nil?)
