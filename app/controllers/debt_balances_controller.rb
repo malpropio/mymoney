@@ -1,5 +1,6 @@
 class DebtBalancesController < ApplicationController
   include SpendingsHelper
+  include DateModule
 
   before_action :set_debt_balance, only: [:show, :edit, :update, :destroy, :close]
 
@@ -21,13 +22,16 @@ class DebtBalancesController < ApplicationController
   end
 
   def loans_by_month
-    render json: DebtBalance.joins(:debt)
-                         .where("debts.category = 'Loans'")
-                         .group("debts.name")
-                         .group_by_month(:due_date, format: "%b %Y")
-                         .having("sum(debt_balances.balance) > ?", 0)
-                         .sum(:balance)
-                         .chart_json
+  h1 = Hash.new
+
+  last_12_months.reverse.each do |date|
+      end_date = [date[1].end_of_month,Time.now.to_date].min
+	  total_debt = 0
+	  DebtBalance.joins(:debt).where("debt_balances.payment_start_date <= '#{end_date}' AND '#{end_date}' <= due_date AND is_asset=false AND Category <> 'Bill'").each { |k| total_debt += k.max_payment(end_date)}
+	  h1.store(date[0],total_debt)
+  end
+
+  render json: h1.chart_json
   end
   
   # GET /debt_balances/1
