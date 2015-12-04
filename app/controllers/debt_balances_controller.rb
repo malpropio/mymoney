@@ -27,7 +27,8 @@ class DebtBalancesController < ApplicationController
   last_12_months.reverse.each do |date|
       end_date = [date[1].end_of_month,Time.now.to_date].min
 	  total_debt = 0
-	  DebtBalance.joins(:debt).where("debt_balances.payment_start_date <= '#{end_date}' AND '#{end_date}' <= due_date AND is_asset=false AND Category <> 'Bill'").each { |k| total_debt += k.max_payment(end_date)}
+	  DebtBalance.joins(:debt).where("debt_balances.payment_start_date <= '#{end_date}' AND '#{end_date}' <= due_date AND is_asset=false AND Category <> 'Bill' AND Category = 'Credit Cards'").each { |k| total_debt += k.max_payment(end_date)}
+	  DebtBalance.joins(:debt).where("'#{end_date}' <= due_date AND is_asset=false AND Category NOT IN ('Bill','Credit Cards')").each { |k| total_debt += k.max_payment(end_date)}
 	  h1.store(date[0],total_debt)
   end
 
