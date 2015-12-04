@@ -56,6 +56,6 @@ module DateModule
      end_date = curr_month.change(day: 1)
      end_date = 1.month.since end_date if (Time.now >= 1.month.from_now.change(day: 1) - 5.days)
      start_date = 1.year.ago end_date
-     (start_date..end_date).map{ |k| [k.strftime('%B %Y'),k] if k.day==1}.compact.reverse!
+     (start_date..end_date).map{ |k| [k.strftime('%b %Y'),k] if k.day==1}.compact.reverse!
   end
 end 

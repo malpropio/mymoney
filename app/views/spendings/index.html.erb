@@ -2,29 +2,25 @@
 
 <div class="row">
   <div class="col-xs-12">
-    <h3>Spendings By Month</h3>
-    <%= line_chart spendings_by_month_spendings_path, discrete: true, library: {vAxis: {format: '$#,###.##'}} %>
+    <%= line_chart spendings_by_month_spendings_path, discrete: true, library: {title: "Spendings By Month"} %>
   </div>
 </div>
 
 <div class="row">
   <div class="col-xs-12">
-    <h3>Spendings By Category</h3>
-    <%= pie_chart spendings_by_category_spendings_path, discrete: true %>
+    <%= pie_chart spendings_by_category_spendings_path, discrete: true, library: {title: "Spendings By Category"} %>
   </div>
 </div>
 
 <div class="row">
   <div class="col-xs-12">
-    <h3>Spendings By Payment Methods</h3>
-    <%= pie_chart spendings_by_payment_method_spendings_path, discrete: true %>
+    <%= pie_chart spendings_by_payment_method_spendings_path, discrete: true, library: {title: "Spendings By Payment Methods"} %>
   </div>
 </div>
 
 <div class="row">
   <div class="col-xs-12">
-    <h3>CC Spendings vs Payments</h3>
-    <%= line_chart cc_purchase_vs_payment_spendings_path, discrete: true, library: {vAxis: {format: '$#,###.##'}} %>
+    <%= line_chart cc_purchase_vs_payment_spendings_path, discrete: true, library: {title: "CC Spendings vs Payments"} %>
   </div>
 </div>
 

@@ -18,14 +18,14 @@ class SpendingsController < ApplicationController
   end
   
   def spendings_by_day
-    render json: Spending.group_by_day(:spending_date, format: "%B %d, %Y")
+    render json: Spending.group_by_day(:spending_date, format: "%b %d, %Y")
                          .sum(:amount)
   end
   
   def spendings_by_month
     render json: Spending.joins(:category)
                          .where("categories.name NOT IN ('Credit Cards')")
-                         .group_by_month(:spending_date, format: "%B, %Y")
+                         .group_by_month(:spending_date, format: "%b %Y")
                          .sum(:amount)
   end
 

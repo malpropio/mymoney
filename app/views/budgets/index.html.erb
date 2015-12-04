@@ -6,8 +6,7 @@
 
 <div class="row">
   <div class="col-xs-12">
-    <h3>Budget vs Spending By Month</h3>
-    <%= line_chart budgets_by_month_budgets_path, discrete: true, library: {vAxis: {format: '$#,###.##'}} %>
+    <%= line_chart budgets_by_month_budgets_path, discrete: true, library: {title: "Budget vs Spending By Month"} %>
   </div>
 </div>
 

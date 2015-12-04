@@ -1,4 +1,5 @@
 Chartkick.options = {
   height: "300px",
-  #colors: ["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "0000ff"]
+  colors: ["#0101df", "#04b404", "#b404ae", "#df0101", "#0489b1", "#ffff00", "#b40431"],
+  library: { hAxis: {slantedText: true, slantedTextAngle: 45 }, vAxis: {format: '$#,###.##'}}
 }
