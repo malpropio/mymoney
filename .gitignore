@@ -22,3 +22,5 @@ config/att.yml
 
 #ignore any production dbs
 db/backups/*prod*
+
+passenger*
