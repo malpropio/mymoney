@@ -19,3 +19,6 @@
 #ignore key files
 config/secrets.yml
 config/att.yml
+
+#ignore any production dbs
+db/backups/*prod*
