@@ -10,7 +10,7 @@ class Debt < ActiveRecord::Base
 
   before_save do
     self.sub_category = self.category if self.sub_category.blank?
-    self.fix_amount = nil if self.fix_amount && self.fix_amount <= 0
+    self.fix_amount = nil if self.fix_amount && self.fix_amount < 0
   end
 
   def self.search(search)
