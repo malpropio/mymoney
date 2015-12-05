@@ -88,6 +88,10 @@ class DebtBalance < ActiveRecord::Base
     update_attribute(:target_balance, new_target_balance)    
     update_attribute(:due_date, Time.now.to_date)
   end
+  
+  def in_payment?(date = Time.now.to_date)
+    payment_start_date <= date && date <= due_date
+  end
 
   def self.search(search)
     if search

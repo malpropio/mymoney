@@ -68,12 +68,14 @@ WARNING = "#F7FE2E"
      end
   end
   
-  
-
   def equal_cell_color(amount_1 = nil, amount_2 = nil, alert = true)
     if !(amount_1.nil? || amount_2.nil?)
       amount_1 == amount_2 ? alert ? SUCCESS : NEUTRAL : ERROR
     end
+  end
+  
+  def success(is_success = false)
+    is_success ? SUCCESS : NEUTRAL
   end
 
   def auth_service

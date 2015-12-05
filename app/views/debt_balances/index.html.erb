@@ -50,7 +50,7 @@
   <tbody>
     <% @debt_balances.each do |debt_balance| %>
       <tr>
-        <td><%= debt_balance.debt.name %></td>
+        <td style="background-color:<%= success(debt_balance.in_payment?)%>"><%= debt_balance.debt.name %></td>
         <td><%= debt_balance.payment_start_date %></td>
         <td><%= debt_balance.due_date %></td>
         <td><%= number_to_currency(debt_balance.balance_of_interest) %></td>
