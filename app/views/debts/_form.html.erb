@@ -13,7 +13,7 @@
 
   <div class="field">
     <%= f.label :category %><br>
-    <%= f.select :category, options_for_select([['Credit Cards', 'Credit Cards'], ['Savings', 'Savings'], ['Loans','Loans'], ['Bill','Bill']]) %>
+    <%= f.select :category, options_for_select([['Credit Cards', 'Credit Cards'], ['Savings', 'Savings'], ['Loans','Loans'], ['Bill','Bill']], @debt.category) %>
   </div>
   <div class="field">
     <%= f.label :sub_category %><br>
@@ -25,7 +25,7 @@
   </div>
   <div class="field">
     <%= f.label :pay_from %><br>
-    <%= f.select :pay_from , options_for_select([['Bank Of America', 'Bank Of America'], ['Chase', 'Chase']]) %>
+    <%= f.select :pay_from , options_for_select([['Bank Of America', 'Bank Of America'], ['Chase', 'Chase']], @debt.pay_from) %>
   </div>
   <div class="field">
     <%= f.label :fix_amount %><br>
@@ -33,7 +33,7 @@
   </div>
   <div class="field">
     <%= f.label :schedule %><br>
-    <%= f.select :schedule , options_for_select([['Bi-Weekly', 'Bi-Weekly'], ['Monthly', 'Monthly']]) %>
+    <%= f.select :schedule , options_for_select([['Bi-Weekly', 'Bi-Weekly'], ['Monthly', 'Monthly']], @debt.schedule) %>
   </div>
   <div class="field">
     <%= f.label :payment_start_date %><br>
