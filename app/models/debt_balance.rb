@@ -40,8 +40,10 @@ class DebtBalance < ActiveRecord::Base
       end
     elsif payment_date.nil? || payment_date < Date.new(2015,11,1)
       result = self.debt.pay_from == 'Chase' ? chase_payment_due : boa_payment_due
-    elsif payment_date >= Date.new(2015,11,1)
+    elsif payment_date >= Date.new(2015,11,1) && payment_date < Date.new(2015,12,1)
       result = [nih_payment_due,max_payment(payment_date)].min
+    elsif payment_date > Date.new(2015,12,1)
+      result = [verve_payment_due,max_payment(payment_date)].min
     end
     result
   end
@@ -60,6 +62,10 @@ class DebtBalance < ActiveRecord::Base
 
   def nih_payment_due
     self.balance_of_interest/nih_fridays(self.payment_start_date, self.due_date)
+  end
+  
+  def verve_payment_due
+    self.balance_of_interest/verve_paychecks(self.payment_start_date, self.due_date)
   end
 
   def after_pay_balance(up_to_date = nil, inclusive = false)

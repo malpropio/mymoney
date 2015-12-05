@@ -38,6 +38,13 @@ module DateModule
     end
     fridays
   end
+  
+  def verve_paychecks(start_date, end_date)
+    if start_date && end_date
+      result = (start_date..end_date).to_a.select {|k| k.day==15 || k == k.end_of_month}
+      result.count
+    end
+  end
 
   def bi_weekly_due(base_date, curr_date)
     reference_date = Date.new(2009,1,1)
