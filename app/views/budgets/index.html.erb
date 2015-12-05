@@ -35,7 +35,7 @@
 <%= form_tag budgets_path, :method => 'get', :id => "budgets_search" do %>
   <table class="filters">
     <tr>
-        <td><%= select_tag :search, options_for_select(last_12_months, @curr_budget) %></td>
+        <td><%= select_tag :search, options_for_select(last_n_months(12), @curr_budget) %></td>
         <td><%= submit_tag "See Budget", :name => nil %></td>
     </tr>
   </table>
