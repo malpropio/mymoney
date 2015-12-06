@@ -42,7 +42,7 @@ class DebtBalance < ActiveRecord::Base
       result = self.debt.pay_from == 'Chase' ? chase_payment_due : boa_payment_due
     elsif payment_date >= Date.new(2015,11,1) && payment_date < Date.new(2015,12,1)
       result = [nih_payment_due,max_payment(payment_date)].min
-    elsif payment_date > Date.new(2015,12,1)
+    elsif payment_date >= Date.new(2015,12,1)
       result = [verve_payment_due,max_payment(payment_date)].min
     end
     result
