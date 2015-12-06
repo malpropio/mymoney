@@ -26,8 +26,9 @@ class DebtBalance < ActiveRecord::Base
     current_balance = ( self.target_balance - self.balance ).abs
   end
 
-  def payment_due(payment_date = nil)
+  def payment_due(payment_date = nil, live = true)
     result = 0
+    max = live ? max_payment(payment_date) : 999999 #TODO: fix
     if self.debt.fix_amount
       if self.debt.schedule == "Bi-Weekly"
         result = bi_weekly_due(self.debt.payment_start_date,payment_date) ? self.debt.fix_amount  : 0
@@ -41,9 +42,9 @@ class DebtBalance < ActiveRecord::Base
     elsif payment_date.nil? || payment_date < Date.new(2015,11,1)
       result = self.debt.pay_from == 'Chase' ? chase_payment_due : boa_payment_due
     elsif payment_date >= Date.new(2015,11,1) && payment_date < Date.new(2015,12,1)
-      result = [nih_payment_due,max_payment(payment_date)].min
+      result = [nih_payment_due,max].min
     elsif payment_date >= Date.new(2015,12,1)
-      result = [verve_payment_due,max_payment(payment_date)].min
+      result = [verve_payment_due,max].min
     end
     result
   end
