@@ -1,0 +1,41 @@
+<%= form_for(@income_source) do |f| %>
+  <% if @income_source.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@income_source.errors.count, "error") %> prohibited this income_source from being saved:</h2>
+
+      <ul>
+      <% @income_source.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :pay_schedule %><br>
+    <%= f.select :pay_schedule, options_for_select([['bi-weekly', 'bi-weekly'], ['semi-monthly', 'semi-monthly']], @income_source.pay_schedule) %>
+  </div>
+  <div class="field">
+    <%= f.label :pay_day %><br>
+    <%= f.text_field :pay_day %>
+  </div>
+  <div class="field">
+    <%= f.label :amount %><br>
+    <%= f.number_field :amount %>
+  </div>
+  <div class="field">
+    <%= f.label :start_date %><br>
+    <%= f.calendar_field :start_date %>
+  </div>
+  <div class="field">
+    <%= f.label :end_date %><br>
+    <%= f.calendar_field :end_date %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

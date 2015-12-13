@@ -1,0 +1,37 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Income Sources</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Pay schedule</th>
+      <th>Pay day</th>
+      <th>Amount</th>
+      <th>Start date</th>
+      <th>End date</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @income_sources.each do |income_source| %>
+      <tr>
+        <td><%= income_source.name %></td>
+        <td><%= income_source.pay_schedule %></td>
+        <td><%= income_source.pay_day %></td>
+        <td><%= income_source.amount %></td>
+        <td><%= income_source.start_date %></td>
+        <td><%= income_source.end_date %></td>
+        <td><%= link_to 'Show', income_source %></td>
+        <td><%= link_to 'Edit', edit_income_source_path(income_source) %></td>
+        <td><%= link_to 'Destroy', income_source, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Income source', new_income_source_path %>
