@@ -40,10 +40,5 @@
   <%= number_to_currency(@income_source.income(@income_source.start_date, @income_source.end_date)) %>
 </p>
 
-<p>
-  <strong>Total Lifetime Income:</strong>
-  <%= number_to_currency(IncomeSource.total_income) %>
-</p>
-
 <%= link_to 'Edit', edit_income_source_path(@income_source) %> |
 <%= link_to 'Back', income_sources_path %>
