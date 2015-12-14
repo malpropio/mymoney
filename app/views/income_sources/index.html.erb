@@ -20,8 +20,8 @@
       <tr>
         <td><%= income_source.name %></td>
         <td><%= income_source.pay_schedule %></td>
-        <td><%= income_source.pay_day %></td>
-        <td><%= income_source.amount %></td>
+        <td><%= income_source.paydays %></td>
+        <td><%= number_to_currency(income_source.amount) %></td>
         <td><%= income_source.start_date %></td>
         <td><%= income_source.end_date %></td>
         <td><%= link_to 'Show', income_source %></td>

@@ -9,6 +9,14 @@ class IncomeSource < ActiveRecord::Base
   validate :semi_monthly_pay, :if => Proc.new{|k| k.pay_schedule == 'semi-monthly'}
   validate :start_and_end
     
+  def paydays
+    if pay_schedule == 'weekly' || pay_schedule == 'bi-weekly'
+      pay_day.titleize
+    else
+      pay_day.split(",").map { |word| word.to_i > 0 ? word.to_i.ordinalize : word.titleize }.join(" and ")
+    end
+  end
+  
   def paychecks(from=Time.now.to_date, to=Time.now.to_date)
     from = [from, start_date].max
     to = [to, end_date].min
@@ -27,7 +35,7 @@ class IncomeSource < ActiveRecord::Base
     paychecks(from, to) * self.amount
   end
   
-  def self.total_income(from=Time.now.to_date, to=Time.now.to_date)
+  def self.total_income(from=Date.new(2010,1,1), to=Date.new(2020,1,1))
     result = 0
     IncomeSource.all.each {|k| result += k.income(from,to)}
     result

@@ -12,7 +12,7 @@
 
 <p>
   <strong>Pay day:</strong>
-  <%= @income_source.pay_day %>
+  <%= @income_source.paydays %>
 </p>
 
 <p>
@@ -41,8 +41,8 @@
 </p>
 
 <p>
-  <strong>Total Income:</strong>
-  <%= number_to_currency(IncomeSource.total_income(@income_source.start_date, @income_source.end_date)) %>
+  <strong>Total Lifetime Income:</strong>
+  <%= number_to_currency(IncomeSource.total_income) %>
 </p>
 
 <%= link_to 'Edit', edit_income_source_path(@income_source) %> |
