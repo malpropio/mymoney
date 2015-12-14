@@ -41,6 +41,10 @@ class IncomeSource < ActiveRecord::Base
     result
   end
   
+  def self.max_end_date
+    IncomeSource.maximum(:end_date)
+  end
+  
   private
   def bi_weekly_payday
       errors.add(:pay_day, "must be a valid day (#{days_of_week.join(', ')})") unless days_of_week.include?(pay_day.titleize)

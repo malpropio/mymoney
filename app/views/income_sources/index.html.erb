@@ -6,7 +6,7 @@
   <strong>After taxes and deductions income:</strong>
 </p>
 <p style="text-indent: 2em;">
-  <strong>Expected lifetime:</strong> <%= number_to_currency(IncomeSource.total_income(Date.new(2007,1,1),Date.new(2020,1,1))) %>
+  <strong>Expected through <%= IncomeSource.max_end_date %>:</strong> <%= number_to_currency(IncomeSource.total_income(Date.new(2007,1,1),Date.new(2020,1,1))) %>
 </p>
 <p style="text-indent: 2em;">
   <strong>To date:</strong> <%= number_to_currency(IncomeSource.total_income) %>
