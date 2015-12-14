@@ -4,6 +4,7 @@ class IncomeSource < ActiveRecord::Base
   validates_presence_of :name, :pay_schedule, :pay_day, :amount, :start_date, :end_date
   validates_numericality_of :amount
   
+  validate :weekly_payday, :if => Proc.new{|k| k.pay_schedule == 'weekly'}
   validate :bi_weekly_payday, :if => Proc.new{|k| k.pay_schedule == 'bi-weekly'}
   validate :semi_monthly_pay, :if => Proc.new{|k| k.pay_schedule == 'semi-monthly'}
   validate :start_and_end
@@ -12,7 +13,9 @@ class IncomeSource < ActiveRecord::Base
     from = [from, start_date].max
     to = [to, end_date].min
     result = []
-    if pay_schedule == 'bi-weekly'
+    if pay_schedule == 'weekly'
+      result = (from..to).to_a.select {|k| is_day_of_week(k, pay_day)}
+    elsif pay_schedule == 'bi-weekly'
       result = (from..to).to_a.select {|k| is_day_of_week(k, pay_day) && k.cweek % 2 == start_date.cweek % 2}
     elsif pay_schedule == 'semi-monthly'
       result = (from..to).to_a.select {|k| is_day_of_month(k, pay_day.split(',')[0]) || is_day_of_month(k, pay_day.split(',')[1])}
@@ -32,6 +35,11 @@ class IncomeSource < ActiveRecord::Base
   
   private
   def bi_weekly_payday
+      errors.add(:pay_day, "must be a valid day (#{days_of_week.join(', ')})") unless days_of_week.include?(pay_day.titleize)
+      errors.add(:start_date, "must be a #{pay_day.titleize}") unless is_day_of_week(start_date, pay_day)
+  end
+  
+  def weekly_payday
       errors.add(:pay_day, "must be a valid day (#{days_of_week.join(', ')})") unless days_of_week.include?(pay_day.titleize)
       errors.add(:start_date, "must be a #{pay_day.titleize}") unless is_day_of_week(start_date, pay_day)
   end
