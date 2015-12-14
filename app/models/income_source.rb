@@ -35,7 +35,7 @@ class IncomeSource < ActiveRecord::Base
     paychecks(from, to) * self.amount
   end
   
-  def self.total_income(from=Date.new(2010,1,1), to=Date.new(2020,1,1))
+  def self.total_income(from=Date.new(2010,1,1), to=Time.now.to_date)
     result = 0
     IncomeSource.all.each {|k| result += k.income(from,to)}
     result
