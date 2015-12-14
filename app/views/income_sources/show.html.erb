@@ -34,10 +34,26 @@
   <strong>Paychecks:</strong>
   <%= @income_source.paychecks(@income_source.start_date, @income_source.end_date) %>
 </p>
+<p style="text-indent: 2em;">
+  <strong>To date:</strong>
+  <%= @income_source.paychecks(@income_source.start_date, Time.now.to_date) %>
+</p>
+<p style="text-indent: 2em;">
+  <strong>Remaining:</strong>
+  <%= @income_source.paychecks(Time.now.to_date, @income_source.end_date) %>
+</p>
 
 <p>
   <strong>Income:</strong>
   <%= number_to_currency(@income_source.income(@income_source.start_date, @income_source.end_date)) %>
+</p>
+<p style="text-indent: 2em;">
+  <strong>To date:</strong>
+  <%= number_to_currency(@income_source.income(@income_source.start_date, Time.now.to_date)) %>
+</p>
+<p style="text-indent: 2em;">
+  <strong>Remaining:</strong>
+  <%= number_to_currency(@income_source.income(Time.now.to_date, @income_source.end_date)) %>
 </p>
 
 <%= link_to 'Edit', edit_income_source_path(@income_source) %> |

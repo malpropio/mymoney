@@ -3,8 +3,16 @@
 <h1>Listing Income Sources</h1>
 
 <p>
-  <strong>Total Lifetime Income:</strong>
-  <%= number_to_currency(IncomeSource.total_income) %>
+  <strong>After taxes and deductions income:</strong>
+</p>
+<p style="text-indent: 2em;">
+  <strong>Expected lifetime:</strong> <%= number_to_currency(IncomeSource.total_income(Date.new(2007,1,1),Date.new(2020,1,1))) %>
+</p>
+<p style="text-indent: 2em;">
+  <strong>To date:</strong> <%= number_to_currency(IncomeSource.total_income) %>
+</p>
+<p style="text-indent: 2em;">
+  <strong>Remaining:</strong> <%= number_to_currency(IncomeSource.total_income(Time.now.to_date,Date.new(2020,1,1))) %>
 </p>
 
 <table>
