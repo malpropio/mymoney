@@ -28,6 +28,12 @@ class Debt < ActiveRecord::Base
   def soft_delete
     update_attribute(:deleted_at, Time.now)
   end
+  
+  def self.do_not_pay_list
+    result = Debt.where(autopay: false).uniq.pluck(:name)
+    result += Debt.uniq.pluck(:pay_from)
+    result.sort
+  end
 
   private
   def debt_exists

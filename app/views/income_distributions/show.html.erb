@@ -77,7 +77,15 @@
     </tr>
   </tbody>
 </table>
+<br>
 
+<p style="text-indent: 0em; color:red;">
+   <strong>No payments auto pay for the following: </strong>
+</p>
+
+<p style="text-indent: 2em; color:red;">
+  <%= Debt.do_not_pay_list.join(", ") %>
+</p>
 <br>
 
 <%= link_to 'Edit', edit_income_distribution_path(@income_distribution) %> |
