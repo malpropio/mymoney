@@ -28,5 +28,5 @@ test:
 production:
   <<: *default
   database: mymoney_production
-  username: rails
-  password: rails
+  username: <%= ENV["DB_USER"] %>
+  password: <%= ENV["DB_PW"] %>
