@@ -1,8 +1,6 @@
 source 'https://rubygems.org'
 
-#source 'http://lprod.code-api-att.com:8808' do
-#  gem 'att-codekit'  
-#end
+gem 'seed_dump', :git => 'git@github.com:iDreamOn/seed_dump.git'
 
 # Add bootstrap
 gem 'bootstrap-sass', '3.2.0.0'

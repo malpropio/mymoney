@@ -1,7 +1,7 @@
 class Debt < ActiveRecord::Base
   has_many :debt_balances
   
-  validates_presence_of :category, :name, :schedule
+  validates_presence_of :category, :name
 
   validate :debt_exists
 

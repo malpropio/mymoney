@@ -46,10 +46,10 @@ class Spending < ActiveRecord::Base
 
   def clean_desc
     if !self.category.nil?
-      self.description = nil if Debt.where(category: self.category.name).exists? && self.category.name != 'Rent'
-      self.description = self.description_loan if self.category.name == 'Loans'
-      self.description = self.description_cc if self.category.name == 'Credit Cards'
-      self.description = self.description_asset if self.category.name == 'Savings'
+      self.description = nil if Debt.where(category: self.category.name).exists? && self.category.name != 'Rent' && (!self.description_loan.nil? || !self.description_cc.nil? || !self.description_asset.nil?)
+      self.description = self.description_loan if (self.category.name == 'Loans' && !self.description_loan.nil?)
+      self.description = self.description_cc if (self.category.name == 'Credit Cards' && !self.description_cc.nil?)
+      self.description = self.description_asset if (self.category.name == 'Savings' && !self.description_asset.nil?)
       self.payment_method_id = PaymentMethod.find_by_name("Debit").id if (DEBIT_CATEGORIES.include? self.category.name)
       self.description = self.description.titleize unless self.description.nil?
     end
