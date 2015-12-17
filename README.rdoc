@@ -8,6 +8,8 @@
     1. Ubuntu: http://railsapps.github.io/installrubyonrails-ubuntu.html
     2. VirtualBox: https://github.com/iDreamOn/rails-dev-box
 3. Make sure you have mysql installed and running (Not necessary if using VirtualBox above)
+3. Install time zone support on mysql server (Not necessary if using VirtualBox above)
+    Run `mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root mysql`
 3. Add rails user for mysql (Not necessary if using VirtualBox above)
         mysql -uroot <<SQL
         GRANT ALL PRIVILEGES ON *.* to 'rails'@'localhost';
