@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
   skip_before_action :require_login, only: [:create, :new, :destroy]
-  ALLOWED = %w[titbabthomas@gmail.com samanthalouis.12@gmail.com]
+  ALLOWED = USERS_CONFIG["allowed_users"].split(',')
 
   def new
   end

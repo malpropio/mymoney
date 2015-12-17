@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
-source 'http://lprod.code-api-att.com:8808' do
-  gem 'att-codekit'  
-end
+#source 'http://lprod.code-api-att.com:8808' do
+#  gem 'att-codekit'  
+#end
 
 # Add bootstrap
 gem 'bootstrap-sass', '3.2.0.0'

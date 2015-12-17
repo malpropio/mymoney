@@ -1,0 +1,10 @@
+development:
+  allowed_users: dev@local.com
+
+test:
+  allowed_users: dev@local.com
+
+# Do not keep production secrets in the repository,
+# instead read values from the environment.
+production:
+  allowed_users:

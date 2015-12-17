@@ -1,6 +1,4 @@
 module ApplicationHelper
-include Att::Codekit
-
 
 VALID = ["Amex","Freedom","Travel","Cash","Jcp","Express"]
 VALID_GOOD_NEG = ["Credit Cards","Savings","Loans"]
@@ -78,24 +76,4 @@ WARNING = "#F7FE2E"
     is_success ? SUCCESS : NEUTRAL
   end
 
-  def auth_service
-    service = Auth::AuthCode.new(ATT_CONFIG['fqdn'], ATT_CONFIG['client_id'], ATT_CONFIG['client_secret'], :redirect => root_url, :scope => ATT_CONFIG['scope'])
-  end
-
-  def text_token
-    token = Auth::OAuthToken.open_token(ATT_CONFIG['token_file']) if File.exist?(ATT_CONFIG['token_file'])
-  end
-
-  def store_token(code = nil)
-    if code
-      token = auth_service.createToken(code)
-      Auth::OAuthToken.save_token(ATT_CONFIG['token_file'], token)
-    end
-  end
-
-  def text_service
-    if text_token
-      Service::IMMNService.new(ATT_CONFIG['fqdn'], text_token)
-    end
-  end
 end

@@ -10,7 +10,6 @@ class CreateDebts < ActiveRecord::Migration
 		  t.timestamps null: false
 		end
 
-		add_index :debts, [:category, :name], unique: true, name: "by_category_name"
 	end
   end
   
