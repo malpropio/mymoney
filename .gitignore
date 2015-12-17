@@ -19,6 +19,7 @@
 #ignore key files
 config/secrets.yml
 config/database.yml
+config/users_config.yml
 
 #ignore any production dbs
 db/backups/*prod*
