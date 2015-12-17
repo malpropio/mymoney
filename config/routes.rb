@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   
 
+  resources :income_sources
   resources :income_distributions do
     member do
          get :make_payments

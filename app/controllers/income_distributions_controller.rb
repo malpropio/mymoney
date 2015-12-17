@@ -106,7 +106,7 @@ class IncomeDistributionsController < ApplicationController
       c = @income_distribution.debts_hash
 
       c.map do |k,v|
-        unless ["Rent","Bank Of America","Chase"].include? k 
+        unless Debt.do_not_pay_list.include? k 
           id = nil || Category.find_by_name(k).id if Category.exists?(name: k)
           id = id || Category.find_by_name(Debt.find_by_name(k).category).id if Debt.exists?(name: k)
           payment = Spending.create(description: k, category_id: id, spending_date: spending_date, amount: v[1], description_loan: k, description_cc: k, payment_method_id: payment_method_id, description_asset: k)
@@ -123,7 +123,7 @@ class IncomeDistributionsController < ApplicationController
       c = @income_distribution.debts_hash
       
       c.map do |k,v|
-        unless ["Rent","Bank Of America","Chase"].include? k
+        unless Debt.do_not_pay_list.include? k
           id = nil || Category.find_by_name(k).id if Category.exists?(name: k)
           id = id || Category.find_by_name(Debt.find_by_name(k).category) if Debt.exists?(name: k)
           destroy_spending(Spending.find_by(description: k, category_id: id, spending_date: spending_date, payment_method_id: payment_method_id))

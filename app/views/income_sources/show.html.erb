@@ -1,0 +1,60 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @income_source.name %>
+</p>
+
+<p>
+  <strong>Pay schedule:</strong>
+  <%= @income_source.pay_schedule %>
+</p>
+
+<p>
+  <strong>Pay day:</strong>
+  <%= @income_source.paydays %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= number_to_currency(@income_source.amount) %>
+</p>
+
+<p>
+  <strong>Start date:</strong>
+  <%= @income_source.start_date %>
+</p>
+
+<p>
+  <strong>End date:</strong>
+  <%= @income_source.end_date %>
+</p>
+
+<p>
+  <strong>Paychecks:</strong>
+  <%= @income_source.paychecks(@income_source.start_date, @income_source.end_date) %>
+</p>
+<p style="text-indent: 2em;">
+  <strong>To date:</strong>
+  <%= @income_source.paychecks(@income_source.start_date, Time.now.to_date) %>
+</p>
+<p style="text-indent: 2em;">
+  <strong>Remaining:</strong>
+  <%= @income_source.paychecks(Time.now.to_date, @income_source.end_date) %>
+</p>
+
+<p>
+  <strong>Income:</strong>
+  <%= number_to_currency(@income_source.income(@income_source.start_date, @income_source.end_date)) %>
+</p>
+<p style="text-indent: 2em;">
+  <strong>To date:</strong>
+  <%= number_to_currency(@income_source.income(@income_source.start_date, Time.now.to_date)) %>
+</p>
+<p style="text-indent: 2em;">
+  <strong>Remaining:</strong>
+  <%= number_to_currency(@income_source.income(Time.now.to_date, @income_source.end_date)) %>
+</p>
+
+<%= link_to 'Edit', edit_income_source_path(@income_source) %> |
+<%= link_to 'Back', income_sources_path %>

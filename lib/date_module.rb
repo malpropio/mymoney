@@ -65,4 +65,29 @@ module DateModule
      start_date = n.month.ago end_date
      (start_date..end_date).map{ |k| [k.strftime('%b %Y'),k] if k.day==1}.compact.reverse!
   end
+  
+  def days_of_week
+    end_date = Date.new(2015,01,04)
+    start_date = 6.days.ago end_date
+    (start_date..end_date).map{ |k| k.strftime('%A').titleize }.compact
+  end
+  
+  def is_before(first, second)
+    first < second
+  end
+  
+  def is_day_of_week(date, day)
+    date.strftime('%A').titleize == day.titleize
+  end
+  
+  def is_day_of_month(date, day)
+    day = day.downcase.strip
+    if day == 'first'
+      date == date.beginning_of_month
+    elsif day == 'last'
+      date == date.end_of_month
+    else
+      date.day == [day.to_i,date.end_of_month.day].min
+    end
+  end
 end 

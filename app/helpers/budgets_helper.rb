@@ -99,17 +99,9 @@ module BudgetsHelper
 
   def potential_income(curr_month = nil)
     if !curr_month.nil?
-      start_date = curr_month.change(day: 1)
+      start_date = curr_month.beginning_of_month
       end_date = curr_month.end_of_month
-      if start_date < Date.new(2015,10,1)
-        chase_fridays(start_date,end_date) * 1837.09 + nih_fridays(start_date,end_date) * 1137.31
-      elsif start_date >= Date.new(2015,10,1) && start_date < Date.new(2015,11,1)
-        chase_fridays(start_date,Date.new(2015,10,14)) * 1837.09 + nih_fridays(start_date,Date.new(2015,10,14)) * 1137.31 + nih_fridays(Date.new(2015,10,15),end_date) * 1093.37
-      elsif start_date >= Date.new(2015,11,1) && start_date < Date.new(2015,12,1)
-        nih_fridays(start_date,end_date) * 1093.37 + verve_business_days(Date.new(2015,11,23),end_date) * 254
-      else
-        nih_fridays(start_date,end_date) * 1093.37 + verve_business_days(start_date,end_date) * 254
-      end
+      IncomeSource.total_income(start_date, end_date)
     end
   end
   

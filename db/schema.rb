@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151127193950) do
+ActiveRecord::Schema.define(version: 20151213155844) do
 
   create_table "budgets", force: :cascade do |t|
     t.integer  "category_id",  limit: 4
@@ -75,6 +75,17 @@ ActiveRecord::Schema.define(version: 20151127193950) do
   end
 
   add_index "income_distributions", ["distribution_date"], name: "index_income_distributions_on_distribution_date", unique: true, using: :btree
+
+  create_table "income_sources", force: :cascade do |t|
+    t.string   "name",         limit: 255
+    t.string   "pay_schedule", limit: 255
+    t.string   "pay_day",      limit: 255
+    t.decimal  "amount",                   precision: 8, scale: 2, null: false
+    t.date     "start_date"
+    t.date     "end_date"
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
+  end
 
   create_table "payment_methods", force: :cascade do |t|
     t.string   "name",        limit: 255
