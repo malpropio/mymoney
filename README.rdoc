@@ -26,3 +26,6 @@
 9. Run ``rake db:seed``
 10. Run ``rails s -b 0.0.0.0``
 11. Browse ``http://0.0.0.0:3000``
+12. You should be able to login using the default dev account:
+        username: dev
+        password: devdev
