@@ -84,3 +84,8 @@ group :development, :test do
   gem 'rspec-rails'
 end
 
+group :development do
+  #needed for database diagrams
+  gem "rails-erd"
+end
+
