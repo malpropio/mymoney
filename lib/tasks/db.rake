@@ -13,6 +13,7 @@ namespace :db do
 
   desc 'restore the last backup'
   task restore: :environment do
+     puts "restoring #{db_config['database']} into #{db_config['database']}"
      system "gunzip < #{db_dir.to_s}/#{db_config['database']}.sql.gz | mysql -u#{db_config['username']} -p#{db_config['password']} #{db_config['database']}"
   end
 

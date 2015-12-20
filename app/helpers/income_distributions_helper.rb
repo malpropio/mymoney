@@ -10,7 +10,7 @@ module IncomeDistributionsHelper
 
   def distro_list
     result = {}
-    Debt.all.map { |d| result[d.name] = [d.name,d.category] }
+    Debt.all.map { |d| result[d.name] = [d.name,d.old_category] }
     result
   end
 

@@ -1,0 +1,41 @@
+<%= form_for(@account_balance) do |f| %>
+  <% if @account_balance.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@account_balance.errors.count, "error") %> prohibited this account_balance from being saved:</h2>
+
+      <ul>
+      <% @account_balance.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :balance_date %><br>
+    <%= f.calendar_field :balance_date %>
+  </div>
+  <div class="field">
+    <%= f.label :account_id %><br>
+    <%= f.collection_select :account_id, Account.all.order(:name), :id, :name %>
+  </div>
+  <div class="field">
+    <%= f.label :amount %><br>
+    <%= f.text_field :amount %>
+  </div>
+  <div class="field">
+    <%= f.label :buffer %><br>
+    <%= f.text_field :buffer %>
+  </div>
+  <div class="field">
+    <%= f.label :debt_id %><br>
+    <%= f.collection_select :debt_id, Debt.active.order(:name), :id, :name %>
+  </div>
+  <div class="field">
+    <%= f.label :paid %><br>
+    <%= f.check_box :paid %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

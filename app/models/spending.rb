@@ -2,6 +2,7 @@ class Spending < ActiveRecord::Base
   belongs_to :category
   belongs_to :budget
   belongs_to :payment_method
+  belongs_to :debt_balance
 
   attr_accessor :description_loan
   attr_accessor :description_cc

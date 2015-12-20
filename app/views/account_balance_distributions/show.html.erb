@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Account balance:</strong>
+  <%= @account_balance_distribution.account_balance %>
+</p>
+
+<p>
+  <strong>Debt:</strong>
+  <%= @account_balance_distribution.debt %>
+</p>
+
+<p>
+  <strong>Recommendation:</strong>
+  <%= @account_balance_distribution.recommendation %>
+</p>
+
+<p>
+  <strong>Actual:</strong>
+  <%= @account_balance_distribution.actual %>
+</p>
+
+<%= link_to 'Edit', edit_account_balance_distribution_path(@account_balance_distribution) %> |
+<%= link_to 'Back', account_balance_distributions_path %>

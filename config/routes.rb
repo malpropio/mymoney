@@ -2,6 +2,9 @@ Rails.application.routes.draw do
 
   
 
+  resources :account_balance_distributions
+  resources :account_balances
+  resources :accounts
   resources :income_sources
   resources :income_distributions do
     member do

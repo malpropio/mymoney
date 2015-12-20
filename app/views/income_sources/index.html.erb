@@ -20,6 +20,7 @@
     <tr>
       <th>Name</th>
       <th>Pay schedule</th>
+      <th>Account</th>
       <th>Pay day</th>
       <th>Amount</th>
       <th>Start date</th>
@@ -33,6 +34,7 @@
       <tr>
         <td><%= income_source.name %></td>
         <td><%= income_source.pay_schedule %></td>
+        <td><%= income_source.account.name %></td>
         <td><%= income_source.paydays %></td>
         <td><%= number_to_currency(income_source.amount) %></td>
         <td><%= income_source.start_date %></td>

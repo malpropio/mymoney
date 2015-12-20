@@ -3,6 +3,8 @@ class DebtBalance < ActiveRecord::Base
 
   belongs_to :debt
 
+  has_many :spendings
+
   validates_presence_of :debt_id, :due_date, :balance
   validates :balance, numericality: true
 
@@ -14,12 +16,18 @@ class DebtBalance < ActiveRecord::Base
     self.payment_start_date = self.due_date - 1.months + 1.days if !self.due_date.blank? && self.payment_start_date.blank?
   end
 
-  def payments(up_to_date = nil, inclusive = false)
+  def old_payments(up_to_date = nil, inclusive = false)
     comparison = inclusive ? "<=" : "<"
     threshold = "AND spending_date#{comparison}'#{up_to_date}'" unless up_to_date.nil?
     Spending.joins(:category)
             .where("(spendings.description = '#{self.debt.name}' AND categories.name = '#{self.debt.category}') OR ('#{self.debt.category}' = 'Bill' AND categories.name = '#{self.debt.name}')")
             .where("spending_date>='#{self.payment_start_date}' AND spending_date<='#{self.due_date}' #{threshold}")
+  end
+
+  def payments(up_to_date = nil, inclusive = false)
+    comparison = inclusive ? "<=" : "<"
+    threshold = "AND spending_date#{comparison}'#{up_to_date}'" unless up_to_date.nil?
+    self.spendings.where("spending_date>='#{self.payment_start_date}' AND spending_date<='#{self.due_date}' #{threshold}")
   end
 
   def balance_of_interest

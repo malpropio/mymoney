@@ -1,12 +1,12 @@
 class CreateIncomeSources < ActiveRecord::Migration
   def change
     create_table :income_sources do |t|
-      t.string :name
-      t.string :pay_schedule
-      t.string :pay_day
+      t.string :name, null: false
+      t.string :pay_schedule, null:false
+      t.string :pay_day, null: false
       t.decimal :amount, null: false, :precision => 8, :scale => 2
-      t.date :start_date
-      t.date :end_date
+      t.date :start_date, null: false
+      t.date :end_date, null: false
 
       t.timestamps null: false
     end

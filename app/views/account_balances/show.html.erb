@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Balance date:</strong>
+  <%= @account_balance.balance_date %>
+</p>
+
+<p>
+  <strong>Account:</strong>
+  <%= @account_balance.account %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @account_balance.amount %>
+</p>
+
+<p>
+  <strong>Buffer:</strong>
+  <%= @account_balance.buffer %>
+</p>
+
+<p>
+  <strong>Debt:</strong>
+  <%= @account_balance.debt %>
+</p>
+
+<p>
+  <strong>Paid:</strong>
+  <%= @account_balance.paid %>
+</p>
+
+<p>
+Recommendations<br>
+<%= @account_balance.make_recommendations %>
+</p>
+
+<%= link_to 'Edit', edit_account_balance_path(@account_balance) %> |
+<%= link_to 'Back', account_balances_path %>

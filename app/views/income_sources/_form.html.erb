@@ -20,6 +20,10 @@
     <%= f.select :pay_schedule, options_for_select([['weekly', 'weekly'], ['bi-weekly', 'bi-weekly'], ['semi-monthly', 'semi-monthly']], @income_source.pay_schedule) %>
   </div>
   <div class="field">
+    <%= f.label :account_id %><br>
+    <%= f.collection_select :account_id, Account.all.order(:name), :id, :name %>
+  </div>
+  <div class="field">
     <%= f.label :pay_day %><br>
     <%= f.text_field :pay_day %>
   </div>
