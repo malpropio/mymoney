@@ -3,7 +3,12 @@ Rails.application.routes.draw do
   
 
   resources :account_balance_distributions
-  resources :account_balances
+  resources :account_balances do
+    member do
+         get :make_payments
+         get :undo_payments
+       end
+  end
   resources :accounts
   resources :income_sources
   resources :income_distributions do

@@ -46,7 +46,7 @@
     </tr>
   </thead>
   <tbody>
-    <% account_balance.make_recommendations.each do |debt| %>
+    <% account_balance.recommendations.each do |debt| %>
       <% unless debt[1][1] == 0 %>
         <tr>
           <td><%= debt[0] %></td>
@@ -70,6 +70,21 @@
 </table>
 
 <%= link_to 'Edit', edit_account_balance_path(account_balance) %> |
-<%= link_to 'Back', account_balances_path %>
+<%= link_to 'Back', account_balances_path %> |
+<% if !account_balance.paid %>
+  <%= link_to 'Make Payments', make_payments_account_balance_path(account_balance), :data => {:confirm => 'Are you sure?'} %>
+<% else %>
+  <%= link_to 'Undo Payments', undo_payments_account_balance_path(account_balance), :data => {:confirm => 'Are you sure?'} %>
+<% end %>
+
 
 <% end %>
+
+<p style="text-indent: 0em; color:red;">
+   <strong>No payments auto pay for the following: </strong>
+</p>
+
+<p style="text-indent: 2em; color:red;">
+  <%= Debt.do_not_pay_list.join(", ") %>
+</p>
+<br>

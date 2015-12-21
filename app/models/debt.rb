@@ -33,8 +33,8 @@ class Debt < ActiveRecord::Base
   end
   
   def self.do_not_pay_list
-    result = Debt.where(autopay: false).uniq.pluck(:name)
-    result += Debt.uniq.pluck(:pay_from)
+    result = Debt.where(autopay: false).where(deleted_at: nil).uniq.pluck(:name)
+    result += Account.uniq.pluck(:name)
     result.sort
   end
 

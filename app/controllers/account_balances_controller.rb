@@ -1,5 +1,5 @@
 class AccountBalancesController < ApplicationController
-  before_action :set_account_balance, only: [:show, :edit, :update, :destroy]
+  before_action :set_account_balance, only: [:show, :edit, :update, :destroy, :make_payments, :undo_payments]
 
   # GET /account_balances
   # GET /account_balances.json
@@ -59,6 +59,25 @@ class AccountBalancesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to account_balances_url, notice: 'Account balance was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  # Make the payments
+  def make_payments
+    @account_balance.make_payments
+
+    respond_to do |format|
+        format.html { redirect_to @account_balance, notice: 'Payments successfully made.' }
+        format.json { render :show, status: :made, location: @account_balance }
+    end
+  end
+
+  def undo_payments
+    @account_balance.undo_payments
+
+    respond_to do |format|
+        format.html { redirect_to @account_balance, notice: 'Payments successfully made.' }
+        format.json { render :show, status: :made, location: @account_balance }
     end
   end
 

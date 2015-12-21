@@ -6,7 +6,13 @@ class AccountBalance < ActiveRecord::Base
 
   attr_accessor :total_distribution
 
-  def make_recommendations
+  def debts
+    DebtBalance.joins(:debt).where("debt_balances.payment_start_date<='#{balance_date}'
+                                      AND due_date>='#{balance_date}'
+                                      AND (debts.account_id = '#{account.id}' OR debts.id = '#{self.debt.id}')")
+  end
+
+  def recommendations
     recommendations = AccountBalance.all_recommendations(balance_date)
     other_pays = 0
     recommendations.each do |key, value|
@@ -28,10 +34,19 @@ class AccountBalance < ActiveRecord::Base
     recommendations[account.name]
   end
 
-  def debts
-    DebtBalance.joins(:debt).where("debt_balances.payment_start_date<='#{balance_date}'
-                                      AND due_date>='#{balance_date}'
-                                      AND (debts.account_id = '#{account.id}' OR debts.id = '#{self.debt.id}')")
+  def make_payments
+    recommendations.each do |rec|
+      unless Debt.do_not_pay_list.include? rec[0]
+        new_debt = Debt.find_by(name: rec[0], deleted_at: nil)
+        AccountBalanceDistribution.create(recommendation: rec[1][0], actual: rec[1][1], debt_id: new_debt.id, account_balance_id: self.id) unless rec[1][1] == 0
+      end
+    end
+    self.update(paid: true)
+  end
+
+  def undo_payments
+    self.account_balance_distributions.each { |k| k.destroy }
+    self.update(paid: false)
   end
 
   def self.all_recommendations(date)
