@@ -8,7 +8,7 @@
       <th>Date</th>
       <th>Account</th>
       <th>Debt</th>
-      <th>Recommendation</th>
+      <th>Recommended</th>
       <th>Actual</th>
       <th colspan="3"></th>
     </tr>
@@ -20,8 +20,8 @@
         <td><%= account_balance_distribution.account_balance.balance_date %></td>
         <td><%= account_balance_distribution.account_balance.account %></td>
         <td><%= account_balance_distribution.debt %></td>
-        <td><%= account_balance_distribution.recommendation %></td>
-        <td><%= account_balance_distribution.actual %></td>
+        <td><%= number_to_currency(account_balance_distribution.recommendation) %></td>
+        <td><%= number_to_currency(account_balance_distribution.actual) %></td>
         <td><%= link_to 'Show', account_balance_distribution %></td>
         <td><%= link_to 'Edit', edit_account_balance_distribution_path(account_balance_distribution) %></td>
         <td><%= link_to 'Destroy', account_balance_distribution, method: :delete, data: { confirm: 'Are you sure?' } %></td>

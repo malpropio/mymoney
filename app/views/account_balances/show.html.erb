@@ -12,16 +12,16 @@
 
 <p>
   <strong>Amount:</strong>
-  <%= @account_balance.amount %>
+  <%= number_to_currency(@account_balance.amount) %>
 </p>
 
 <p>
   <strong>Buffer:</strong>
-  <%= @account_balance.buffer %>
+  <%= number_to_currency(@account_balance.buffer) %>
 </p>
 
 <p>
-  <strong>Debt:</strong>
+  <strong>Leftover:</strong>
   <%= @account_balance.debt %>
 </p>
 
