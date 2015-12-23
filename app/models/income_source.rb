@@ -1,5 +1,7 @@
 class IncomeSource < ActiveRecord::Base
   include DateModule
+
+  belongs_to :account
   
   validates_presence_of :name, :pay_schedule, :pay_day, :amount, :start_date, :end_date
   validates_numericality_of :amount

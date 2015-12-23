@@ -8,11 +8,13 @@ namespace :db do
 
   desc 'take a backup of the db'
   task backup: :environment do
+     puts "backing up #{db_config['database']} into #{db_dir.to_s}/#{db_config['database']}"
      system "mysqldump -u#{db_config['username']} -p#{db_config['password']} #{db_config['database']} | gzip > #{db_dir.to_s}/#{db_config['database']}.sql.gz"
   end
 
   desc 'restore the last backup'
   task restore: :environment do
+     puts "restoring #{db_dir.to_s}/#{db_config['database']} into #{db_config['database']}"
      system "gunzip < #{db_dir.to_s}/#{db_config['database']}.sql.gz | mysql -u#{db_config['username']} -p#{db_config['password']} #{db_config['database']}"
   end
 

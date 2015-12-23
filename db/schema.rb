@@ -11,7 +11,44 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151213155844) do
+ActiveRecord::Schema.define(version: 20151219234122) do
+
+  create_table "account_balance_distributions", force: :cascade do |t|
+    t.integer  "account_balance_id", limit: 4
+    t.integer  "debt_id",            limit: 4
+    t.decimal  "recommendation",               precision: 8, scale: 2, null: false
+    t.decimal  "actual",                       precision: 8, scale: 2, null: false
+    t.datetime "created_at",                                           null: false
+    t.datetime "updated_at",                                           null: false
+  end
+
+  add_index "account_balance_distributions", ["account_balance_id"], name: "index_account_balance_distributions_on_account_balance_id", using: :btree
+  add_index "account_balance_distributions", ["debt_id"], name: "index_account_balance_distributions_on_debt_id", using: :btree
+
+  create_table "account_balances", force: :cascade do |t|
+    t.date     "balance_date",                                   null: false
+    t.integer  "account_id",   limit: 4
+    t.decimal  "amount",                 precision: 8, scale: 2, null: false
+    t.decimal  "buffer",                 precision: 8, scale: 2, null: false
+    t.integer  "debt_id",      limit: 4
+    t.boolean  "paid"
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+  end
+
+  add_index "account_balances", ["account_id"], name: "index_account_balances_on_account_id", using: :btree
+  add_index "account_balances", ["debt_id"], name: "index_account_balances_on_debt_id", using: :btree
+
+  create_table "accounts", force: :cascade do |t|
+    t.integer  "user_id",      limit: 4,  null: false
+    t.string   "name",         limit: 20
+    t.string   "account_type", limit: 20
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  add_index "accounts", ["name"], name: "index_accounts_on_name", unique: true, using: :btree
+  add_index "accounts", ["user_id"], name: "index_accounts_on_user_id", using: :btree
 
   create_table "budgets", force: :cascade do |t|
     t.integer  "category_id",  limit: 4
@@ -29,7 +66,10 @@ ActiveRecord::Schema.define(version: 20151213155844) do
     t.string   "description", limit: 255, null: false
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.integer  "user_id",     limit: 4
   end
+
+  add_index "categories", ["user_id"], name: "index_categories_on_user_id", using: :btree
 
   create_table "debt_balances", force: :cascade do |t|
     t.integer  "debt_id",            limit: 4
@@ -46,7 +86,7 @@ ActiveRecord::Schema.define(version: 20151213155844) do
   add_index "debt_balances", ["payment_start_date"], name: "index_debt_balances_on_payment_start_date", using: :btree
 
   create_table "debts", force: :cascade do |t|
-    t.string   "category",           limit: 255,                                                      null: false
+    t.string   "old_category",       limit: 255,                                                      null: false
     t.string   "sub_category",       limit: 255,                                                      null: false
     t.string   "name",               limit: 255,                                                      null: false
     t.datetime "created_at",                                                                          null: false
@@ -58,43 +98,39 @@ ActiveRecord::Schema.define(version: 20151213155844) do
     t.string   "schedule",           limit: 255
     t.date     "payment_start_date"
     t.boolean  "autopay",                                                 default: false
+    t.integer  "category_id",        limit: 4
+    t.integer  "account_id",         limit: 4
   end
 
-  add_index "debts", ["category", "name", "deleted_at"], name: "by_category_name", unique: true, using: :btree
+  add_index "debts", ["account_id"], name: "index_debts_on_account_id", using: :btree
+  add_index "debts", ["category_id"], name: "index_debts_on_category_id", using: :btree
   add_index "debts", ["deleted_at"], name: "index_debts_on_deleted_at", using: :btree
-
-  create_table "income_distributions", force: :cascade do |t|
-    t.date     "distribution_date"
-    t.decimal  "boa_chk",                       precision: 8, scale: 2,                 null: false
-    t.decimal  "chase_chk",                     precision: 8, scale: 2,                 null: false
-    t.boolean  "paid",                                                  default: false
-    t.datetime "created_at",                                                            null: false
-    t.datetime "updated_at",                                                            null: false
-    t.string   "chase_focus",       limit: 255
-    t.string   "boa_focus",         limit: 255
-  end
-
-  add_index "income_distributions", ["distribution_date"], name: "index_income_distributions_on_distribution_date", unique: true, using: :btree
+  add_index "debts", ["old_category", "name", "deleted_at"], name: "by_category_name", unique: true, using: :btree
 
   create_table "income_sources", force: :cascade do |t|
-    t.string   "name",         limit: 255
-    t.string   "pay_schedule", limit: 255
-    t.string   "pay_day",      limit: 255
+    t.string   "name",         limit: 255,                         null: false
+    t.string   "pay_schedule", limit: 255,                         null: false
+    t.string   "pay_day",      limit: 255,                         null: false
     t.decimal  "amount",                   precision: 8, scale: 2, null: false
-    t.date     "start_date"
-    t.date     "end_date"
+    t.date     "start_date",                                       null: false
+    t.date     "end_date",                                         null: false
     t.datetime "created_at",                                       null: false
     t.datetime "updated_at",                                       null: false
+    t.integer  "account_id",   limit: 4
   end
+
+  add_index "income_sources", ["account_id"], name: "index_income_sources_on_account_id", using: :btree
 
   create_table "payment_methods", force: :cascade do |t|
     t.string   "name",        limit: 255
     t.string   "description", limit: 255
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.integer  "user_id",     limit: 4
   end
 
   add_index "payment_methods", ["name"], name: "index_payment_methods_on_name", unique: true, using: :btree
+  add_index "payment_methods", ["user_id"], name: "index_payment_methods_on_user_id", using: :btree
 
   create_table "spendings", force: :cascade do |t|
     t.string   "description",       limit: 255,                         null: false
@@ -105,10 +141,12 @@ ActiveRecord::Schema.define(version: 20151213155844) do
     t.datetime "updated_at",                                            null: false
     t.integer  "budget_id",         limit: 4
     t.integer  "payment_method_id", limit: 4
+    t.integer  "debt_balance_id",   limit: 4
   end
 
   add_index "spendings", ["budget_id"], name: "index_spendings_on_budget_id", using: :btree
   add_index "spendings", ["category_id"], name: "index_spendings_on_category_id", using: :btree
+  add_index "spendings", ["debt_balance_id"], name: "index_spendings_on_debt_balance_id", using: :btree
   add_index "spendings", ["payment_method_id"], name: "index_spendings_on_payment_method_id", using: :btree
   add_index "spendings", ["spending_date"], name: "index_spendings_on_spending_date", using: :btree
 
@@ -128,9 +166,20 @@ ActiveRecord::Schema.define(version: 20151213155844) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
+  add_foreign_key "account_balance_distributions", "account_balances"
+  add_foreign_key "account_balance_distributions", "debts"
+  add_foreign_key "account_balances", "accounts"
+  add_foreign_key "account_balances", "debts"
+  add_foreign_key "accounts", "users"
   add_foreign_key "budgets", "categories"
+  add_foreign_key "categories", "users"
   add_foreign_key "debt_balances", "debts"
+  add_foreign_key "debts", "accounts"
+  add_foreign_key "debts", "categories"
+  add_foreign_key "income_sources", "accounts"
+  add_foreign_key "payment_methods", "users"
   add_foreign_key "spendings", "budgets"
   add_foreign_key "spendings", "categories"
+  add_foreign_key "spendings", "debt_balances"
   add_foreign_key "spendings", "payment_methods"
 end

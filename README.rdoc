@@ -29,3 +29,4 @@
 12. You should be able to login using the default dev account:
         username: dev
         password: devdev
+If you can login, run ``rake db:restore`` and try again.

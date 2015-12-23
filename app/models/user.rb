@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+  has_many :categories
+  has_many :payment_methods
+  has_many :accounts
 
   attr_accessor :remember_token
   attr_accessor :activation_token

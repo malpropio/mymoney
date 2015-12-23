@@ -46,6 +46,7 @@
     <tr>
       <th><%= sortable "description" %></th>
       <th><%= sortable "category_id", "Category" %></th>
+      <th><%= sortable "debt_balance_id", "Goal" %></th>
       <th><%= sortable "spending_date", "Date" %></th>
       <th><%= sortable "amount" %></th>
       <th><%= sortable "payment_method_id", "Payment Method" %></th>
@@ -58,6 +59,7 @@
       <tr>
         <td><%= spending.description %></td>
         <td><%= spending.category.name %></td>
+        <td><%= spending.debt_balance_id ? spending.debt_balance.debt.name : "None" %></td>
         <td><%= spending.spending_date %></td>
         <td><%= number_to_currency(spending.amount) %></td>
         <td><%= spending.payment_method.name %></td>

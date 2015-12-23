@@ -21,15 +21,15 @@
   </div>
   <div class="field" id="desc_loan" style="display:none;" >
     <%= f.label :description %><br>
-    <%= f.collection_select :description_loan, Debt.where(category: "Loans").order(:name), :name, :name, {prompt: 'Please Select'} %>
+    <%= f.collection_select :description_loan, Debt.joins(:category).where("categories.name='Loans'").order(:name), :name, :name, {prompt: 'Please Select'} %>
   </div>
   <div class="field" id="desc_cc" style="display:none;" >
     <%= f.label :description %><br>
-    <%= f.collection_select :description_cc, Debt.where(category: "Credit Cards").order(:name), :name, :name, {prompt: 'Please Select'} %>
+    <%= f.collection_select :description_cc, Debt.joins(:category).where("categories.name='Credit Cards'").order(:name), :name, :name, {prompt: 'Please Select'} %>
   </div>
   <div class="field" id="desc_asset" style="display:none;" >
     <%= f.label :description %><br>
-    <%= f.collection_select :description_asset, Debt.where(category: "Savings").order(:name), :name, :name, {prompt: 'Please Select'} %>
+    <%= f.collection_select :description_asset, Debt.joins(:category).where("categories.name='Savings'").order(:name), :name, :name, {prompt: 'Please Select'} %>
   </div>
   <div class="field">
     <%= f.label :spending_date, "Date"  %>

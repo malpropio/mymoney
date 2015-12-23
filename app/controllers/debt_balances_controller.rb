@@ -8,12 +8,12 @@ class DebtBalancesController < ApplicationController
   # GET /debt_balances.json
   def index
       @debt_balances = DebtBalance.search(params[:debt_balance]).order(:due_date => :desc).paginate(:per_page => 25, :page => params[:page])
-      @debts = DebtBalance.joins(:debt).where("'#{Time.now.to_date}' <= due_date AND is_asset=false AND Category <> 'Bill'")
+      @debts = DebtBalance.joins(debt: :category).where("'#{Time.now.to_date}' <= due_date AND is_asset=false AND categories.name <> 'Bill'")
   end
 
   def ccs_by_month
-    render json: DebtBalance.joins(:debt)
-                         .where("debts.category = 'Credit Cards'")
+    render json: DebtBalance.joins(debt: :category)
+                         .where("categories.name = 'Credit Cards'")
                          .group("debts.name")
                          .group_by_month(:due_date, format: "%b %Y")
                          .having("sum(debt_balances.balance) > ?", 0)
@@ -27,8 +27,8 @@ class DebtBalancesController < ApplicationController
   last_n_months(12).reverse.each do |date|
       end_date = [date[1].end_of_month,Time.now.to_date].min
 	  total_debt = 0
-	  DebtBalance.joins(:debt).where("debt_balances.payment_start_date <= '#{end_date}' AND '#{end_date}' <= due_date AND is_asset=false AND Category <> 'Bill' AND Category = 'Credit Cards'").each { |k| total_debt += k.max_payment(end_date,true)}
-	  DebtBalance.joins(:debt).where("'#{end_date}' <= due_date AND is_asset=false AND Category NOT IN ('Bill','Credit Cards')").each { |k| total_debt += k.max_payment(end_date,true)}
+	  DebtBalance.joins(debt: :category).where("debt_balances.payment_start_date <= '#{end_date}' AND '#{end_date}' <= due_date AND is_asset=false AND categories.name <> 'Bill' AND categories.name = 'Credit Cards'").each { |k| total_debt += k.max_payment(end_date,true)}
+	  DebtBalance.joins(debt: :category).where("'#{end_date}' <= due_date AND is_asset=false AND categories.name NOT IN ('Bill','Credit Cards')").each { |k| total_debt += k.max_payment(end_date,true)}
 	  h1.store(date[0],total_debt)
   end
 
