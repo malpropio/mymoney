@@ -1,6 +1,35 @@
+User.create!([
+  {first_name: "Dev", last_name: "Dev", email: "dev@local.com", username: "dev", password_digest: "$2a$10$MQXBLoTi4vAnoJ/YkzWuDuphjbQ0QqCN5diUUmxiHmCcZ3T9MY9lW", remember_digest: nil, activation_digest: "$2a$10$l.aBO6xf6EpA0XD02HDacufYMB5Kgke1mu1wEvEHym4lkdhnhmPBe", activated: nil}
+])
 Account.create!([
-  {user_id: 2, name: "Chase", account_type: "Checkings"},
-  {user_id: 2, name: "Bank Of America", account_type: "Checkings"}
+  {user_id: User.first.id, name: "Chase", account_type: "Checkings"},
+  {user_id: User.first.id, name: "Bank Of America", account_type: "Checkings"}
+])
+Category.create!([
+  {name: "Automotive, Home & Games", description: "Awesome Silk Bench", user_id: User.first.id},
+  {name: "Beauty, Music & Automotive", description: "Ergonomic Paper Bench", user_id: User.first.id},
+  {name: "Garden, Health, Books, Industrial & Home", description: "Durable Iron Clock", user_id: User.first.id},
+  {name: "Loans", description: "All loans", user_id: User.first.id},
+  {name: "Credit Cards", description: "Credit Card Payment", user_id: User.first.id},
+  {name: "Savings", description: "all savings", user_id: User.first.id},
+  {name: "Rent", description: "Rent", user_id: User.first.id}
+])
+PaymentMethod.create!([
+  {name: "Credit", description: "Any of our cc", user_id: User.first.id},
+  {name: "Debit", description: "Any of our debit", user_id: User.first.id},
+  {name: "Gift", description: "Any gift card", user_id: User.first.id},
+  {name: "Cash", description: "Cash", user_id: User.first.id},
+  {name: "Other", description: "Any other form of payments", user_id: User.first.id}
+])
+Debt.create!([
+  {old_category: "Credit Cards", sub_category: "Credit Cards", name: "Amex", is_asset: false, pay_from: "Bank Of America", deleted_at: nil, fix_amount: nil, schedule: "Bi-Weekly", payment_start_date: nil, autopay: false, category_id: 5, account_id: 2},
+  {old_category: "Loans", sub_category: "Student Loans", name: "Wolff Academy", is_asset: false, pay_from: "Chase", deleted_at: nil, fix_amount: nil, schedule: nil, payment_start_date: nil, autopay: false, category_id: 4, account_id: 1},
+  {old_category: "Loans", sub_category: "Car Loans", name: "Vw", is_asset: false, pay_from: "Bank Of America", deleted_at: nil, fix_amount: "186.19", schedule: "Bi-Weekly", payment_start_date: "2015-09-11", autopay: true, category_id: 4, account_id: 2},
+  {old_category: "Savings", sub_category: "Savings", name: "Emergency Fundings", is_asset: true, pay_from: "Bank Of America", deleted_at: "2015-11-26 20:34:44", fix_amount: nil, schedule: nil, payment_start_date: nil, autopay: false, category_id: 6, account_id: 2},
+  {old_category: "Savings", sub_category: "Savings", name: "Emergency Fundings", is_asset: true, pay_from: "Bank Of America", deleted_at: "2015-11-26 21:30:01", fix_amount: nil, schedule: nil, payment_start_date: nil, autopay: false, category_id: 6, account_id: 2},
+  {old_category: "Savings", sub_category: "Savings", name: "Emergency Fundings", is_asset: true, pay_from: "Bank Of America", deleted_at: nil, fix_amount: nil, schedule: nil, payment_start_date: nil, autopay: false, category_id: 6, account_id: 2},
+  {old_category: "Bill", sub_category: "Bill", name: "Rent", is_asset: false, pay_from: "Bank Of America", deleted_at: nil, fix_amount: "1550.0", schedule: "Monthly", payment_start_date: nil, autopay: false, category_id: nil, account_id: 2},
+  {old_category: "Loans", sub_category: "Phone", name: "Sams Phone", is_asset: false, pay_from: "Bank Of America", deleted_at: nil, fix_amount: nil, schedule: "Bi-Weekly", payment_start_date: nil, autopay: false, category_id: 4, account_id: 2}
 ])
 AccountBalance.create!([
   {balance_date: "2015-10-30", account_id: 2, amount: 2103, buffer: 10, debt_id: 1, paid: false},
@@ -82,25 +111,6 @@ Budget.create!([
   {category_id: 1, budget_month: "2015-12-01", amount: "10.0"},
   {category_id: 2, budget_month: "2015-12-01", amount: "0.0"}
 ])
-Category.create!([
-  {name: "Automotive, Home & Games", description: "Awesome Silk Bench", user_id: 2},
-  {name: "Beauty, Music & Automotive", description: "Ergonomic Paper Bench", user_id: 2},
-  {name: "Garden, Health, Books, Industrial & Home", description: "Durable Iron Clock", user_id: 2},
-  {name: "Loans", description: "All loans", user_id: 2},
-  {name: "Credit Cards", description: "Credit Card Payment", user_id: 2},
-  {name: "Savings", description: "all savings", user_id: 2},
-  {name: "Rent", description: "Rent", user_id: 2}
-])
-Debt.create!([
-  {old_category: "Credit Cards", sub_category: "Credit Cards", name: "Amex", is_asset: false, pay_from: "Bank Of America", deleted_at: nil, fix_amount: nil, schedule: "Bi-Weekly", payment_start_date: nil, autopay: false, category_id: 5, account_id: 2},
-  {old_category: "Loans", sub_category: "Student Loans", name: "Wolff Academy", is_asset: false, pay_from: "Chase", deleted_at: nil, fix_amount: nil, schedule: nil, payment_start_date: nil, autopay: false, category_id: 4, account_id: 1},
-  {old_category: "Loans", sub_category: "Car Loans", name: "Vw", is_asset: false, pay_from: "Bank Of America", deleted_at: nil, fix_amount: "186.19", schedule: "Bi-Weekly", payment_start_date: "2015-09-11", autopay: true, category_id: 4, account_id: 2},
-  {old_category: "Savings", sub_category: "Savings", name: "Emergency Fundings", is_asset: true, pay_from: "Bank Of America", deleted_at: "2015-11-26 20:34:44", fix_amount: nil, schedule: nil, payment_start_date: nil, autopay: false, category_id: 6, account_id: 2},
-  {old_category: "Savings", sub_category: "Savings", name: "Emergency Fundings", is_asset: true, pay_from: "Bank Of America", deleted_at: "2015-11-26 21:30:01", fix_amount: nil, schedule: nil, payment_start_date: nil, autopay: false, category_id: 6, account_id: 2},
-  {old_category: "Savings", sub_category: "Savings", name: "Emergency Fundings", is_asset: true, pay_from: "Bank Of America", deleted_at: nil, fix_amount: nil, schedule: nil, payment_start_date: nil, autopay: false, category_id: 6, account_id: 2},
-  {old_category: "Bill", sub_category: "Bill", name: "Rent", is_asset: false, pay_from: "Bank Of America", deleted_at: nil, fix_amount: "1550.0", schedule: "Monthly", payment_start_date: nil, autopay: false, category_id: nil, account_id: 2},
-  {old_category: "Loans", sub_category: "Phone", name: "Sams Phone", is_asset: false, pay_from: "Bank Of America", deleted_at: nil, fix_amount: nil, schedule: "Bi-Weekly", payment_start_date: nil, autopay: false, category_id: 4, account_id: 2}
-])
 DebtBalance.create!([
   {debt_id: 1, due_date: "2015-09-15", balance: "1000.0", payment_start_date: "2015-08-16", target_balance: "0.0"},
   {debt_id: 2, due_date: "2019-01-01", balance: "4400.0", payment_start_date: "2015-04-01", target_balance: "0.0"},
@@ -122,13 +132,6 @@ IncomeSource.create!([
   {name: "Job 3", pay_schedule: "bi-weekly", pay_day: "friday", amount: "100.0", start_date: "2015-06-05", end_date: "2015-08-31", account_id: 1},
   {name: "Job 2", pay_schedule: "semi-monthly", pay_day: "15, last", amount: "100.0", start_date: "2015-10-01", end_date: "2015-12-31", account_id: 1},
   {name: "Job 1", pay_schedule: "weekly", pay_day: "thursday", amount: "100.0", start_date: "2015-01-01", end_date: "2015-12-31", account_id: 1}
-])
-PaymentMethod.create!([
-  {name: "Credit", description: "Any of our cc", user_id: 2},
-  {name: "Debit", description: "Any of our debit", user_id: 2},
-  {name: "Gift", description: "Any gift card", user_id: 2},
-  {name: "Cash", description: "Cash", user_id: 2},
-  {name: "Other", description: "Any other form of payments", user_id: 2}
 ])
 Spending.create!([
   {description: "Wolff Academy", category_id: 4, spending_date: "2015-05-08", amount: "92.44", budget_id: nil, payment_method_id: 2, debt_balance_id: 2},
@@ -239,7 +242,4 @@ Spending.create!([
   {description: "Wolff Academy", category_id: 4, spending_date: "2015-12-04", amount: "2980.48", budget_id: nil, payment_method_id: 2, debt_balance_id: 2},
   {description: "Vw", category_id: 4, spending_date: "2015-12-04", amount: "186.19", budget_id: nil, payment_method_id: 2, debt_balance_id: 13},
   {description: "Should Add New Budget", category_id: 2, spending_date: "2015-12-16", amount: "23.0", budget_id: 163, payment_method_id: 1, debt_balance_id: nil}
-])
-User.create!([
-  {first_name: "Dev", last_name: "Dev", email: "dev@local.com", username: "dev", password_digest: "$2a$10$MQXBLoTi4vAnoJ/YkzWuDuphjbQ0QqCN5diUUmxiHmCcZ3T9MY9lW", remember_digest: nil, activation_digest: "$2a$10$l.aBO6xf6EpA0XD02HDacufYMB5Kgke1mu1wEvEHym4lkdhnhmPBe", activated: nil}
 ])
