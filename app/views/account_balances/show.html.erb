@@ -30,10 +30,46 @@
   <%= @account_balance.paid %>
 </p>
 
-<p>
-Recommendations<br>
-<%= @account_balance.make_recommendations %>
-</p>
+<% @account_balances.each do |account_balance| %>
 
-<%= link_to 'Edit', edit_account_balance_path(@account_balance) %> |
+<h2><%= account_balance.account %></h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Account</th>
+      <th>Balance</th>
+      <th>Distribution</th>
+      <% if Rails.env.development? %>
+        <th>Max</th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% account_balance.make_recommendations.each do |debt| %>
+      <% unless debt[1][1] == 0 %>
+        <tr>
+          <td><%= debt[0] %></td>
+          <td><%= number_to_currency(debt[1][0]) %></td>
+          <td style="background-color:<%= good_pos_cell_color(debt[1][1])%>"><%= number_to_currency(debt[1][1]) %></td>
+          <% if Rails.env.development? %>
+            <td><%= number_to_currency(debt[1][2]) %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    <% end %>
+    <tr>
+      <td></td>
+      <td><strong>Total</strong></td>
+      <td><%= number_to_currency(account_balance.total_distribution) %></td>
+      <% if Rails.env.development? %>
+        <td></td>
+      <% end %>
+    </tr>
+  </tbody>
+</table>
+
+<%= link_to 'Edit', edit_account_balance_path(account_balance) %> |
 <%= link_to 'Back', account_balances_path %>
+
+<% end %>

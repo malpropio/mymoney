@@ -4,12 +4,13 @@ class AccountBalancesController < ApplicationController
   # GET /account_balances
   # GET /account_balances.json
   def index
-    @account_balances = AccountBalance.all
+    @account_balances = AccountBalance.order(balance_date: :asc, account_id: :desc)
   end
 
   # GET /account_balances/1
   # GET /account_balances/1.json
   def show
+    @account_balances = AccountBalance.where(balance_date: @account_balance.balance_date)
   end
 
   # GET /account_balances/new

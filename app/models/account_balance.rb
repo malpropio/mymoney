@@ -4,39 +4,75 @@ class AccountBalance < ActiveRecord::Base
 
   has_many :account_balance_distributions
 
+  attr_accessor :total_distribution
+
   def make_recommendations
-    result = {}
-
-	  left_over = self.debt.name #focus
-	  left_over_total = self.amount #checking amount
-
-	  result[account.name] = [self.amount, self.buffer, self.amount]
-	  left_over_total -= self.buffer
-
-	  if left_over_total > 0
-		debts.map do |d|
-		  amount = d.payment_due(self.balance_date)
-		  max_amount = d.max_payment(self.balance_date)
-		  result[d.debt.name] = [amount, amount, max_amount]
-		  left_over_total -= amount unless d.debt.name == left_over
-		end
-	  end
-
-	  if !result[left_over].nil?
-		if left_over == account.name
-		  result[left_over][1] += left_over_total
-		else
-		  result[left_over][1] = [left_over_total,result[left_over][2]].min
-		  result[account.name][1] += (left_over_total - result[left_over][1]) #add diff between leftover and max payment allowed
-		end
-	  end
-    result
+    recommendations = AccountBalance.all_recommendations(balance_date)
+    other_pays = 0
+    recommendations.each do |key, value|
+      if key != self.account.name && key == self.debt.account.name
+        other_pays += value[self.debt.name][1] unless value[self.debt.name].nil?
+      end
+    end
+    if !recommendations[account.name][self.debt.name].nil?
+      recommendations[account.name][self.debt.name][2] -= other_pays
+      original = recommendations[account.name][self.debt.name][1] 
+      new_debt = [recommendations[account.name][self.debt.name][2], original].min
+      recommendations[account.name][self.debt.name][1] = new_debt
+      recommendations[account.name][account.name][1] += original - new_debt
+    end
+    self.total_distribution = recommendations[account.name].map {|k,v| v[1]}.reduce(0, :+)
+    if self.total_distribution < self.amount
+      recommendations[account.name][account.name][1] += self.amount - self.total_distribution
+    end
+    recommendations[account.name]
   end
 
   def debts
     DebtBalance.joins(:debt).where("debt_balances.payment_start_date<='#{balance_date}'
                                       AND due_date>='#{balance_date}'
-                                      AND (debts.account_id = '#{debt.account.id}' OR debts.id = '#{self.debt.id}')")
+                                      AND (debts.account_id = '#{account.id}' OR debts.id = '#{self.debt.id}')")
+  end
+
+  def self.all_recommendations(date)
+    all_balances = AccountBalance.where(balance_date: date)
+
+    overall_result = {}
+
+    if all_balances.exists?
+      all_balances.each do |balance|
+          result = {}
+          left_over = balance.debt.name #focus
+          left_over_total = balance.amount #checking amount
+
+          result[balance.account.name] = [balance.amount, balance.buffer, balance.amount]
+          left_over_total -= balance.buffer
+
+          if left_over_total > 0
+                balance.debts.map do |d|
+                  amount = d.payment_due(balance.balance_date)
+                  max_amount = d.max_payment(balance.balance_date)
+                  result[d.debt.name] = [amount, amount, max_amount]
+                  left_over_total -= amount unless d.debt.name == left_over
+                end
+          end
+
+          if !result[left_over].nil?
+                if left_over == balance.account.name
+                  result[left_over][1] += left_over_total
+                else
+                  result[left_over][1] = [left_over_total,result[left_over][2]].min
+                  result[balance.account.name][1] += (left_over_total - result[left_over][1]) #add diff between leftover and max payment allowed
+                end
+          end
+
+        total = 0
+        result.map{|k,v| total+=v[1].abs}
+        balance.total_distribution = total
+        overall_result[balance.account.name] = result
+      end
+    end
+    overall_result
   end
 
   def to_s
