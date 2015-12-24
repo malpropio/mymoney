@@ -14,12 +14,10 @@ class Spending < ActiveRecord::Base
 
   before_save do
     set_budget
-    set_goal
   end
 
   after_create do
     set_budget
-    set_goal
   end
 
   ## Set description to loans if loans selected
@@ -35,7 +33,7 @@ class Spending < ActiveRecord::Base
 
   private
   def set_goal
-    db = DebtBalance.joins(debt: :category).where("debt_balances.payment_start_date <= '#{self.spending_date}' AND '#{self.spending_date}' <= due_date AND (debts.name = '#{self.description}' OR categories.id = #{self.category.id})")
+    db = DebtBalance.where("debt_balances.payment_start_date <= '#{self.spending_date}' AND '#{self.spending_date}' <= due_date AND debt_id = #{self.debt_id.to_i}")
     if db.exists?
       self.debt_balance_id = db.first.id
     end
@@ -61,10 +59,11 @@ class Spending < ActiveRecord::Base
   end
 
   def spending_goal
-    if self.debt_id.blank? || Debt.find(self.debt_id).category != self.category
-      errors.add(:category, "doesn't match with goal.")
+    if self.debt_id.blank? || Debt.find(self.debt_id).category != self.category || Debt.find(self.debt_id).debt_balances.count<=0
+      errors.add(:category, "doesn't match with goal or you don't have a set goal for this category")
     else
       self.description = Debt.find(self.debt_id).name
+      set_goal
     end 
   end
 
