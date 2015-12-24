@@ -29,6 +29,7 @@ module Mymoney
     config.generators do |g|
       g.test_framework :rspec
       g.integration_tool :rspec
+      g.fixture_replacement :factory_girl
       g.stylesheets false
     end
   end
