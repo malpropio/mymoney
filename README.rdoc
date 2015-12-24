@@ -13,6 +13,7 @@
 3. Add rails user for mysql (Not necessary if using VirtualBox above)
         mysql -uroot <<SQL
         GRANT ALL PRIVILEGES ON *.* to 'rails'@'localhost';
+        GRANT ALL PRIVILEGES ON mymoney_test.* to 'travis'@'localhost';
         USE mysql;
         UPDATE user SET PASSWORD=PASSWORD("rails") WHERE User='rails';
         flush privileges;

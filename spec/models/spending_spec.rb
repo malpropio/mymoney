@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Spending, type: :model do
+  pending "add some examples to (or delete) #{__FILE__}"
+
   it "should have the necessary required validators" do
     spending = Spending.create(:description => "",:category_id => nil,:amount => "",:spending_date => nil)
     expect(spending.errors).to have_key(:description)
