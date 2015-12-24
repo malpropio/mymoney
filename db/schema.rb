@@ -107,6 +107,17 @@ ActiveRecord::Schema.define(version: 20151219234122) do
   add_index "debts", ["deleted_at"], name: "index_debts_on_deleted_at", using: :btree
   add_index "debts", ["old_category", "name", "deleted_at"], name: "by_category_name", unique: true, using: :btree
 
+  create_table "income_distributions", force: :cascade do |t|
+    t.date     "distribution_date"
+    t.decimal  "boa_chk",           precision: 8, scale: 2,                 null: false
+    t.decimal  "chase_chk",         precision: 8, scale: 2,                 null: false
+    t.boolean  "paid",                                      default: false
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
+  end
+
+  add_index "income_distributions", ["distribution_date"], name: "index_income_distributions_on_distribution_date", unique: true, using: :btree
+
   create_table "income_sources", force: :cascade do |t|
     t.string   "name",         limit: 255,                         null: false
     t.string   "pay_schedule", limit: 255,                         null: false
