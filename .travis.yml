@@ -1,13 +1,18 @@
 language: ruby
 rvm:
-  - "2.2.1"
+  - 2.2.1
+services:
+  - mysql
 env:
   - DB=mysql
 script:
-  - RAILS_ENV=test bundle exec rake db:create --trace 
+  - RAILS_ENV=test bundle exec rake db:create --trace
   - RAILS_ENV=test bundle exec rake db:migrate --trace
   - bundle exec rake db:test:prepare
-  - bundle exec rspec spec/
+  - bundle exec rspec spec/models/
 before_script:
   - mysql -e 'create database myapp_test'
-bundler_args: --binstubs=./bundler_stubs
+bundler_args: "--binstubs=./bundler_stubs"
+notifications:
+  slack:
+    secure: zyTKb587WReJRdyuU47Agc+kCYlBqDJOM1Y/3GjD8iN66ZbJbhJdL2Rn6XW+vFmmIR6vXx1ecD0eTXKeaZdjlDBYhnnK5syMJtPAtBiPC5RHpNFSf3Fq1rTDYsSndATlkibKTF57L4AuC9McbsAqhvOpocQfwbI18CiZKH9F25QL6WplhT1rpMURUNXQBPebqbOIuy5peVGNc8ejSIVfElZ+rTysjBL9WQKeTSUtLhj/msqnlCIUtLyZGj6KN9Hfqge8Eh/bxgnQIaWTZmayZm7d2ywKH3QvmG/PsapVfLts3BfRIC5Xbg/otbdXtzIIkze9OH27l686IzTxBPb2M+QxGdlBgyaUF6/4QTjz7t7+gC3QBhRGO/iYDz3WJ9KEGxTiQeU4AhPUnUWHQRrr8Td8kL6aSWu3Kt7b0z2hVUZz59skr3xxzDC/zKFEB2ecDDC4SbjggAlKi/VztoAOo3BxMSBJiYoMBuWKLhFICakbyuiz/ywn7uFQgAo+PMpnjrQCEgeNSJ5FwJyx7ibjyM3EontKWHOtePkZQPrMi6shztQtkpBoBuM9d5YnIddWiuq+bEZVIC5EFWrWb6hUsJDtJJkyFuJH4dXLSSNuohKwb1vjLD70scsPWnvAQxyOS3hHNjTkZMsZ92xOAHG1nZoA/OGU38aPXqGEY+FdWcU=
