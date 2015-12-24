@@ -9,25 +9,25 @@ $(document).on 'change ready page:load', ->
   $('#spending_category_id').ready ->
     selectedOption = $('#spending_category_id option:selected').text().toLowerCase()
     if selectedOption == 'loans'
-      $('form #desc_text').hide()
-      $('form #desc_cc').hide()
-      $('form #desc_asset').hide()
+      $('form #desc_text').show()
+      $('form #desc_cc').show()
+      $('form #desc_asset').show()
       $('form #desc_loan').show()
     else if selectedOption == 'credit cards'
       $('form #desc_cc').show()
-      $('form #desc_loan').hide()
-      $('form #desc_text').hide()
-      $('form #desc_asset').hide()
+      $('form #desc_loan').show()
+      $('form #desc_text').show()
+      $('form #desc_asset').show()
     else if selectedOption == 'savings'
-      $('form #desc_cc').hide()
-      $('form #desc_loan').hide()
-      $('form #desc_text').hide()
+      $('form #desc_cc').show()
+      $('form #desc_loan').show()
+      $('form #desc_text').show()
       $('form #desc_asset').show()
     else
-      $('form #desc_loan').hide()
+      $('form #desc_loan').show()
       $('form #desc_text').show()
-      $('form #desc_cc').hide()
-      $('form #desc_asset').hide()
+      $('form #desc_cc').show()
+      $('form #desc_asset').show()
     return;
 
 GetElementInsideContainer = (containerID, childID) ->
