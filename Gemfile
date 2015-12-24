@@ -1,6 +1,14 @@
 source 'https://rubygems.org'
 
-gem 'seed_dump', :git => 'git@github.com:iDreamOn/seed_dump.git'
+if ENV['CI']
+  # use HTTPS with password on Travis CI
+  git_source :github do |repo_name|
+    repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+    "https://emthomas:#{ENV.fetch("CI_USER_PASSWORD")}@github.com/#{repo_name}.git"
+  end
+else
+  gem 'seed_dump', :git => 'git@github.com:iDreamOn/seed_dump.git'
+end
 
 # Add bootstrap
 gem 'bootstrap-sass', '3.2.0.0'
