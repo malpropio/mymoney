@@ -8,34 +8,41 @@ RSpec.describe User, type: :model do
   it "is invalid without a firstname" do
     user = FactoryGirl.build(:user, first_name: nil)
     expect(user).to_not be_valid
+    expect(user.errors).to have_key(:first_name)
   end
 
   it "is invalid without a lastname" do
     user = FactoryGirl.build(:user, last_name: nil)
     expect(user).to_not be_valid
+    expect(user.errors).to have_key(:last_name)
   end
 
   it "is invalid without a username" do
     user = FactoryGirl.build(:user, username: nil)
     expect(user).to_not be_valid
+    expect(user.errors).to have_key(:username)
   end
 
   it "is invalid without an email" do
     user = FactoryGirl.build(:user, email: nil)
     expect(user).to_not be_valid
+    expect(user.errors).to have_key(:email)
   end
 
   it "is invalid if the email is not well formatted" do
     user = FactoryGirl.build(:user, email: "test.com")
     expect(user).to_not be_valid
+    expect(user.errors).to have_key(:email)
     user = FactoryGirl.build(:user, email: "test@test")
     expect(user).to_not be_valid
+    expect(user.errors).to have_key(:email)
   end
 
   it "is invalid if email is not unique" do
     user_1 = FactoryGirl.create(:user, email: "test@test.com")
     user_2 = FactoryGirl.build(:user, email: "test@test.com")
     expect(user_2).to_not be_valid
+    expect(user_2.errors).to have_key(:email)
   end
 
   it "converts valid email to lowercase" do
@@ -46,16 +53,19 @@ RSpec.describe User, type: :model do
   it "is invalid without a password" do
     user = FactoryGirl.build(:user, password: nil)
     expect(user).to_not be_valid
+    expect(user.errors).to have_key(:password)
   end
 
   it "is invalid if password is too short" do
     user = FactoryGirl.build(:user, password: "abc", password_confirmation: "abc")
     expect(user).to_not be_valid
+    expect(user.errors).to have_key(:password)
   end
 
   it "is invalid if password and password confirmation don't match" do
     user = FactoryGirl.build(:user, password: "password")
     expect(user).to_not be_valid
+    expect(user.errors).to have_key(:password_confirmation)
   end
 
   it "has many categories" do
