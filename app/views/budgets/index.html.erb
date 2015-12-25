@@ -22,14 +22,7 @@
 <p>
   Expected Income<sup><a href="#fn3" id="ref3"> 3</a></sup>: <%= number_to_currency(potential_income(@curr_budget)) %><br>
   Total Budget: <%= number_to_currency(overall_budget(@curr_budget)) %><br>
-  Fixed Budget<sup><a href="#fn1" id="ref1"> 1</a></sup>: <%= number_to_currency(fixed_budget(@curr_budget)) %><br>
-  Variable Budget: <%= "#{number_to_currency(variable_budget(@curr_budget))} of #{number_to_currency(potential_income(@curr_budget)-fixed_budget(@curr_budget))}" %><br>
-  Debit Budget: <%= number_to_currency(debit_budget(@curr_budget)) %><br>
-  Credit Budget: <%= "#{number_to_currency(credit_budget(@curr_budget))} of #{number_to_currency(potential_income(@curr_budget)-debit_budget(@curr_budget)
-)}" %><br>
   Estimated CC Payments Budget<sup><a href="#fn2" id="ref2"> 2</a></sup>: <%= number_to_currency(credit_payment_budget(@curr_budget)) %><br>
-  <!-- Savings: <%= number_to_currency(savings_budget(@curr_budget)) %><br>
-  Loans: <%= number_to_currency(loans_budget(@curr_budget)) %> -->
 </p>
 
 <%= form_tag budgets_path, :method => 'get', :id => "budgets_search" do %>
@@ -58,7 +51,7 @@
   <tbody>
     <% @budgets.each do |budget| %>
       <tr>
-        <td><%= budget.category.name %></td>
+        <td><%= budget.category %></td>
         <td><%= budget.budget_month.strftime('%B %Y') %></td>
         <td><%= number_to_currency(budget.amount) %></td>
         <td><%= number_to_currency(budget.spendings.sum(:amount)) %></td>
@@ -78,7 +71,6 @@
 <hr></hr>
 
 <p>
-<sup id="fn1">1. <%= fixed_budget_notes(@curr_budget) %><a href="#ref1" title="Jump back to footnote 1 in the text.">↩</a></sup><br>
 <sup id="fn2">2. <%= credit_payment_budget_notes(@curr_budget) %><a href="#ref2" title="Jump back to footnote 2 in the text.">↩</a></sup><br>
 <sup id="fn3">3. <%= potential_income_notes(@curr_budget) %><a href="#ref3" title="Jump back to footnote 3 in the text.">↩</a></sup><br>
 <sup id="fn4">4. <span style="background-color:<%= good_pos_cell_color_comparison(100,0)%>">Below budget</span>; <span style="background-color:<%= good_pos_cell_color_comparison(100.00,109.00)%>">Over by less than 10%</span>; <span style="background-color:<%= good_pos_cell_color_comparison(100.00,111.00)%>">More than 10% over</span>. <a href="#ref4" title="Jump back to footnote 4 in the text.">↩</a></sup><br>

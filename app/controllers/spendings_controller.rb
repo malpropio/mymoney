@@ -113,6 +113,7 @@ class SpendingsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_spending
       @spending = Spending.find(params[:id])
+      authorize @spending.payment_method
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

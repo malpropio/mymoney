@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
-
   
-
   resources :account_balance_distributions
   resources :account_balances do
     member do
@@ -49,11 +47,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :payment_methods do
-    collection do
-      get :reset
-    end
-  end
+  resources :payment_methods
   
   resources :debts
 

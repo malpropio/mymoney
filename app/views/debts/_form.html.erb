@@ -12,12 +12,8 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :old_category %><br>
-    <%= f.select :old_category, options_for_select([['Credit Cards', 'Credit Cards'], ['Savings', 'Savings'], ['Loans','Loans'], ['Bill','Bill']], @debt.category) %>
-  </div>
-  <div class="field">
     <%= f.label :category_id %><br>
-    <%= f.collection_select :category_id, Category.all.order(:name), :id, :name %>
+    <%= f.collection_select :category_id, current_user.categories.order(:name), :id, :name %>
   </div>
   <div class="field">
     <%= f.label :sub_category %><br>
@@ -28,8 +24,8 @@
     <%= f.text_field :name %>
   </div>
   <div class="field">
-    <%= f.label :pay_from %><br>
-    <%= f.select :pay_from, options_for_select([['Bank Of America', 'Bank Of America'], ['Chase', 'Chase']], @debt.pay_from) %>
+    <%= f.label :account_id, "Pay From" %><br>
+    <%= f.collection_select :account_id, current_user.accounts, :id, :name %>
   </div>
   <div class="field">
     <%= f.label :fix_amount %><br>

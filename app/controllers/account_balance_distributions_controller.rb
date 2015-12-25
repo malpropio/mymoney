@@ -4,7 +4,7 @@ class AccountBalanceDistributionsController < ApplicationController
   # GET /account_balance_distributions
   # GET /account_balance_distributions.json
   def index
-    @account_balance_distributions = AccountBalanceDistribution.all
+    @account_balance_distributions = current_user.account_balance_distributions
   end
 
   # GET /account_balance_distributions/1
@@ -65,6 +65,7 @@ class AccountBalanceDistributionsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_account_balance_distribution
       @account_balance_distribution = AccountBalanceDistribution.find(params[:id])
+      authorize @account_balance_distribution.account_balance.account
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

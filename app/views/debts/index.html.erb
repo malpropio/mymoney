@@ -6,11 +6,9 @@
   <thead>
     <tr>
       <th>Category</th>
-      <th>Old Category</th>
       <th>Sub category</th>
       <th>Name</th>
-      <th>Payment Account</th>
-      <th>Account</th>
+      <th>Pay From</th>
       <th>Fix Amount</th>
       <th>Schedule</th>
       <th>Payment Start Date</th>
@@ -22,11 +20,9 @@
   <tbody>
     <% @debts.each do |debt| %>
       <tr>
-        <td><%= debt.category ? debt.category.name : "None" %></td>
-        <td><%= debt.old_category %></td>
+        <td><%= debt.category %></td>
         <td><%= debt.sub_category %></td>
         <td><%= debt.name %></td>
-        <td><%= debt.pay_from %></td>
         <td><%= debt.account %></td>
         <td><%= number_to_currency(debt.fix_amount) %></td>
         <td><%= debt.schedule %></td>

@@ -1,5 +1,4 @@
 class Spending < ActiveRecord::Base
-  #belongs_to :category
   belongs_to :budget, -> { includes :category }
   belongs_to :payment_method
   belongs_to :debt_balance
@@ -7,7 +6,7 @@ class Spending < ActiveRecord::Base
   attr_accessor :category_id
   attr_accessor :debt_id
 
-  validates_presence_of :description, :spending_date, :amount, :payment_method_id #, :category_id
+  validates_presence_of :description, :spending_date, :amount, :payment_method_id 
   validates :amount, numericality: true, exclusion: { in: [0], message: "can't be %{value}."}
   validate :spending_goal, :unless => Proc.new{|k| k.debt_id.blank? }
  
@@ -28,6 +27,10 @@ class Spending < ActiveRecord::Base
     else
       all
     end
+  end
+
+  def user
+    self.payment_method.user
   end
 
   private

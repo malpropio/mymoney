@@ -4,7 +4,7 @@ class DebtsController < ApplicationController
   # GET /debts
   # GET /debts.json
   def index
-    @debts = Debt.order(:pay_from).order(:old_category).order(:sub_category).order(:name).where(:deleted_at => nil)
+    @debts = current_user.debts.order(:account_id).order(:category_id).order(:sub_category).order(:name).where(:deleted_at => nil)
   end
 
   # GET /debts/1
@@ -66,10 +66,11 @@ class DebtsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_debt
       @debt = Debt.find(params[:id])
+      authorize @debt.account
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def debt_params
-      params.require(:debt).permit(:old_category, :category_id, :sub_category, :name, :is_asset, :pay_from, :fix_amount, :schedule, :autopay, :payment_start_date)
+      params.require(:debt).permit(:category_id, :sub_category, :name, :is_asset, :account_id, :fix_amount, :schedule, :autopay, :payment_start_date)
     end
 end

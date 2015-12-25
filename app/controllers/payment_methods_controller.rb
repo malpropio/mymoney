@@ -4,7 +4,7 @@ class PaymentMethodsController < ApplicationController
   # GET /payment_methods
   # GET /payment_methods.json
   def index
-    @payment_methods = PaymentMethod.all
+    @payment_methods = current_user.payment_methods
   end
 
   # GET /payment_methods/1
@@ -14,43 +14,11 @@ class PaymentMethodsController < ApplicationController
 
   # GET /payment_methods/new
   def new
-    @payment_method = PaymentMethod.new
+    @payment_method = current_user.payment_methods.build 
   end
 
   # GET /payment_methods/1/edit
   def edit
-  end
-
-  #Reset all payment methods
-  def reset
-     str = <<-END_SQL
-      UPDATE spendings AS s
-      JOIN categories AS b
-      ON s.category_id = b.id
-      JOIN (SELECT id FROM payment_methods WHERE LOWER(name) LIKE '%credit%' ) AS c
-      ON 1 = 1
-      SET payment_method_id = c.id
-      WHERE LOWER(b.name) NOT IN ('loans','rent','utilities');
-    END_SQL
-   
-    ActiveRecord::Base.connection.execute("#{str}")
-
-    str = <<-END_SQL
-      UPDATE spendings AS s
-      JOIN categories AS b
-      ON s.category_id = b.id
-      JOIN (SELECT id FROM payment_methods WHERE LOWER(name) LIKE '%debit%' ) AS c
-      ON 1 = 1
-      SET payment_method_id = c.id
-      WHERE LOWER(b.name) IN ('loans','rent','utilities');
-    END_SQL
-   
-    ActiveRecord::Base.connection.execute("#{str}")
-
-    respond_to do |format|
-      format.html { redirect_to payment_methods_url, notice: 'Payment Methods reset.' }
-      format.json { head :no_content }
-    end
   end
 
   # POST /payment_methods
@@ -97,10 +65,11 @@ class PaymentMethodsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_payment_method
       @payment_method = PaymentMethod.find(params[:id])
+      authorize @payment_method
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def payment_method_params
-      params.require(:payment_method).permit(:name, :description)
+      params.require(:payment_method).permit(:user_id, :name, :description)
     end
 end

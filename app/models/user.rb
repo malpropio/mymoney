@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
   has_many :income_sources, through: :accounts
   has_many :debts, through: :accounts
   has_many :account_balances, through: :accounts
+  has_many :debt_balances, through: :debts
+  has_many :account_balance_distributions, through: :account_balances
 
   attr_accessor :remember_token
   attr_accessor :activation_token

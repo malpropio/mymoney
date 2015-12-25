@@ -5,8 +5,10 @@ class Category < ActiveRecord::Base
   
   belongs_to :user
 
-  validates_presence_of :description, :name
-  validates_uniqueness_of :name, case_sensitive: false
+  attr_readonly :user
+
+  validates_presence_of :description, :name, :user_id
+  validates_uniqueness_of :name, case_sensitive: false, :scope => :user_id
 
   def active_debts
     self.debts.active
