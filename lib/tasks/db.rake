@@ -26,6 +26,7 @@ namespace :db do
     ENV['title']='My Money Model Diagram'  
     ENV['attributes']='content,foreign_keys,primary_keys'
     ENV['notation']='bachman'
+    ENV['polymorphism']='true'
 
     Rake::Task['erd'].invoke
   end

@@ -1,0 +1,11 @@
+<tr>
+  <td><%= spending.description %></td>
+  <td><%= spending.budget.category unless spending.budget.nil? %></td>
+  <td><%= spending.debt_balance %></td>
+  <td><%= spending.spending_date %></td>
+  <td><%= number_to_currency(spending.amount) %></td>
+  <td><%= spending.payment_method %></td>
+  <td><%= link_to 'Show', spending %></td>
+  <td><%= link_to 'Edit', edit_spending_path(spending) %></td>
+  <td><%= link_to 'Destroy', spending, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+</tr>
