@@ -4,13 +4,12 @@ class Spending < ActiveRecord::Base
   belongs_to :payment_method
   belongs_to :debt_balance
 
-  attr_accessor :description_loan
-  attr_accessor :description_cc
-  attr_accessor :description_asset
+  attr_accessor :debt_id
 
   validates_presence_of :description, :category_id, :spending_date, :amount, :payment_method_id
   validates :amount, numericality: true, exclusion: { in: [0], message: "can't be %{value}."}
-  
+  validate :spending_goal, :if => Proc.new{|k| k.category.debts.active.exists?}
+ 
   DEBIT_CATEGORIES = ['Credit Cards','Loans','Rent','Utilities','Savings']
 
   before_save do
@@ -33,6 +32,13 @@ class Spending < ActiveRecord::Base
   end
 
   private
+  def set_goal
+    db = DebtBalance.where("debt_balances.payment_start_date <= '#{self.spending_date}' AND '#{self.spending_date}' <= due_date AND debt_id = #{self.debt_id.to_i}")
+    if db.exists?
+      self.debt_balance_id = db.first.id
+    end
+  end
+
   def set_budget
     dt = self.spending_date.change(day: 1).strftime('%Y-%m')            
     new_budget = Budget.where("DATE_FORMAT(budget_month, '%Y-%m') = ? AND category_id = ?", dt, self.category_id)
@@ -47,13 +53,18 @@ class Spending < ActiveRecord::Base
 
   def clean_desc
     if !self.category.nil?
-      self.description = nil if Debt.where(category: self.category.name).exists? && self.category.name != 'Rent' && (!self.description_loan.nil? || !self.description_cc.nil? || !self.description_asset.nil?)
-      self.description = self.description_loan if (self.category.name == 'Loans' && !self.description_loan.nil?)
-      self.description = self.description_cc if (self.category.name == 'Credit Cards' && !self.description_cc.nil?)
-      self.description = self.description_asset if (self.category.name == 'Savings' && !self.description_asset.nil?)
       self.payment_method_id = PaymentMethod.find_by_name("Debit").id if (DEBIT_CATEGORIES.include? self.category.name)
       self.description = self.description.titleize unless self.description.nil?
     end
+  end
+
+  def spending_goal
+    if self.debt_id.blank? || Debt.find(self.debt_id).category != self.category || Debt.find(self.debt_id).debt_balances.count<=0
+      errors.add(:category, "doesn't match with goal or you don't have a set goal for this category")
+    else
+      self.description = Debt.find(self.debt_id).name
+      set_goal
+    end 
   end
 
 end

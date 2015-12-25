@@ -1,5 +1,4 @@
 class Category < ActiveRecord::Base
-  #has_many :spendings  
   has_many :budgets
   has_many :debts
   
@@ -7,4 +6,8 @@ class Category < ActiveRecord::Base
 
   validates_presence_of :description, :name
   validates_uniqueness_of :name, case_sensitive: false
+
+  def active_debts
+    self.debts.active
+  end
 end

@@ -13,23 +13,15 @@
 
   <div class="field">
     <%= f.label :category_id %><br>
-    <%= f.collection_select :category_id, Category.all.order(:name), :id, :name, {prompt: 'Please Select'} %>
+    <%= f.collection_select :category_id, Category.order(:name), :id, :name, {prompt: 'Please Select'}, {:class => 'select', required: true} %>
   </div>
   <div class="field" id="desc_text" style="display:none;" >
     <%= f.label :description %><br>
     <%= f.text_field :description %>
   </div>
-  <div class="field" id="desc_loan" style="display:none;" >
-    <%= f.label :description %><br>
-    <%= f.collection_select :description_loan, Debt.joins(:category).where("categories.name='Loans'").order(:name), :name, :name, {prompt: 'Please Select'} %>
-  </div>
-  <div class="field" id="desc_cc" style="display:none;" >
-    <%= f.label :description %><br>
-    <%= f.collection_select :description_cc, Debt.joins(:category).where("categories.name='Credit Cards'").order(:name), :name, :name, {prompt: 'Please Select'} %>
-  </div>
-  <div class="field" id="desc_asset" style="display:none;" >
-    <%= f.label :description %><br>
-    <%= f.collection_select :description_asset, Debt.joins(:category).where("categories.name='Savings'").order(:name), :name, :name, {prompt: 'Please Select'} %>
+  <div class="field" id="desc_select" style="display:true;" >
+    <%= f.label :debt_id, "Goal" %><br>
+    <%= f.grouped_collection_select :debt_id, Category.joins(:debts).distinct.order(:name), :active_debts, :name, :id, :name, {prompt: 'None'}, :class => 'select' %>
   </div>
   <div class="field">
     <%= f.label :spending_date, "Date"  %>
