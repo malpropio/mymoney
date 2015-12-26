@@ -6,7 +6,7 @@ class Spending < ActiveRecord::Base
   attr_accessor :category_id
   attr_accessor :debt_id
 
-  validates_presence_of :description, :spending_date, :amount, :payment_method_id, :category_id 
+  validates_presence_of :description, :spending_date, :amount, :payment_method_id
   validates :amount, numericality: true, exclusion: { in: [0], message: "can't be %{value}."}
   validate :spending_goal, :unless => Proc.new{|k| k.category_id.blank? }
 

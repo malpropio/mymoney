@@ -16,31 +16,31 @@ ActiveRecord::Schema.define(version: 20151225123843) do
   create_table "account_balance_distributions", force: :cascade do |t|
     t.integer  "account_balance_id", limit: 4
     t.integer  "debt_id",            limit: 4
-    t.decimal  "recommendation",               precision: 10
-    t.decimal  "actual",                       precision: 10
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
+    t.decimal  "recommendation",               precision: 8, scale: 2, null: false
+    t.decimal  "actual",                       precision: 8, scale: 2, null: false
+    t.datetime "created_at",                                           null: false
+    t.datetime "updated_at",                                           null: false
   end
 
   add_index "account_balance_distributions", ["account_balance_id"], name: "index_account_balance_distributions_on_account_balance_id", using: :btree
   add_index "account_balance_distributions", ["debt_id"], name: "index_account_balance_distributions_on_debt_id", using: :btree
 
   create_table "account_balances", force: :cascade do |t|
-    t.date     "balance_date"
+    t.date     "balance_date",                                   null: false
     t.integer  "account_id",   limit: 4
-    t.decimal  "amount",                 precision: 10
-    t.decimal  "buffer",                 precision: 10
+    t.decimal  "amount",                 precision: 8, scale: 2, null: false
+    t.decimal  "buffer",                 precision: 8, scale: 2, null: false
     t.integer  "debt_id",      limit: 4
     t.boolean  "paid"
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
   end
 
   add_index "account_balances", ["account_id"], name: "index_account_balances_on_account_id", using: :btree
   add_index "account_balances", ["debt_id"], name: "index_account_balances_on_debt_id", using: :btree
 
   create_table "accounts", force: :cascade do |t|
-    t.integer  "user_id",      limit: 4
+    t.integer  "user_id",      limit: 4,  null: false
     t.string   "name",         limit: 20
     t.string   "account_type", limit: 20
     t.datetime "created_at",              null: false
@@ -107,12 +107,12 @@ ActiveRecord::Schema.define(version: 20151225123843) do
   add_index "debts", ["name", "deleted_at"], name: "by_category_name", unique: true, using: :btree
 
   create_table "income_sources", force: :cascade do |t|
-    t.string   "name",         limit: 255
-    t.string   "pay_schedule", limit: 255
-    t.string   "pay_day",      limit: 255
+    t.string   "name",         limit: 255,                         null: false
+    t.string   "pay_schedule", limit: 255,                         null: false
+    t.string   "pay_day",      limit: 255,                         null: false
     t.decimal  "amount",                   precision: 8, scale: 2, null: false
-    t.date     "start_date"
-    t.date     "end_date"
+    t.date     "start_date",                                       null: false
+    t.date     "end_date",                                         null: false
     t.datetime "created_at",                                       null: false
     t.datetime "updated_at",                                       null: false
     t.integer  "account_id",   limit: 4

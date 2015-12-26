@@ -1,8 +1,9 @@
 GIT
   remote: git@github.com:iDreamOn/seed_dump.git
-  revision: 917a3733e44eb19da677f84ca4cc0d002eb19178
+  revision: 09997d6561a819cb666dd1276d9d6506cd494a4e
+  branch: order-by-association
   specs:
-    seed_dump (3.2.3)
+    seed_dump (3.2.5)
       activerecord (~> 4)
       activesupport (~> 4)
 
