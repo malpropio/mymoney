@@ -7,12 +7,12 @@ class DebtBalancesController < ApplicationController
   # GET /debt_balances
   # GET /debt_balances.json
   def index
-      @debt_balances = current_user.debt_balances.search(params[:debt_balance]).order(:due_date => :desc).paginate(:per_page => 25, :page => params[:page])
-      @debts = current_user.debt_balances.joins(debt: :category).where("'#{Time.now.to_date}' <= due_date AND debts.is_asset=false AND categories.name <> 'Bill'")
+      @debt_balances = current_user.get_debt_balances.search(params[:debt_balance]).order(:due_date => :desc).paginate(:per_page => 25, :page => params[:page])
+      @debts = current_user.get_debt_balances.joins(debt: :category).where("'#{Time.now.to_date}' <= due_date AND debts.is_asset=false AND categories.name <> 'Bill'")
   end
 
   def ccs_by_month
-    render json: current_user.debt_balances.joins(debt: :category)
+    render json: current_user.get_debt_balances.joins(debt: :category)
                          .where("categories.name = 'Credit Cards'")
                          .group("debts.name")
                          .group_by_month(:due_date, format: "%b %Y")
@@ -27,8 +27,8 @@ class DebtBalancesController < ApplicationController
   last_n_months(12).reverse.each do |date|
       end_date = [date[1].end_of_month,Time.now.to_date].min
 	  total_debt = 0
-	  current_user.debt_balances.joins(debt: :category).where("debt_balances.payment_start_date <= '#{end_date}' AND '#{end_date}' <= due_date AND debts.is_asset=false AND categories.name <> 'Bill' AND categories.name = 'Credit Cards'").each { |k| total_debt += k.max_payment(end_date,true)}
-	  current_user.debt_balances.joins(debt: :category).where("'#{end_date}' <= due_date AND debts.is_asset=false AND categories.name NOT IN ('Bill','Credit Cards')").each { |k| total_debt += k.max_payment(end_date,true)}
+	  current_user.get_debt_balances.joins(debt: :category).where("debt_balances.payment_start_date <= '#{end_date}' AND '#{end_date}' <= due_date AND debts.is_asset=false AND categories.name <> 'Bill' AND categories.name = 'Credit Cards'").each { |k| total_debt += k.max_payment(end_date,true)}
+	  current_user.get_debt_balances.joins(debt: :category).where("'#{end_date}' <= due_date AND debts.is_asset=false AND categories.name NOT IN ('Bill','Credit Cards')").each { |k| total_debt += k.max_payment(end_date,true)}
 	  h1.store(date[0],total_debt)
   end
 
@@ -105,7 +105,7 @@ class DebtBalancesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_debt_balance
       @debt_balance = DebtBalance.find(params[:id])
-      authorize @debt_balance.debt.account
+      authorize @debt_balance
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

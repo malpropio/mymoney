@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151225080828) do
+ActiveRecord::Schema.define(version: 20151225123843) do
 
   create_table "account_balance_distributions", force: :cascade do |t|
     t.integer  "account_balance_id", limit: 4
@@ -146,6 +146,14 @@ ActiveRecord::Schema.define(version: 20151225080828) do
   add_index "spendings", ["debt_balance_id"], name: "index_spendings_on_debt_balance_id", using: :btree
   add_index "spendings", ["payment_method_id"], name: "index_spendings_on_payment_method_id", using: :btree
   add_index "spendings", ["spending_date"], name: "index_spendings_on_spending_date", using: :btree
+
+  create_table "user_contributors", id: false, force: :cascade do |t|
+    t.integer "user_id",             limit: 4
+    t.integer "contributor_user_id", limit: 4
+  end
+
+  add_index "user_contributors", ["contributor_user_id", "user_id"], name: "index_user_contributors_on_contributor_user_id_and_user_id", unique: true, using: :btree
+  add_index "user_contributors", ["user_id", "contributor_user_id"], name: "index_user_contributors_on_user_id_and_contributor_user_id", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "first_name",        limit: 255

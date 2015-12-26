@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
+    #@users = User.all
   end
 
   # GET /users/1
@@ -20,6 +20,24 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+  end
+
+  def add_contributor
+    current_user.contributors << User.find(params['id'])
+
+    respond_to do |format|
+      format.html { redirect_to users_url, notice: "User was successfully added as contributor." }
+      format.json { head :no_content }
+    end
+  end
+
+  def remove_contributor
+    current_user.contributors.delete(User.find params['id'])
+
+    respond_to do |format|
+      format.html { redirect_to users_url, notice: "User was successfully removed as contributor." }
+      format.json { head :no_content }
+    end
   end
 
   # POST /users
@@ -66,6 +84,7 @@ class UsersController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params[:id])
+      authorize @user
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

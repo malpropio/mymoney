@@ -41,6 +41,10 @@ class Debt < ActiveRecord::Base
     self.name
   end
 
+  def authorize(user=nil)
+    self.account.user.id == user.id
+  end
+
   private
   def debt_exists
     if Debt.where("id != #{self.id || 0} AND category_id = '#{self.category.id}' AND deleted_at IS NULL").exists?

@@ -6,6 +6,10 @@ class AccountBalance < ActiveRecord::Base
 
   attr_accessor :total_distribution
 
+  def authorize(user=nil)
+    self.account.user.id == user.id
+  end
+
   def debts
     DebtBalance.joins(:debt).where("debt_balances.payment_start_date<='#{balance_date}'
                                       AND due_date>='#{balance_date}'

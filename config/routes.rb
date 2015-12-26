@@ -27,7 +27,12 @@ Rails.application.routes.draw do
 
   resources :categories
   
-  resources :users
+  resources :users do
+    member do
+       get :add_contributor
+       get :remove_contributor
+    end
+  end
   
   resources :spendings do
     collection do

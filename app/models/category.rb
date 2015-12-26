@@ -17,4 +17,8 @@ class Category < ActiveRecord::Base
   def to_s
     name
   end
+
+  def authorize(user=nil)
+    self.user.id == user.id
+  end
 end

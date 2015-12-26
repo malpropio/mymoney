@@ -10,6 +10,10 @@ class IncomeSource < ActiveRecord::Base
   validate :bi_weekly_payday, :if => Proc.new{|k| k.pay_schedule == 'bi-weekly'}
   validate :semi_monthly_pay, :if => Proc.new{|k| k.pay_schedule == 'semi-monthly'}
   validate :start_and_end
+
+  def authorize(user=nil)
+    self.account.user.id == user.id
+  end
     
   def paydays
     if pay_schedule == 'weekly' || pay_schedule == 'bi-weekly'

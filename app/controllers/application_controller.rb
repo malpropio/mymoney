@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   before_action :require_login
 
   def authorize(object=nil)
-    if object.user != current_user
+    if !object.authorize(current_user)
       flash[:error] = "You dont have permission to access this section"
       redirect_to root_url
     end

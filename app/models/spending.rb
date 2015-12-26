@@ -6,10 +6,14 @@ class Spending < ActiveRecord::Base
   attr_accessor :category_id
   attr_accessor :debt_id
 
-  validates_presence_of :description, :spending_date, :amount, :payment_method_id 
+  validates_presence_of :description, :spending_date, :amount, :payment_method_id, :category_id 
   validates :amount, numericality: true, exclusion: { in: [0], message: "can't be %{value}."}
-  validate :spending_goal, :unless => Proc.new{|k| k.debt_id.blank? }
- 
+  validate :spending_goal, :unless => Proc.new{|k| k.category_id.blank? }
+
+  #def has_debt
+    
+  #end  
+   
   before_save do
     set_budget
   end
@@ -29,8 +33,8 @@ class Spending < ActiveRecord::Base
     end
   end
 
-  def user
-    self.payment_method.user
+  def authorize(user=nil)
+    ( self.payment_method.user.id == user.id || self.payment_method.user.contributors.where(id: user.id).exists? )
   end
 
   private
@@ -55,19 +59,22 @@ class Spending < ActiveRecord::Base
 
   def clean_desc
       self.description = self.description.titleize unless self.description.nil?
+      self.debt_id = nil if self.debt_id.blank?
   end
 
   def spending_goal
-    if self.debt_id.blank?
-      errors.add(:category, "you must pick a goal for this category")
-    elsif Debt.find(self.debt_id).category.id != self.category_id.to_i
-      errors.add(:category, "doesn't match with goal.")
-    elsif Debt.find(self.debt_id).debt_balances.empty?
-      errors.add(:category, "don't have a set goal.")
-    else
-      self.description = Debt.find(self.debt_id).name
-      set_goal
-    end 
+    if Category.find(self.category_id.to_i).debts.any?
+      if self.debt_id.blank?
+        errors.add(:category, "you must pick a goal for this category")
+      elsif Debt.find(self.debt_id).category.id != self.category_id.to_i
+        errors.add(:category, "doesn't match with goal.")
+      elsif Debt.find(self.debt_id).debt_balances.empty?
+        errors.add(:category, "don't have a set goal.")
+      else
+        self.description = Debt.find(self.debt_id).name
+        set_goal
+      end 
+    end
   end
 
 end

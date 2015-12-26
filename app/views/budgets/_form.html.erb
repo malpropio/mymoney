@@ -13,7 +13,7 @@
 
   <div class="field">
     <%= f.label :category_id %><br>
-    <%= f.collection_select :category_id, Category.all.order(:name), :id, :name %>
+    <%= f.collection_select :category_id, current_user.get_categories.order(:name), :id, :name %>
   </div>
   <div class="field">
     <%= f.label :budget_month %><br>

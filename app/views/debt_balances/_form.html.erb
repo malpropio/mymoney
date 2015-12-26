@@ -13,7 +13,7 @@
 
   <div class="field">
     <%= f.label :debt_id %><br>
-    <%= f.collection_select :debt_id, current_user.debts.active.order(:name), :id, :name%>
+    <%= f.collection_select :debt_id, current_user.get_debts.active.order(:name), :id, :name%>
   </div>
   <div class="field">
     <%= f.label :balance %><br>

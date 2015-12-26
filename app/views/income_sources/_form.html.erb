@@ -21,7 +21,7 @@
   </div>
   <div class="field">
     <%= f.label :account_id %><br>
-    <%= f.collection_select :account_id, current_user.accounts.order(:name), :id, :name %>
+    <%= f.collection_select :account_id, current_user.get_accounts.order(:name), :id, :name %>
   </div>
   <div class="field">
     <%= f.label :pay_day %><br>

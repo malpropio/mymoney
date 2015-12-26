@@ -9,7 +9,7 @@ class BudgetsController < ApplicationController
   # GET /budgets
   # GET /budgets.json
   def index
-    @budgets = current_user.budgets
+    @budgets = current_user.get_budgets
                            .joins(:category)
                            .search(params[:search])
                            .order("categories.name")
@@ -119,7 +119,7 @@ class BudgetsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_budget
       @budget = Budget.find(params[:id])
-      authorize @budget.category
+      authorize @budget
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

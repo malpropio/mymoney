@@ -1,0 +1,12 @@
+<tr>
+  <td><%= user.first_name %></td>
+  <td><%= user.last_name %></td>
+  <td><%= user.email %></td>
+  <td><%= user.username %></td>
+  <td><% if current_user.contributors.where(id: user.id).exists? %>
+        <%= link_to 'Remove', remove_contributor_user_path(user) %>
+      <% else %>
+        <%= link_to 'Add', add_contributor_user_path(user) %>
+      <% end %>
+  </td>
+</tr>

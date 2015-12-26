@@ -20,12 +20,8 @@ class DebtBalance < ActiveRecord::Base
     debt.name
   end
 
-  def old_payments(up_to_date = nil, inclusive = false)
-    comparison = inclusive ? "<=" : "<"
-    threshold = "AND spending_date#{comparison}'#{up_to_date}'" unless up_to_date.nil?
-    Spending.joins(:category)
-            .where("(spendings.description = '#{self.debt.name}' AND categories.name = '#{self.debt.category}') OR ('#{self.debt.category}' = 'Bill' AND categories.name = '#{self.debt.name}')")
-            .where("spending_date>='#{self.payment_start_date}' AND spending_date<='#{self.due_date}' #{threshold}")
+  def authorize(user=nil)
+    self.debt.account.user.id == user.id
   end
 
   def payments(up_to_date = nil, inclusive = false)
