@@ -34,29 +34,16 @@ class BudgetsController < ApplicationController
   end
 
   def budgets_by_month
-    subquery = Spending.joins(:category)
-                        .where("categories.name NOT IN ('Credit Cards','Savings')")
-                        .select("SUM(amount) AS total_spending, budget_id").group(:budget_id).to_sql
-
-    payments_subquery = Spending.joins(:category)
-                        .where("categories.name IN ('Credit Cards','Rent','Utilities','Loans')")
-                        .select("SUM(amount) AS total_payment, budget_id").group(:budget_id).to_sql
-   
-    agg = Budget.joins("INNER JOIN categories ON categories.id = budgets.category_id")
-                .joins("LEFT OUTER JOIN (#{subquery}) spendings ON budgets.id = spendings.budget_id")
-                .joins("LEFT OUTER JOIN (#{payments_subquery}) payments ON budgets.id = payments.budget_id")
-                .select("budgets.budget_month, Sum(CASE WHEN categories.name IN ('Credit Cards','Savings') THEN 0 ELSE spendings.total_spending END) AS total_spending, Sum(CASE WHEN categories.name IN ('Credit Cards','Savings') THEN 0 ELSE budgets.amount END) AS total_budget, Sum(payments.total_payment) AS total_payment ")
-                .where("budgets.budget_month >= DATE_ADD(NOW(), INTERVAL - 24 MONTH)")
-                .group("budgets.budget_month")
-                .having("Sum(CASE WHEN categories.name IN ('Credit Cards','Savings') THEN 0 ELSE spendings.total_spending END)>0 AND Sum(CASE WHEN categories.name IN ('Credit Cards','Savings') THEN 0 ELSE budgets.amount END)>0 AND Sum(payments.total_payment)>0")
-    
     h1 = Hash.new
 
-    agg.each do |budget| 
-      h1.store(["Budget", budget.budget_month.strftime('%b %Y')],budget.total_budget) 
-      h1.store(["Spending", budget.budget_month.strftime('%b %Y')],budget.total_spending)
+    current_user.real_spendings.group_by_month(:spending_date, format: "%b %Y").sum(:amount).each do |spending|
+      h1.store(["Spending", spending[0]], spending[1])
     end
-    
+
+    current_user.real_budgets.group_by_month(:budget_month, format: "%b %Y").sum(:amount).each do |budget|
+      h1.store(["Budget", budget[0]], budget[1])
+    end
+
     render json: h1.chart_json
   end
   

@@ -2,15 +2,14 @@ class SpendingsController < ApplicationController
   include SpendingsHelper
 
   before_action :set_spending, only: [:show, :edit, :update, :destroy]
-  #after_action :send_alert, only: [:create]
-
 
   FLOOR = "2014-01-01"
 
   # GET /spendings
   # GET /spendings.json
   def index
-    @spendings = Spending.search(params[:search])
+    @spendings = current_user.spendings
+                         .search(params[:search])
                          .order(sort_column + " " + sort_direction)
                          .order(updated_at: :desc)
                          .where("spending_date >= '#{FLOOR}'")
@@ -23,36 +22,37 @@ class SpendingsController < ApplicationController
   end
   
   def spendings_by_month
-    render json: Spending.joins(:category)
-                         .where("categories.name NOT IN ('Credit Cards')")
-                         .group_by_month(:spending_date, format: "%b %Y")
-                         .sum(:amount)
+    render json: current_user.real_spendings
+                             .group_by_month(:spending_date, format: "%b %Y")
+                             .sum(:amount)
   end
 
   def spendings_by_category
-    render json: Spending.joins(:category)
-                         .where("categories.name NOT IN ('Credit Cards')")
-                         .select("spendings.*, categories.name")
-                         .group(:name).sum(:amount)
+    render json: current_user.real_spendings
+                             .select("spendings.*, categories.name")
+                             .group("categories.name").sum("spendings.amount")
   end
 
   def spendings_by_payment_method
-    render json: Spending.joins(:category)
-                         .where("categories.name NOT IN ('Credit Cards')")
-                         .joins(:payment_method)
-                         .select("spendings.*, payment_methods.name")
-                         .group("payment_methods.name").sum(:amount)
+    render json: current_user.real_spendings
+                             .joins(:payment_method)
+                             .select("spendings.*, payment_methods.name")
+                             .group("payment_methods.name").sum(:amount)
   end
 
   def cc_purchase_vs_payment
-    render json: Spending.where("spending_date >= DATE_ADD(DATE_FORMAT(NOW(), '%Y-%m-%01'), INTERVAL - 24 MONTH) AND (categories.name = 'Credit Cards' OR payment_methods.name = 'Credit')")
-                         .joins(:category)
-                         .joins(:payment_method)
-                         .select("Sum(spendings.amount) AS sum_amount, CASE WHEN payment_methods.name = 'Credit' THEN 'Purchase' ELSE 'Payment' END AS payment_method_id, DATE_FORMAT(spending_date, '%Y-%m-01 00:00:00') AS month")
-                         .group("CASE WHEN payment_methods.name = 'Credit' THEN 'Purchase' ELSE 'Payment' END")
-                         .group_by_month(:spending_date, format: "%b %Y")
-                         .sum(:amount)
-                         .chart_json
+    h1 = Hash.new
+
+    current_user.cc_spendings.group_by_month(:spending_date, format: "%b %Y").sum(:amount).each do |spending|
+      h1.store(["Spendings", spending[0]], spending[1])
+    end
+
+    current_user.cc_payments.group_by_month(:budget_month, format: "%b %Y").sum(:amount).each do |budget|
+      h1.store(["Payments", budget[0]], budget[1])
+    end
+
+    render json: h1.chart_json
+
   end
 
   # GET /spendings/1
@@ -120,10 +120,4 @@ class SpendingsController < ApplicationController
       params.require(:spending).permit(:description, :debt_id, :debt_balance_id, :category_id, :spending_date, :amount, :payment_method_id)
     end
 
-    def send_alert
-      if !@spending.budget.alert_message.nil? && text_service
-        #text_service.sendMessage(ATT_CONFIG['addresses'], :message => "Je t'aimmmmeeeee (sent from the website) whooohooo")
-        text_service.sendMessage(ATT_CONFIG['addresses'], :message => @spending.budget.alert_message)
-      end
-    end
 end

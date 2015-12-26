@@ -1,17 +1,16 @@
 class Spending < ActiveRecord::Base
-  belongs_to :category
-  belongs_to :budget
+  #belongs_to :category
+  belongs_to :budget, -> { includes :category }
   belongs_to :payment_method
   belongs_to :debt_balance
 
+  attr_accessor :category_id
   attr_accessor :debt_id
 
-  validates_presence_of :description, :category_id, :spending_date, :amount, :payment_method_id
+  validates_presence_of :description, :spending_date, :amount, :payment_method_id #, :category_id
   validates :amount, numericality: true, exclusion: { in: [0], message: "can't be %{value}."}
-  validate :spending_goal, :if => Proc.new{|k| k.category.debts.active.exists?}
+  validate :spending_goal, :unless => Proc.new{|k| k.debt_id.blank? }
  
-  DEBIT_CATEGORIES = ['Credit Cards','Loans','Rent','Utilities','Savings']
-
   before_save do
     set_budget
   end
@@ -52,15 +51,16 @@ class Spending < ActiveRecord::Base
   end
 
   def clean_desc
-    if !self.category.nil?
-      self.payment_method_id = PaymentMethod.find_by_name("Debit").id if (DEBIT_CATEGORIES.include? self.category.name)
       self.description = self.description.titleize unless self.description.nil?
-    end
   end
 
   def spending_goal
-    if self.debt_id.blank? || Debt.find(self.debt_id).category != self.category || Debt.find(self.debt_id).debt_balances.count<=0
-      errors.add(:category, "doesn't match with goal or you don't have a set goal for this category")
+    if self.debt_id.blank?
+      errors.add(:category, "you must pick a goal for this category")
+    elsif Debt.find(self.debt_id).category.id != self.category_id.to_i
+      errors.add(:category, "doesn't match with goal.")
+    elsif Debt.find(self.debt_id).debt_balances.empty?
+      errors.add(:category, "don't have a set goal.")
     else
       self.description = Debt.find(self.debt_id).name
       set_goal

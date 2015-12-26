@@ -1,7 +1,12 @@
 class User < ActiveRecord::Base
   has_many :categories
+  has_many :budgets, through: :categories
   has_many :payment_methods
+  has_many :spendings, through: :payment_methods
   has_many :accounts
+  has_many :income_sources, through: :accounts
+  has_many :debts, through: :accounts
+  has_many :account_balances, through: :accounts
 
   attr_accessor :remember_token
   attr_accessor :activation_token
@@ -60,6 +65,22 @@ class User < ActiveRecord::Base
   # Sends activation email.
   def send_activation_email
     UserMailer.account_activation(self).deliver_now
+  end
+
+  def real_spendings
+    self.spendings.joins(budget: :category).where("categories.name <> 'Credit Cards'")
+  end
+
+  def cc_spendings
+    self.spendings.joins(:payment_method).where("payment_methods.name = 'Credit'")
+  end
+  
+  def cc_payments
+    self.spendings.joins(budget: :category).where("categories.name = 'Credit Cards'")
+  end
+
+  def real_budgets
+    self.budgets.joins(:category).where("categories.name <> 'Credit Cards'")
   end
   
   private

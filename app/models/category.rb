@@ -1,5 +1,6 @@
 class Category < ActiveRecord::Base
   has_many :budgets
+  has_many :spendings, through: :budgets
   has_many :debts
   
   belongs_to :user
@@ -9,5 +10,9 @@ class Category < ActiveRecord::Base
 
   def active_debts
     self.debts.active
+  end
+
+  def to_s
+    name
   end
 end

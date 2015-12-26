@@ -16,6 +16,10 @@ class DebtBalance < ActiveRecord::Base
     self.payment_start_date = self.due_date - 1.months + 1.days if !self.due_date.blank? && self.payment_start_date.blank?
   end
 
+  def to_s
+    debt.name
+  end
+
   def old_payments(up_to_date = nil, inclusive = false)
     comparison = inclusive ? "<=" : "<"
     threshold = "AND spending_date#{comparison}'#{up_to_date}'" unless up_to_date.nil?
