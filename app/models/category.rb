@@ -19,6 +19,7 @@ class Category < ActiveRecord::Base
   end
 
   def authorize(user=nil)
-    self.user.id == user.id
+    owner = self.user
+    owner.id == user.id || owner.contributors.where(id: user.id).exists? 
   end
 end

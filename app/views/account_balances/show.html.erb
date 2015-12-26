@@ -85,6 +85,6 @@
 </p>
 
 <p style="text-indent: 2em; color:red;">
-  <%= Debt.do_not_pay_list.join(", ") %>
+  <%= current_user.get_debts.do_not_pay_list.join(", ") %>
 </p>
 <br>

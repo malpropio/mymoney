@@ -12,7 +12,8 @@ class IncomeSource < ActiveRecord::Base
   validate :start_and_end
 
   def authorize(user=nil)
-    self.account.user.id == user.id
+    owner = self.account.user
+    owner.id == user.id || owner.contributors.where(id: user.id).exists? 
   end
     
   def paydays

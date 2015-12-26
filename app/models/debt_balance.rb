@@ -21,7 +21,8 @@ class DebtBalance < ActiveRecord::Base
   end
 
   def authorize(user=nil)
-    self.debt.account.user.id == user.id
+    owner = self.debt.account.user
+    owner.id == user.id || owner.contributors.where(id: user.id).exists? 
   end
 
   def payments(up_to_date = nil, inclusive = false)

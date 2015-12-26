@@ -34,7 +34,8 @@ class Spending < ActiveRecord::Base
   end
 
   def authorize(user=nil)
-    ( self.payment_method.user.id == user.id || self.payment_method.user.contributors.where(id: user.id).exists? )
+    owner = self.payment_method.user
+    owner.id == user.id || owner.contributors.where(id: user.id).exists?
   end
 
   private
