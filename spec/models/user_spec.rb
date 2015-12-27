@@ -82,28 +82,50 @@ RSpec.describe User, type: :model do
     user = FactoryGirl.create(:user_with_accounts)
     expect(user.accounts.length).to eq(2)
   end
+  
+  it "has many contributors" do
+    user = FactoryGirl.create(:user_with_contributors)
+    expect(user.contributors.length).to eq(1)
+  end
 
-  #it "returns a contact's full name as a string" do
-  #  FactoryGirl(:contact, firstname: "John", lastname: "Doe").name.should == "John Doe"
-  #end
+  it "has many contributors and contributes to many" do
+    user = FactoryGirl.create(:user_has_and_belongs_to_many_contributors)
+    expect(user.contributors.length).to eq(1)
+    contributor = user.contributors.first
+    expect(contributor.contributors.where(id: user.id)).to exist
+  end
 
-  #describe "filter last name by letter" do      
-  #  before :each do
-  #    @smith = FactoryGirl(:contact, lastname: "Smith")
-  #    @jones = FactoryGirl(:contact, lastname: "Jones")
-  #    @johnson = FactoryGirl(:contact, lastname: "Johnson")
-  #  end
-
-  #  context "matching letters" do
-  #    it "returns a sorted array of results that match" do
-  #      Contact.by_letter("J").should == [@johnson, @jones]
-  #    end
-  #  end
-
-  #  context "non-matching letters" do
-  #    it "does not return contacts that don't start with the provided letter" do
-  #      Contact.by_letter("J").should_not include @smith
-  #    end
-  #  end
-  #end
+  it "has many budgets through categories" do
+    user = FactoryGirl.create(:user_with_budgets_through_categories)
+    expect(user.budgets.length).to eq(1)
+  end
+  
+  it "has many spendings through payment methods" do
+    user = FactoryGirl.create(:user_with_spendings_through_payment_methods)
+    expect(user.spendings.length).to eq(1)
+  end
+  
+  it "has many income_sources" do
+    user = FactoryGirl.create(:user_with_income_sources)
+    expect(user.income_sources.length).to eq(1)
+  end
+  
+  it "has many debts" do
+    user = FactoryGirl.create(:user_with_debts)
+    expect(user.debts.length).to eq(1)
+  end
+  
+  it "has many account_balances" do
+    user = FactoryGirl.create(:user_with_account_balances)
+    expect(user.account_balances.length).to eq(1)
+  end
+  
+  it "has many debt_balances" do
+    user = FactoryGirl.create(:user_with_debt_balances)
+    expect(user.debt_balances.length).to eq(1)
+  end
+  
+  it "has many account_balance_distributions" do
+    skip "WILL BE DELETED"
+  end 
 end
