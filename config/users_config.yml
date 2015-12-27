@@ -1,5 +1,5 @@
 development:
-  allowed_users: dev@local.com
+  allowed_users: dev@local.com, dev2@local.com
 
 test:
   allowed_users: dev@local.com

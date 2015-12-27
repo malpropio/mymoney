@@ -4,15 +4,14 @@ class Debt < ActiveRecord::Base
 
   has_many :debt_balances
   
-  validates_presence_of :old_category, :name
-
-  validate :debt_exists
+  validates_presence_of :name, :category_id
+  validates_uniqueness_of :name, case_sensitive: false, :scope => :category_id 
 
   ## Titleize fields if not empty
   before_validation :clean_fields
 
   before_save do
-    self.sub_category = self.old_category if self.sub_category.blank?
+    self.sub_category = self.category.name if self.sub_category.blank?
     self.fix_amount = nil if self.fix_amount && self.fix_amount < 0
   end
 
@@ -44,13 +43,12 @@ class Debt < ActiveRecord::Base
 
   private
   def debt_exists
-    if Debt.where("id != #{self.id || 0} AND old_category = '#{self.old_category}' AND name = '#{self.name}' AND deleted_at IS NULL").exists?
+    if Debt.where("id != #{self.id || 0} AND category_id = '#{self.category.id}' AND deleted_at IS NULL").exists?
       errors.add(:debt, "already exists")
     end
   end
   
   def clean_fields
-    self.old_category = self.old_category.titleize unless self.old_category.nil?
     self.sub_category = self.sub_category.titleize unless self.sub_category.nil?
     self.name = self.name.titleize unless self.name.nil?
   end

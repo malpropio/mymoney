@@ -13,7 +13,7 @@
 
   <div class="field">
     <%= f.label :category_id %><br>
-    <%= f.collection_select :category_id, Category.order(:name), :id, :name, {prompt: 'Please Select'}, {:class => 'select', required: true} %>
+    <%= f.collection_select :category_id, current_user.categories.order(:name), :id, :name, {prompt: 'Please Select'}, {:class => 'select', required: true} %>
   </div>
   <div class="field" id="desc_text" style="display:none;" >
     <%= f.label :description %><br>
@@ -21,7 +21,7 @@
   </div>
   <div class="field" id="desc_select" style="display:true;" >
     <%= f.label :debt_id, "Goal" %><br>
-    <%= f.grouped_collection_select :debt_id, Category.joins(:debts).distinct.order(:name), :active_debts, :name, :id, :name, {prompt: 'None'}, :class => 'select' %>
+    <%= f.grouped_collection_select :debt_id, current_user.categories.joins(:debts).distinct.order(:name), :active_debts, :name, :id, :name, {prompt: 'None'}, :class => 'select' %>
   </div>
   <div class="field">
     <%= f.label :spending_date, "Date"  %>
@@ -33,7 +33,7 @@
   </div>
   <div class="field">
     <%= f.label :payment_method_id %><br>
-    <%= f.collection_select :payment_method_id, PaymentMethod.all.order(:name), :id, :name, {prompt: 'Please Select'} %>
+    <%= f.collection_select :payment_method_id, current_user.payment_methods.order(:name), :id, :name, {prompt: 'Please Select'} %>
   </div>
   <div class="actions">
     <%= f.submit %>

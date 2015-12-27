@@ -45,7 +45,7 @@
 </p>
 <p style="text-indent: 2em;">
   <strong>Remaining:</strong>
-  <%= @income_source.paychecks(Time.now.to_date, @income_source.end_date) %>
+  <%= @income_source.paychecks(Time.now.to_date + 1, @income_source.end_date) %>
 </p>
 
 <p>
@@ -58,7 +58,7 @@
 </p>
 <p style="text-indent: 2em;">
   <strong>Remaining:</strong>
-  <%= number_to_currency(@income_source.income(Time.now.to_date, @income_source.end_date)) %>
+  <%= number_to_currency(@income_source.income(Time.now.to_date + 1, @income_source.end_date)) %>
 </p>
 
 <%= link_to 'Edit', edit_income_source_path(@income_source) %> |

@@ -7,12 +7,9 @@ class ApplicationController < ActionController::Base
 
   before_action :require_login
 
-  def authorize
-    token = text_token
-    if token.nil?
-      consent_url = auth_service.consentFlow
-      redirect_to consent_url
-    else
+  def authorize(object=nil)
+    if object.user != current_user
+      flash[:error] = "You dont have permission to access this section"
       redirect_to root_url
     end
   end

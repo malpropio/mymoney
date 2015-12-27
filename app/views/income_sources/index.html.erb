@@ -6,13 +6,13 @@
   <strong>After taxes and deductions income:</strong>
 </p>
 <p style="text-indent: 2em;">
-  <strong>Expected through <%= IncomeSource.max_end_date %>:</strong> <%= number_to_currency(IncomeSource.total_income(Date.new(2007,1,1),Date.new(2020,1,1))) %>
+  <strong>Expected through <%= current_user.income_sources.max_end_date %>:</strong> <%= number_to_currency(current_user.income_sources.total_income(Date.new(2007,1,1),Date.new(2020,1,1))) %>
 </p>
 <p style="text-indent: 2em;">
-  <strong>To date:</strong> <%= number_to_currency(IncomeSource.total_income) %>
+  <strong>To date:</strong> <%= number_to_currency(current_user.income_sources.total_income) %>
 </p>
 <p style="text-indent: 2em;">
-  <strong>Remaining:</strong> <%= number_to_currency(IncomeSource.total_income(Time.now.to_date,Date.new(2020,1,1))) %>
+  <strong>Remaining:</strong> <%= number_to_currency(current_user.income_sources.total_income(Time.now.to_date + 1,Date.new(2020,1,1))) %>
 </p>
 
 <table>
