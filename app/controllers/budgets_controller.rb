@@ -9,7 +9,7 @@ class BudgetsController < ApplicationController
   # GET /budgets
   # GET /budgets.json
   def index
-    @budgets = current_user.get_budgets
+    @budgets = current_user.get_all("budgets")
                            .joins(:category)
                            .search(params[:search])
                            .order("categories.name")

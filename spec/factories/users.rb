@@ -61,7 +61,7 @@ FactoryGirl.define do
       end
     end
 
-    factory :user_with_budgets_through_categories do
+    factory :user_with_budgets do
       transient do
         budget { FactoryGirl.create(:budget) }
         category { FactoryGirl.create(:category) }
@@ -73,7 +73,7 @@ FactoryGirl.define do
       end
     end
     
-    factory :user_with_spendings_through_payment_methods do
+    factory :user_with_spendings do
       transient do
         spending { FactoryGirl.create(:spending) }
         payment_method { FactoryGirl.create(:payment_method) }
