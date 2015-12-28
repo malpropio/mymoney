@@ -38,11 +38,11 @@ class SpendingsController < ApplicationController
   def cc_purchase_vs_payment
     h1 = Hash.new
 
-    current_user.cc_spendings.group_by_month(:spending_date, format: "%b %Y").sum(:amount).each do |spending|
+    current_user.cc_spendings.where("spending_date >= '#{FLOOR}'").group_by_month(:spending_date, format: "%b %Y").sum(:amount).each do |spending|
       h1.store(["Spendings", spending[0]], spending[1])
     end
 
-    current_user.cc_payments.group_by_month(:budget_month, format: "%b %Y").sum(:amount).each do |budget|
+    current_user.cc_payments.where("spending_date >= '#{FLOOR}'").group_by_month(:budget_month, format: "%b %Y").sum(:amount).each do |budget|
       h1.store(["Payments", budget[0]], budget[1])
     end
 

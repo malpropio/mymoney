@@ -22,6 +22,7 @@
 <p>
   Expected Income<sup><a href="#fn3" id="ref3"> 3</a></sup>: <%= number_to_currency(potential_income(@curr_budget)) %><br>
   Total Budget: <%= number_to_currency(overall_budget(@curr_budget)) %><br>
+  Total Spending: <%= number_to_currency(overall_spending(@curr_budget)) %><br>
   Estimated CC Payments Budget<sup><a href="#fn2" id="ref2"> 2</a></sup>: <%= number_to_currency(credit_payment_budget(@curr_budget)) %><br>
 </p>
 

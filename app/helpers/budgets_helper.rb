@@ -8,6 +8,11 @@ module BudgetsHelper
     current_user.get_budgets.joins(:category).where("categories.name NOT IN ('Credit Cards')").where(budget_month: start_date).sum(:amount) 
   end
 
+  def overall_spending(date = nil)
+    start_date = date.nil? ? Date.new(1864,1,1) : date.change(day: 1)
+    current_user.real_spendings.where("DATE_FORMAT(spending_date,'%Y-%m-01') = '#{start_date}'").sum(:amount)
+  end
+
   def credit_payment_budget(date = nil)
     result = 0
     current_user.get_debt_balances.where("debt_balances.payment_start_date<='#{date}' AND due_date>='#{date}'").each do |saving|
