@@ -10,6 +10,13 @@ class User < ActiveRecord::Base
   has_many :debt_balances, through: :debts
   has_many :account_balance_distributions, through: :account_balances
 
+  has_and_belongs_to_many :contributors,
+      autosave: true,
+      class_name: 'User',
+      join_table: :user_contributors,
+      foreign_key: :user_id,
+      association_foreign_key: :contributor_user_id
+
   attr_accessor :remember_token
   attr_accessor :activation_token
   
@@ -70,21 +77,85 @@ class User < ActiveRecord::Base
   end
 
   def real_spendings
-    self.spendings.joins(budget: :category).where("categories.name <> 'Credit Cards'")
+    self.get_spendings.joins(budget: :category).where("categories.name <> 'Credit Cards'")
   end
 
   def cc_spendings
-    self.spendings.joins(:payment_method).where("payment_methods.name = 'Credit'")
+    self.get_spendings.joins(:payment_method).where("payment_methods.name = 'Credit'")
   end
   
   def cc_payments
-    self.spendings.joins(budget: :category).where("categories.name = 'Credit Cards'")
+    self.get_spendings.joins(budget: :category).where("categories.name = 'Credit Cards'")
   end
 
   def real_budgets
     self.budgets.joins(:category).where("categories.name <> 'Credit Cards'")
   end
-  
+
+  def authorize(user=nil)
+    self.id == user.id
+  end
+
+  def get_categories
+    ids = self.category_ids 
+    self.contributors.map{|c| ids += c.category_ids }
+    Category.where("categories.id IN (?)",ids)
+  end
+
+  def get_budgets
+    ids = self.budget_ids
+    self.contributors.map{|c| ids += c.budget_ids }
+    Budget.where("budgets.id IN (?)",ids)
+  end
+
+  def get_payment_methods
+    ids = self.payment_method_ids
+    self.contributors.map{|c| ids += c.payment_method_ids }
+    PaymentMethod.where("payment_methods.id IN (?)",ids)
+  end
+
+  def get_spendings
+    ids = self.spending_ids
+    self.contributors.map{|c| ids += c.spending_ids }
+    Spending.where("spendings.id IN (?)",ids)
+  end
+
+  def get_accounts
+    ids = self.account_ids
+    self.contributors.map{|c| ids += c.account_ids }
+    Account.where("accounts.id IN (?)",ids)
+  end
+
+  def get_income_sources
+    ids = self.income_source_ids
+    self.contributors.map{|c| ids += c.income_source_ids }
+    IncomeSource.where("income_sources.id IN (?)",ids)
+  end
+
+  def get_debts
+    ids = self.debt_ids
+    self.contributors.map{|c| ids += c.debt_ids }
+    Debt.where("debts.id IN (?)",ids)
+  end
+
+  def get_account_balances
+    ids = self.account_balance_ids
+    self.contributors.map{|c| ids += c.account_balance_ids }
+    AccountBalance.where("account_balances.id IN (?)",ids)
+  end
+
+  def get_debt_balances
+    ids = self.debt_balance_ids
+    self.contributors.map{|c| ids += c.debt_balance_ids }
+    DebtBalance.where("debt_balances.id IN (?)",ids)
+  end
+
+  def get_account_balance_distributions
+    ids = self.account_balance_distribution_ids
+    self.contributors.map{|c| ids += c.account_balance_distribution_ids }
+    AccountBalanceDistribution.where("account_balance_distributions.id IN (?)",ids)
+  end
+
   private
 	
     # Converts email to all lower-case.

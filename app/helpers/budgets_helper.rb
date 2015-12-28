@@ -5,12 +5,12 @@ module BudgetsHelper
 
   def overall_budget(date = nil)
     start_date = date.nil? ? Date.new(1864,1,1) : date.change(day: 1)
-    current_user.budgets.joins(:category).where("categories.name NOT IN ('Credit Cards')").where(budget_month: start_date).sum(:amount) 
+    current_user.get_budgets.joins(:category).where("categories.name NOT IN ('Credit Cards')").where(budget_month: start_date).sum(:amount) 
   end
 
   def credit_payment_budget(date = nil)
     result = 0
-    current_user.debt_balances.where("debt_balances.payment_start_date<='#{date}' AND due_date>='#{date}'").each do |saving|
+    current_user.get_debt_balances.where("debt_balances.payment_start_date<='#{date}' AND due_date>='#{date}'").each do |saving|
       if saving.debt.category.name == 'Credit Cards'
         result += saving.payment_due(date, false) * paychecks(saving.debt.account.name,date)
       end
@@ -20,7 +20,7 @@ module BudgetsHelper
 
   def credit_payment_budget_notes(date = nil)
     result = "Estimated payments needed to payoff all credit card balances: "
-    current_user.debt_balances.where("debt_balances.payment_start_date<='#{date}' AND due_date>='#{date}'").each do |saving|
+    current_user.get_debt_balances.where("debt_balances.payment_start_date<='#{date}' AND due_date>='#{date}'").each do |saving|
       if saving.debt.category.name == 'Credit Cards'
         result += "#{saving.debt.name} => #{number_to_currency(saving.payment_due(date, false))} x #{paychecks(saving.debt.account.name,date)}; " 
       end
@@ -32,7 +32,7 @@ module BudgetsHelper
     if !curr_month.nil?
       start_date = curr_month.beginning_of_month
       end_date = curr_month.end_of_month
-      current_user.income_sources.total_income(start_date, end_date)
+      current_user.get_income_sources.total_income(start_date, end_date)
     end
   end
   

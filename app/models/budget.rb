@@ -19,4 +19,8 @@ class Budget < ActiveRecord::Base
     end
   end
 
+  def authorize(user=nil)
+    self.category.user.id == user.id
+  end
+
 end

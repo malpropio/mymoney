@@ -8,17 +8,12 @@ class SpendingsController < ApplicationController
   # GET /spendings
   # GET /spendings.json
   def index
-    @spendings = current_user.spendings
+    @spendings = current_user.get_spendings
                          .search(params[:search])
                          .order(sort_column + " " + sort_direction)
                          .order(updated_at: :desc)
                          .where("spending_date >= '#{FLOOR}'")
                          .paginate(page: params[:page])
-  end
-  
-  def spendings_by_day
-    render json: Spending.group_by_day(:spending_date, format: "%b %d, %Y")
-                         .sum(:amount)
   end
   
   def spendings_by_month
@@ -76,8 +71,8 @@ class SpendingsController < ApplicationController
 
     respond_to do |format|
       if @spending.save
-        format.html { redirect_to @spending, notice: 'Spending was successfully created.' }
-        format.json { render :show, status: :created, location: @spending }
+        format.html { redirect_to spendings_path, notice: 'Spending was successfully created.' }
+        format.json { render :index, status: :created }
       else
         format.html { render :new }
         format.json { render json: @spending.errors, status: :unprocessable_entity }
@@ -113,7 +108,7 @@ class SpendingsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_spending
       @spending = Spending.find(params[:id])
-      authorize @spending.payment_method
+      authorize @spending
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
