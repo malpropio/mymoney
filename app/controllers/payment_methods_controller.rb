@@ -14,7 +14,7 @@ class PaymentMethodsController < ApplicationController
 
   # GET /payment_methods/new
   def new
-    @payment_method = current_user.payment_methods.build 
+    @payment_method = current_user.payment_methods.build
   end
 
   # GET /payment_methods/1/edit

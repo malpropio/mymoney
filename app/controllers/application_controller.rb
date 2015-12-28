@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
     unless logged_in?
       store_location
       flash[:error] = "You must be logged in to access this section"
-      redirect_to login_url 
+      redirect_to login_url
     end
   end
 end

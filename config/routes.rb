@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  
+
   resources :account_balance_distributions
   resources :account_balances do
     member do
@@ -26,14 +26,14 @@ Rails.application.routes.draw do
   get 'authorize' => 'application#authorize'
 
   resources :categories
-  
+
   resources :users do
     member do
        get :add_contributor
        get :remove_contributor
     end
   end
-  
+
   resources :spendings do
     collection do
       get :spendings_by_day
@@ -53,7 +53,7 @@ Rails.application.routes.draw do
   end
 
   resources :payment_methods
-  
+
   resources :debts
 
   resources :debt_balances do

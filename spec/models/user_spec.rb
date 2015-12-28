@@ -62,7 +62,7 @@ RSpec.describe User, type: :model do
       user = FactoryGirl.build(:user, password: "password")
       expect(user).to_not be_valid
       expect(user.errors).to have_key(:password_confirmation)
-    end 
+    end
   end
 
   context "association" do
@@ -80,7 +80,7 @@ RSpec.describe User, type: :model do
       user = FactoryGirl.create(:user_with_accounts)
       expect(user.accounts.length).to eq(2)
     end
-    
+
     it "has many contributors" do
       user = FactoryGirl.create(:user_with_contributors)
       expect(user.contributors.length).to eq(1)
@@ -97,35 +97,35 @@ RSpec.describe User, type: :model do
       user = FactoryGirl.create(:user_with_budgets)
       expect(user.budgets.length).to eq(1)
     end
-    
+
     it "has many spendings" do
       user = FactoryGirl.create(:user_with_spendings)
       expect(user.spendings.length).to eq(1)
     end
-    
+
     it "has many income_sources" do
       user = FactoryGirl.create(:user_with_income_sources)
       expect(user.income_sources.length).to eq(1)
     end
-  
+
     it "has many debts" do
       user = FactoryGirl.create(:user_with_debts)
       expect(user.debts.length).to eq(1)
     end
-    
+
     it "has many account_balances" do
       user = FactoryGirl.create(:user_with_account_balances)
       expect(user.account_balances.length).to eq(1)
     end
-    
+
     it "has many debt_balances" do
       user = FactoryGirl.create(:user_with_debt_balances)
       expect(user.debt_balances.length).to eq(1)
     end
-    
+
     it "has many account_balance_distributions" do
       skip "MIGHT BE DELETED"
-    end 
+    end
   end
 
   context "has contributor but doesn't contributes" do
@@ -135,76 +135,76 @@ RSpec.describe User, type: :model do
       user_1.contributors << user_2
       expect(user_1.get_all("spendings").length).to eq(1)
     end
-    
 
-    it 'cant see eachothers categories' do 
-      user_1 = FactoryGirl.create(:user_with_categories) 
-      user_2 = FactoryGirl.create(:user_with_categories) 
-      user_1.contributors << user_2 
+
+    it 'cant see eachothers categories' do
+      user_1 = FactoryGirl.create(:user_with_categories)
+      user_2 = FactoryGirl.create(:user_with_categories)
+      user_1.contributors << user_2
       expect(user_1.get_all('categories').length).to eq(2)
     end
 
-    it 'cant see eachothers payment_methods' do 
-      user_1 = FactoryGirl.create(:user_with_payment_methods) 
-      user_2 = FactoryGirl.create(:user_with_payment_methods) 
-      user_1.contributors << user_2 
+    it 'cant see eachothers payment_methods' do
+      user_1 = FactoryGirl.create(:user_with_payment_methods)
+      user_2 = FactoryGirl.create(:user_with_payment_methods)
+      user_1.contributors << user_2
       expect(user_1.get_all('payment_methods').length).to eq(2)
     end
 
-    it 'cant see eachothers accounts' do 
-      user_1 = FactoryGirl.create(:user_with_accounts) 
-      user_2 = FactoryGirl.create(:user_with_accounts) 
-      user_1.contributors << user_2 
+    it 'cant see eachothers accounts' do
+      user_1 = FactoryGirl.create(:user_with_accounts)
+      user_2 = FactoryGirl.create(:user_with_accounts)
+      user_1.contributors << user_2
       expect(user_1.get_all('accounts').length).to eq(2)
     end
 
-    it 'cant see eachothers account_balances' do 
-      user_1 = FactoryGirl.create(:user_with_account_balances) 
-      user_2 = FactoryGirl.create(:user_with_account_balances) 
-      user_1.contributors << user_2 
+    it 'cant see eachothers account_balances' do
+      user_1 = FactoryGirl.create(:user_with_account_balances)
+      user_2 = FactoryGirl.create(:user_with_account_balances)
+      user_1.contributors << user_2
       expect(user_1.get_all('account_balances').length).to eq(1)
     end
 
     it 'cant see eachothers account_balance_distributions' do
-      skip "MIGHT BE DELETED" 
-      #user_1 = FactoryGirl.create(:user_with_account_balance_distributions) 
-      #user_2 = FactoryGirl.create(:user_with_account_balance_distributions) 
-      #user_1.contributors << user_2 
+      skip "MIGHT BE DELETED"
+      #user_1 = FactoryGirl.create(:user_with_account_balance_distributions)
+      #user_2 = FactoryGirl.create(:user_with_account_balance_distributions)
+      #user_1.contributors << user_2
       #expect(user_1.get_all('account_balance_distributions').length).to eq(1)
     end
 
-    it 'cant see eachothers budgets' do 
-      user_1 = FactoryGirl.create(:user_with_budgets) 
-      user_2 = FactoryGirl.create(:user_with_budgets) 
-      user_1.contributors << user_2 
+    it 'cant see eachothers budgets' do
+      user_1 = FactoryGirl.create(:user_with_budgets)
+      user_2 = FactoryGirl.create(:user_with_budgets)
+      user_1.contributors << user_2
       expect(user_1.get_all('budgets').length).to eq(1)
     end
 
-    it 'cant see eachothers debts' do 
-      user_1 = FactoryGirl.create(:user_with_debts) 
-      user_2 = FactoryGirl.create(:user_with_debts) 
-      user_1.contributors << user_2 
+    it 'cant see eachothers debts' do
+      user_1 = FactoryGirl.create(:user_with_debts)
+      user_2 = FactoryGirl.create(:user_with_debts)
+      user_1.contributors << user_2
       expect(user_1.get_all('debts').length).to eq(1)
     end
 
-    it 'cant see eachothers debt_balances' do 
-      user_1 = FactoryGirl.create(:user_with_debt_balances) 
-      user_2 = FactoryGirl.create(:user_with_debt_balances) 
-      user_1.contributors << user_2 
+    it 'cant see eachothers debt_balances' do
+      user_1 = FactoryGirl.create(:user_with_debt_balances)
+      user_2 = FactoryGirl.create(:user_with_debt_balances)
+      user_1.contributors << user_2
       expect(user_1.get_all('debt_balances').length).to eq(1)
     end
 
-    it 'cant see eachothers income_sources' do 
-      user_1 = FactoryGirl.create(:user_with_income_sources) 
-      user_2 = FactoryGirl.create(:user_with_income_sources) 
-      user_1.contributors << user_2 
+    it 'cant see eachothers income_sources' do
+      user_1 = FactoryGirl.create(:user_with_income_sources)
+      user_2 = FactoryGirl.create(:user_with_income_sources)
+      user_1.contributors << user_2
       expect(user_1.get_all('income_sources').length).to eq(1)
     end
 
-    it 'cant see eachothers spendings' do 
-      user_1 = FactoryGirl.create(:user_with_spendings) 
-      user_2 = FactoryGirl.create(:user_with_spendings) 
-      user_1.contributors << user_2 
+    it 'cant see eachothers spendings' do
+      user_1 = FactoryGirl.create(:user_with_spendings)
+      user_2 = FactoryGirl.create(:user_with_spendings)
+      user_1.contributors << user_2
       expect(user_1.get_all('spendings').length).to eq(1)
     end
   end
@@ -217,80 +217,80 @@ RSpec.describe User, type: :model do
       user_2.contributors << user_1
       expect(user_1.get_all("spendings").length).to eq(2)
     end
-    
 
-    it 'can see eachothers categories' do 
-      user_1 = FactoryGirl.create(:user_with_categories) 
-      user_2 = FactoryGirl.create(:user_with_categories) 
-      user_1.contributors << user_2 
+
+    it 'can see eachothers categories' do
+      user_1 = FactoryGirl.create(:user_with_categories)
+      user_2 = FactoryGirl.create(:user_with_categories)
+      user_1.contributors << user_2
       user_2.contributors << user_1
       expect(user_1.get_all('categories').length).to eq(4)
     end
 
-    it 'can see eachothers payment_methods' do 
-      user_1 = FactoryGirl.create(:user_with_payment_methods) 
-      user_2 = FactoryGirl.create(:user_with_payment_methods) 
-      user_1.contributors << user_2 
+    it 'can see eachothers payment_methods' do
+      user_1 = FactoryGirl.create(:user_with_payment_methods)
+      user_2 = FactoryGirl.create(:user_with_payment_methods)
+      user_1.contributors << user_2
       user_2.contributors << user_1
       expect(user_1.get_all('payment_methods').length).to eq(4)
     end
 
-    it 'can see eachothers accounts' do 
-      user_1 = FactoryGirl.create(:user_with_accounts) 
-      user_2 = FactoryGirl.create(:user_with_accounts) 
-      user_1.contributors << user_2 
+    it 'can see eachothers accounts' do
+      user_1 = FactoryGirl.create(:user_with_accounts)
+      user_2 = FactoryGirl.create(:user_with_accounts)
+      user_1.contributors << user_2
       user_2.contributors << user_1
       expect(user_1.get_all('accounts').length).to eq(4)
     end
 
-    it 'can see eachothers account_balances' do 
-      user_1 = FactoryGirl.create(:user_with_account_balances) 
-      user_2 = FactoryGirl.create(:user_with_account_balances) 
-      user_1.contributors << user_2 
+    it 'can see eachothers account_balances' do
+      user_1 = FactoryGirl.create(:user_with_account_balances)
+      user_2 = FactoryGirl.create(:user_with_account_balances)
+      user_1.contributors << user_2
       user_2.contributors << user_1
       expect(user_1.get_all('account_balances').length).to eq(2)
     end
 
-    it 'can see eachothers account_balance_distributions' do 
+    it 'can see eachothers account_balance_distributions' do
       skip "MIGHT BE DELETED"
     end
 
-    it 'can see eachothers budgets' do 
-      user_1 = FactoryGirl.create(:user_with_budgets) 
-      user_2 = FactoryGirl.create(:user_with_budgets) 
-      user_1.contributors << user_2 
+    it 'can see eachothers budgets' do
+      user_1 = FactoryGirl.create(:user_with_budgets)
+      user_2 = FactoryGirl.create(:user_with_budgets)
+      user_1.contributors << user_2
       user_2.contributors << user_1
       expect(user_1.get_all('budgets').length).to eq(2)
     end
 
-    it 'can see eachothers debts' do 
-      user_1 = FactoryGirl.create(:user_with_debts) 
-      user_2 = FactoryGirl.create(:user_with_debts) 
-      user_1.contributors << user_2 
+    it 'can see eachothers debts' do
+      user_1 = FactoryGirl.create(:user_with_debts)
+      user_2 = FactoryGirl.create(:user_with_debts)
+      user_1.contributors << user_2
       user_2.contributors << user_1
       expect(user_1.get_all('debts').length).to eq(2)
     end
 
-    it 'can see eachothers debt_balances' do 
-      user_1 = FactoryGirl.create(:user_with_debt_balances) 
-      user_2 = FactoryGirl.create(:user_with_debt_balances) 
-      user_1.contributors << user_2 
+    it 'can see eachothers debt_balances' do
+      user_1 = FactoryGirl.create(:user_with_debt_balances)
+      user_2 = FactoryGirl.create(:user_with_debt_balances)
+      user_1.contributors << user_2
       user_2.contributors << user_1
       expect(user_1.get_all('debt_balances').length).to eq(2)
     end
 
-    it 'can see eachothers income_sources' do 
-      user_1 = FactoryGirl.create(:user_with_income_sources) 
-      user_2 = FactoryGirl.create(:user_with_income_sources) 
-      user_1.contributors << user_2 
+    it 'can see eachothers income_sources' do
+      user_1 = FactoryGirl.create(:user_with_income_sources)
+      user_2 = FactoryGirl.create(:user_with_income_sources)
+      user_1.contributors << user_2
       user_2.contributors << user_1
       expect(user_1.get_all('income_sources').length).to eq(2)
     end
 
-    it 'can see eachothers spendings' do 
-      user_1 = FactoryGirl.create(:user_with_spendings) 
-      user_2 = FactoryGirl.create(:user_with_spendings) 
-      user_1.contributors << user_2 
+    it 'can see eachothers spendings' do
+      user_1 = FactoryGirl.create(:user_with_spendings)
+      user_2 = FactoryGirl.create(:user_with_spendings)
+      user_1.contributors << user_2
       user_2.contributors << user_1
       expect(user_1.get_all('spendings').length).to eq(2)
     end

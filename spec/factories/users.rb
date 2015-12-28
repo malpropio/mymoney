@@ -9,7 +9,7 @@ FactoryGirl.define do
     username { Faker::Internet.user_name(first_name) }
     password "abcabc"
     password_confirmation "abcabc"
-    
+
     factory :user_with_accounts do
       transient do
         accounts_count 2
@@ -72,7 +72,7 @@ FactoryGirl.define do
           user.categories << evaluator.category
       end
     end
-    
+
     factory :user_with_spendings do
       transient do
         spending { FactoryGirl.create(:spending) }
@@ -84,7 +84,7 @@ FactoryGirl.define do
           user.payment_methods << evaluator.payment_method
       end
     end
-    
+
     factory :user_with_income_sources do
       transient do
         account { FactoryGirl.create(:account) }
@@ -96,7 +96,7 @@ FactoryGirl.define do
         user.accounts << evaluator.account
       end
     end
-    
+
     factory :user_with_debts do
       transient do
         debt { FactoryGirl.create(:debt) }
@@ -108,7 +108,7 @@ FactoryGirl.define do
           user.accounts << evaluator.account
       end
     end
-    
+
     factory :user_with_account_balances do
       transient do
         account_balance { FactoryGirl.create(:account_balance) }
@@ -120,7 +120,7 @@ FactoryGirl.define do
           user.accounts << evaluator.account
       end
     end
-    
+
     factory :user_with_debt_balances do
       transient do
         debt_balance { FactoryGirl.create(:debt_balance) }
