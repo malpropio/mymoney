@@ -1,0 +1,12 @@
+languages:
+  Ruby: true
+  JavaScript: true
+engines:
+  Duplication: true
+exclude_paths:
+  - 'bin/*'
+  - 'config/*'
+  - 'db/*'
+  - 'lib/*'
+  - 'log/*'
+  - 'spec/*'
