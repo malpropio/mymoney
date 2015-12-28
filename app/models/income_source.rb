@@ -31,7 +31,7 @@ class IncomeSource < ActiveRecord::Base
     if pay_schedule == 'weekly'
       result = (from..to).to_a.select {|k| is_day_of_week(k, pay_day)}
     elsif pay_schedule == 'bi-weekly'
-      result = (from..to).to_a.select {|k| is_day_of_week(k, pay_day) && k.cweek % 2 == start_date.cweek % 2}
+      result = (from..to).to_a.select {|k| is_day_of_week(k, pay_day) && (k - start_date) % 14 == 0 }
     elsif pay_schedule == 'semi-monthly'
       result = (from..to).to_a.select {|k| is_day_of_month(k, pay_day.split(',')[0]) || is_day_of_month(k, pay_day.split(',')[1])}
     end
@@ -42,22 +42,22 @@ class IncomeSource < ActiveRecord::Base
     paychecks(from, to).size * self.amount
   end
   
-  def self.total_income(account=nil, from=Date.new(2010,1,1), to=Time.now.to_date)
+  def self.total_income(source_account=nil, from=Date.new(2010,1,1), to=Time.now.to_date)
     result = 0
-    if account.nil?
+    if source_account.nil?
       IncomeSource.all.each {|k| result += k.income(from,to)}
     else
-      IncomeSource.where(account_id: account.id).each {|k| result += k.income(from,to)}
+      IncomeSource.where(account_id: source_account.id).each {|k| result += k.income(from,to)}
     end
     result
   end
 
-  def self.total_paychecks(account=nil, from=Date.new(2010,1,1), to=Time.now.to_date)
+  def self.total_paychecks(source_account=nil, from=Date.new(2010,1,1), to=Time.now.to_date)
     result = []
-    if account.nil?
+    if source_account.nil?
       IncomeSource.all.each {|k| result += k.paychecks(from,to)}
     else
-      IncomeSource.where(account_id: account.id).each {|k| result += k.paychecks(from,to)}
+      IncomeSource.where(account_id: source_account.id).each {|k| result += k.paychecks(from,to)}
     end
     result.uniq.size
   end

@@ -47,7 +47,7 @@
   
   <p style="text-indent: 2em;">
 	<strong>Per payday: </strong>
-	<%= number_to_currency(@debt_balance.payment_due) %>
+	<%= "#{number_to_currency(@debt_balance.payment_due)} x #{current_user.get_income_sources.total_paychecks(@debt_balance.debt.account, @debt_balance.payment_start_date, @debt_balance.due_date)}" %>
   </p>
 <% else %>
   <p style="text-indent: 0em; color:green;">

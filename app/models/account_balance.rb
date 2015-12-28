@@ -70,10 +70,11 @@ class AccountBalance < ActiveRecord::Base
 
           if left_over_total > 0
                 balance.debts.map do |d|
-                  amount = [d.payment_due(balance.balance_date),0].max
                   max_amount = [d.max_payment(balance.balance_date),0].max
-                  result[d.debt.name] = [amount, amount, max_amount]
-                  left_over_total -= amount unless d.debt.name == left_over
+                  recommendation = [d.payment_due(balance.balance_date),0].max
+                  actual = [max_amount,recommendation].min
+                  result[d.debt.name] = [recommendation, actual, max_amount]
+                  left_over_total -= actual unless d.debt.name == left_over
                 end
           end
 
