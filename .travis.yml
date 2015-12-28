@@ -3,6 +3,9 @@ rvm:
   - 2.2.1
 services:
   - mysql
+branches:
+  only:
+    - master
 env:
   - DB=mysql
 script:
