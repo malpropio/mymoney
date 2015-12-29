@@ -42,40 +42,16 @@ class DebtBalance < ActiveRecord::Base
       if self.debt.schedule == "Bi-Weekly"
         result = bi_weekly_due(self.debt.payment_start_date,payment_date) ? self.debt.fix_amount  : 0
       elsif self.debt.schedule == "Monthly"
-        if payment_date < Date.new(2015,11,1)
-          result = (self.debt.fix_amount*boa_fridays(payment_date.at_beginning_of_month,payment_date))/boa_fridays(payment_date.at_beginning_of_month,payment_date.at_end_of_month)
-        else
-          result = (self.debt.fix_amount*nih_fridays(payment_date.at_beginning_of_month,payment_date))/nih_fridays(payment_date.at_beginning_of_month,payment_date.at_end_of_month)
-        end
+        debt_account = self.debt.account
+        paychecks_todate = self.debt.account.user.get_income_sources.total_paychecks(debt_account,payment_date.at_beginning_of_month,payment_date) 
+        paychecks_all = self.debt.account.user.get_income_sources.total_paychecks(debt_account, payment_date.at_beginning_of_month,payment_date.at_end_of_month)
+        result = (self.debt.fix_amount*paychecks_todate)/paychecks_all unless paychecks_all==0
       end
-    elsif payment_date.nil? || payment_date < Date.new(2015,11,1)
-      result = self.debt.account.name == 'Chase' ? chase_payment_due : boa_payment_due
-    elsif payment_date >= Date.new(2015,11,1) && payment_date < Date.new(2015,12,1)
-      result = [nih_payment_due,max].min
-    elsif payment_date >= Date.new(2015,12,1)
-      result = [verve_payment_due,max].min
+    else
+      paychecks_all = self.debt.account.user.get_income_sources.total_paychecks(self.debt.account,self.payment_start_date, self.due_date)
+      result = self.balance_of_interest/paychecks_all unless paychecks_all==0
     end
     result
-  end
-
-  def payments_to_date
-    self.debt.account.name == 'Chase' ? chase_fridays(self.payment_start_date, Time.now.to_date) : boa_fridays(self.payment_start_date, Time.now.to_date)
-  end
-
-  def chase_payment_due
-    self.balance_of_interest/chase_fridays(self.payment_start_date, self.due_date)
-  end
-
-  def boa_payment_due
-    self.balance_of_interest/boa_fridays(self.payment_start_date, self.due_date)
-  end
-
-  def nih_payment_due
-    self.balance_of_interest/nih_fridays(self.payment_start_date, self.due_date)
-  end
-  
-  def verve_payment_due
-    self.balance_of_interest/verve_paychecks(self.payment_start_date, self.due_date)
   end
 
   def after_pay_balance(up_to_date = nil, inclusive = false)
@@ -88,9 +64,9 @@ class DebtBalance < ActiveRecord::Base
   
   def max_payment(up_to_date = nil, inclusive = false)
     if self.debt.is_asset?
-      self.target_balance - self.after_pay_balance(up_to_date, inclusive)
+      (self.target_balance - self.after_pay_balance(up_to_date, inclusive)).round(2)
     else
-      self.after_pay_balance(up_to_date, inclusive) - self.target_balance
+      (self.after_pay_balance(up_to_date, inclusive) - self.target_balance).round(2)
     end
   end
 

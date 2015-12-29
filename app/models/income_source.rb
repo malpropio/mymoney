@@ -35,17 +35,31 @@ class IncomeSource < ActiveRecord::Base
     elsif pay_schedule == 'semi-monthly'
       result = (from..to).to_a.select {|k| is_day_of_month(k, pay_day.split(',')[0]) || is_day_of_month(k, pay_day.split(',')[1])}
     end
-    result.count
+    result
   end
   
   def income(from=Time.now.to_date, to=Time.now.to_date)
-    paychecks(from, to) * self.amount
+    paychecks(from, to).size * self.amount
   end
   
-  def self.total_income(from=Date.new(2010,1,1), to=Time.now.to_date)
+  def self.total_income(account=nil, from=Date.new(2010,1,1), to=Time.now.to_date)
     result = 0
-    IncomeSource.all.each {|k| result += k.income(from,to)}
+    if account.nil?
+      IncomeSource.all.each {|k| result += k.income(from,to)}
+    else
+      IncomeSource.where(account_id: account.id).each {|k| result += k.income(from,to)}
+    end
     result
+  end
+
+  def self.total_paychecks(account=nil, from=Date.new(2010,1,1), to=Time.now.to_date)
+    result = []
+    if account.nil?
+      IncomeSource.all.each {|k| result += k.paychecks(from,to)}
+    else
+      IncomeSource.where(account_id: account.id).each {|k| result += k.paychecks(from,to)}
+    end
+    result.uniq.size
   end
   
   def self.max_end_date
