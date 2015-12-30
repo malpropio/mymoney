@@ -37,7 +37,7 @@ module BudgetsHelper
     if !curr_month.nil?
       start_date = curr_month.beginning_of_month
       end_date = curr_month.end_of_month
-      current_user.get_income_sources.total_income(start_date, end_date)
+      current_user.get_income_sources.total_income(nil, start_date, end_date)
     end
   end
   
