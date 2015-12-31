@@ -8,7 +8,7 @@ class SpendingsController < ApplicationController
   # GET /spendings
   # GET /spendings.json
   def index
-    @spendings = current_user.get_spendings
+    @spendings = current_user.get_all("spendings")
                          .search(params[:search])
                          .order(sort_column + " " + sort_direction)
                          .order(updated_at: :desc)

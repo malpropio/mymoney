@@ -4,7 +4,7 @@ class AccountBalanceDistributionsController < ApplicationController
   # GET /account_balance_distributions
   # GET /account_balance_distributions.json
   def index
-    @account_balance_distributions = current_user.get_account_balance_distributions
+    @account_balance_distributions = current_user.get_all("account_balance_distributions")
   end
 
   # GET /account_balance_distributions/1
