@@ -4,7 +4,7 @@ class AccountsController < ApplicationController
   # GET /accounts
   # GET /accounts.json
   def index
-    @accounts = current_user.get_accounts
+    @accounts = current_user.get_all("accounts")
   end
 
   # GET /accounts/1

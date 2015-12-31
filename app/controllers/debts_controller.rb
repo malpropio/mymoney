@@ -4,7 +4,7 @@ class DebtsController < ApplicationController
   # GET /debts
   # GET /debts.json
   def index
-    @debts = current_user.get_debts.order(:account_id).order(:category_id).order(:sub_category).order(:name).where(:deleted_at => nil)
+    @debts = current_user.get_all("debts").order(:account_id).order(:category_id).order(:sub_category).order(:name).where(:deleted_at => nil)
   end
 
   # GET /debts/1

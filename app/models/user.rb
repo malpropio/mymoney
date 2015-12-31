@@ -77,15 +77,15 @@ class User < ActiveRecord::Base
   end
 
   def real_spendings
-    self.get_spendings.joins(budget: :category).where("categories.name <> 'Credit Cards'")
+    self.get_all("spendings").joins(budget: :category).where("categories.name <> 'Credit Cards'")
   end
 
   def cc_spendings
-    self.get_spendings.joins(:payment_method).where("payment_methods.name = 'Credit'")
+    self.get_all("spendings").joins(:payment_method).where("payment_methods.name = 'Credit'")
   end
   
   def cc_payments
-    self.get_spendings.joins(budget: :category).where("categories.name = 'Credit Cards'")
+    self.get_all("spendings").joins(budget: :category).where("categories.name = 'Credit Cards'")
   end
 
   def real_budgets
@@ -96,64 +96,13 @@ class User < ActiveRecord::Base
     self.id == user.id
   end
 
-  def get_categories
-    ids = self.category_ids 
-    self.contributors.map{|c| ids += c.category_ids if c.contributors.where(id: self.id).exists? }
-    Category.where("categories.id IN (?)",ids)
-  end
-
-  def get_budgets
-    ids = self.budget_ids
-    self.contributors.map{|c| ids += c.budget_ids if c.contributors.where(id: self.id).exists? }
-    Budget.where("budgets.id IN (?)",ids)
-  end
-
-  def get_payment_methods
-    ids = self.payment_method_ids
-    self.contributors.map{|c| ids += c.payment_method_ids if c.contributors.where(id: self.id).exists? }
-    PaymentMethod.where("payment_methods.id IN (?)",ids)
-  end
-
-  def get_spendings
-    ids = self.spending_ids
-    self.contributors.map{|c| ids += c.spending_ids if c.contributors.where(id: self.id).exists? }
-    Spending.where("spendings.id IN (?)",ids)
-  end
-
-  def get_accounts
-    ids = self.account_ids
-    self.contributors.map{|c| ids += c.account_ids if c.contributors.where(id: self.id).exists? }
-    Account.where("accounts.id IN (?)",ids)
-  end
-
-  def get_income_sources
-    ids = self.income_source_ids
-    self.contributors.map{|c| ids += c.income_source_ids if c.contributors.where(id: self.id).exists? }
-    IncomeSource.where("income_sources.id IN (?)",ids)
-  end
-
-  def get_debts
-    ids = self.debt_ids
-    self.contributors.map{|c| ids += c.debt_ids if c.contributors.where(id: self.id).exists? }
-    Debt.where("debts.id IN (?)",ids)
-  end
-
-  def get_account_balances
-    ids = self.account_balance_ids
-    self.contributors.map{|c| ids += c.account_balance_ids if c.contributors.where(id: self.id).exists? }
-    AccountBalance.where("account_balances.id IN (?)",ids)
-  end
-
-  def get_debt_balances
-    ids = self.debt_balance_ids
-    self.contributors.map{|c| ids += c.debt_balance_ids if c.contributors.where(id: self.id).exists? }
-    DebtBalance.where("debt_balances.id IN (?)",ids)
-  end
-
-  def get_account_balance_distributions
-    ids = self.account_balance_distribution_ids
-    self.contributors.map{|c| ids += c.account_balance_distribution_ids if c.contributors.where(id: self.id).exists? }
-    AccountBalanceDistribution.where("account_balance_distributions.id IN (?)",ids)
+  def get_all(attribute)
+    model = attribute.strip.underscore.singularize.camelize.constantize
+    singular = ActiveModel::Naming.singular(model) 
+    plural = ActiveModel::Naming.plural(model) 
+    ids = send("#{singular}_ids")
+    self.contributors.map{|c| ids += c.send("#{singular}_ids") if c.contributors.where(id: self.id).exists? }
+    model.where("#{plural}.id IN (?)",ids)
   end
 
   private

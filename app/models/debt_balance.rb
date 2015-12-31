@@ -43,12 +43,12 @@ class DebtBalance < ActiveRecord::Base
         result = bi_weekly_due(self.debt.payment_start_date,payment_date) ? self.debt.fix_amount  : 0
       elsif self.debt.schedule == "Monthly"
         debt_account = self.debt.account
-        paychecks_todate = self.debt.account.user.get_income_sources.total_paychecks(debt_account,payment_date.at_beginning_of_month,payment_date) 
-        paychecks_all = self.debt.account.user.get_income_sources.total_paychecks(debt_account, payment_date.at_beginning_of_month,payment_date.at_end_of_month)
+        paychecks_todate = self.debt.account.user.get_all("income_sources").total_paychecks(debt_account,payment_date.at_beginning_of_month,payment_date) 
+        paychecks_all = self.debt.account.user.get_all("income_sources").total_paychecks(debt_account, payment_date.at_beginning_of_month,payment_date.at_end_of_month)
         result = (self.debt.fix_amount*paychecks_todate)/paychecks_all unless paychecks_all==0
       end
     else
-      paychecks_all = self.debt.account.user.get_income_sources.total_paychecks(self.debt.account,self.payment_start_date, self.due_date)
+      paychecks_all = self.debt.account.user.get_all("income_sources").total_paychecks(self.debt.account,self.payment_start_date, self.due_date)
       result = self.balance_of_interest/paychecks_all unless paychecks_all==0
     end
     result

@@ -4,7 +4,7 @@ class IncomeSourcesController < ApplicationController
   # GET /income_sources
   # GET /income_sources.json
   def index
-    @income_sources = current_user.get_income_sources.order(end_date: 'desc')
+    @income_sources = current_user.get_all("income_sources").order(end_date: 'desc')
   end
 
   # GET /income_sources/1
