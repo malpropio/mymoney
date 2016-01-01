@@ -25,3 +25,5 @@ config/users_config.yml
 db/backups/*prod*
 
 passenger*
+
+coverage
