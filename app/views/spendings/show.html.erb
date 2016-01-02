@@ -7,7 +7,7 @@
 
 <p>
   <strong>Category:</strong>
-  <%= @spending.budget.category %>
+  <%= @spending.budget.category_name unless !@spending.budget %>
 </p>
 
 <p>
