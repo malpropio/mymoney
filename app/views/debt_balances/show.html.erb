@@ -2,7 +2,7 @@
 
 <p>
   <strong>Debt/Asset:</strong>
-  <%= @debt_balance.debt.name %>
+  <%= @debt_balance.debt_name %>
 </p>
 
 <p>
@@ -44,15 +44,15 @@
   <p>
 	<strong>Payments needed to payoff/reach target by the due date:</strong>
   </p>
-  
+
   <p style="text-indent: 2em;">
 	<strong>Per payday: </strong>
-	<%= "#{number_to_currency(@debt_balance.payment_due)} x #{current_user.get_income_sources.total_paychecks(@debt_balance.debt.account, @debt_balance.payment_start_date, @debt_balance.due_date)}" %>
+	<%= "#{number_to_currency(@debt_balance.payment_due)} x #{current_user.get_all('income_sources').total_paychecks(@debt_balance.debt.account, @debt_balance.payment_start_date, @debt_balance.due_date)}" %>
   </p>
 <% else %>
   <p style="text-indent: 0em; color:green;">
-	<strong><%= @debt_balance.debt.schedule %> payments:</strong> 
-	<%= number_to_currency(@debt_balance.debt.fix_amount) %>
+	<strong><%= @debt_balance.debt_schedule %> payments:</strong>
+	<%= number_to_currency(@debt_balance.debt_fix_amount) %>
   </p>
 <% end %>
 

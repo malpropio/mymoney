@@ -15,7 +15,7 @@ class SpendingsController < ApplicationController
                          .where("spending_date >= '#{FLOOR}'")
                          .paginate(page: params[:page])
   end
-  
+
   def spendings_by_month
     render json: current_user.real_spendings
                              .group_by_month(:spending_date, format: "%b %Y")

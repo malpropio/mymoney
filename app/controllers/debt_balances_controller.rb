@@ -34,7 +34,7 @@ class DebtBalancesController < ApplicationController
 
   render json: h1.chart_json
   end
-  
+
   # GET /debt_balances/1
   # GET /debt_balances/1.json
   def show
@@ -98,7 +98,7 @@ class DebtBalancesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to @debt_balance, notice: 'Debt/Asset balance was successfully closed.' }
       format.json { head :no_content }
-    end    
+    end
   end
 
   private

@@ -17,7 +17,7 @@
   <tbody>
     <% @account_balance_distributions.each do |account_balance_distribution| %>
       <tr>
-        <td><%= account_balance_distribution.account_balance.balance_date %></td>
+        <td><%= account_balance_distribution.account_balance_balance_date %></td>
         <td><%= account_balance_distribution.account_balance.account %></td>
         <td><%= account_balance_distribution.debt %></td>
         <td><%= number_to_currency(account_balance_distribution.recommendation) %></td>

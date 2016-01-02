@@ -4,7 +4,7 @@ class CreateAccounts < ActiveRecord::Migration
       t.references  :user, index: true, foreign_key: true, null: false
       t.string   :name, limit: 20
       t.string   :account_type, limit: 20
-    
+
       t.timestamps null: false
     end
 

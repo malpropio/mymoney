@@ -8,7 +8,7 @@ class AccountBalance < ActiveRecord::Base
 
   def authorize(user=nil)
     owner = self.account.user
-    owner.id == user.id || owner.contributors.where(id: user.id).exists? 
+    owner.id == user.id || owner.contributors.where(id: user.id).exists?
   end
 
   def debts
@@ -27,7 +27,7 @@ class AccountBalance < ActiveRecord::Base
     end
     if !recommendations[account.name][self.debt.name].nil?
       recommendations[account.name][self.debt.name][2] -= other_pays
-      original = recommendations[account.name][self.debt.name][1] 
+      original = recommendations[account.name][self.debt.name][1]
       new_debt = [recommendations[account.name][self.debt.name][2], original].min
       recommendations[account.name][self.debt.name][1] = new_debt
       recommendations[account.name][account.name][1] += original - new_debt

@@ -2,8 +2,8 @@ class BudgetsController < ApplicationController
   include SpendingsHelper
 
   before_action :set_budget, only: [:show, :edit, :update, :destroy]
-  
-  FLOOR = "2014-01-01"  
+
+  FLOOR = "2014-01-01"
 
 
   # GET /budgets
@@ -47,7 +47,7 @@ class BudgetsController < ApplicationController
 
     render json: h1.chart_json
   end
-  
+
   # Reset all budgets
   def reset
     respond_to do |format|
@@ -61,9 +61,9 @@ class BudgetsController < ApplicationController
   def reset_current_month
 
     time = nil
-    
+
     if params[:choice] == "current"
-      time = Time.now.strftime('%Y-%m-01') 
+      time = Time.now.strftime('%Y-%m-01')
     elsif params[:choice] == "next" && (Time.now >= 1.month.from_now.change(day: 1) - 5.days)
       time = 1.month.from_now.strftime('%Y-%m-01')
     end

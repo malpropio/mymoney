@@ -11,9 +11,9 @@ class Spending < ActiveRecord::Base
   validate :spending_goal, :unless => Proc.new{|k| k.category_id.blank? }
 
   #def has_debt
-    
-  #end  
-   
+
+  #end
+
   before_save do
     set_budget
   end
@@ -47,7 +47,7 @@ class Spending < ActiveRecord::Base
   end
 
   def set_budget
-    dt = self.spending_date.change(day: 1).strftime('%Y-%m')            
+    dt = self.spending_date.change(day: 1).strftime('%Y-%m')
     new_budget = Budget.where("DATE_FORMAT(budget_month, '%Y-%m') = ? AND category_id = ?", dt, self.category_id)
     if new_budget.exists?
       self.budget_id = new_budget.first.id
@@ -74,7 +74,7 @@ class Spending < ActiveRecord::Base
       else
         self.description = Debt.find(self.debt_id).name
         set_goal
-      end 
+      end
     end
   end
 
