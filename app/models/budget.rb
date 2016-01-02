@@ -15,7 +15,7 @@ class Budget < ActiveRecord::Base
 
   def self.search(search)
     if search
-      where(:budget_month => search)
+      where(:budget_month => search.to_date.change(day: 1))
     else
       where(:budget_month => Time.now.to_date.change(day: 1))
     end
