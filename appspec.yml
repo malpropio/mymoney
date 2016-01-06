@@ -12,3 +12,7 @@ hooks:
     - location: scripts/stop_app.sh
       timeout: 300
       runas: ec2-user
+  AfterInstall:
+    - location: scripts/run_migration.sh
+      timeout: 300
+      runas: ec2-user
