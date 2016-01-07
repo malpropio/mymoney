@@ -2,7 +2,7 @@ class Category < ActiveRecord::Base
   has_many :budgets
   has_many :spendings, through: :budgets
   has_many :debts
-  
+
   belongs_to :user
 
   attr_readonly :user
@@ -20,6 +20,6 @@ class Category < ActiveRecord::Base
 
   def authorize(user=nil)
     owner = self.user
-    owner.id == user.id || owner.contributors.where(id: user.id).exists? 
+    owner.id == user.id || owner.contributors.where(id: user.id).exists?
   end
 end

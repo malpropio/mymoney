@@ -4,7 +4,7 @@ class AccountBalancesController < ApplicationController
   # GET /account_balances
   # GET /account_balances.json
   def index
-    @account_balances = current_user.get_account_balances.order(balance_date: :asc, account_id: :desc)
+    @account_balances = current_user.get_all("account_balances").order(balance_date: :asc, account_id: :desc)
   end
 
   # GET /account_balances/1

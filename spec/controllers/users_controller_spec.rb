@@ -24,7 +24,7 @@ RSpec.describe UsersController, type: :controller do
   # User. As you add validations to User, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    FactoryGirl.attributes_for(:user) 
+    FactoryGirl.attributes_for(:user)
   }
 
   let(:invalid_attributes) {
@@ -35,7 +35,7 @@ RSpec.describe UsersController, type: :controller do
   # in order to pass any filters (e.g. authentication) defined in
   # UsersController. Be sure to keep this updated too.
   let(:valid_session) { {} }
-  
+
   describe "GET #index" do
     it "assigns all users as @users" do
       user = User.create! valid_attributes

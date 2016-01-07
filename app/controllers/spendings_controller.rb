@@ -8,14 +8,14 @@ class SpendingsController < ApplicationController
   # GET /spendings
   # GET /spendings.json
   def index
-    @spendings = current_user.get_spendings
+    @spendings = current_user.get_all("spendings")
                          .search(params[:search])
                          .order(sort_column + " " + sort_direction)
                          .order(updated_at: :desc)
                          .where("spending_date >= '#{FLOOR}'")
                          .paginate(page: params[:page])
   end
-  
+
   def spendings_by_month
     render json: current_user.real_spendings
                              .group_by_month(:spending_date, format: "%b %Y")
@@ -113,7 +113,7 @@ class SpendingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def spending_params
-      params.require(:spending).permit(:description, :debt_id, :debt_balance_id, :category_id, :spending_date, :amount, :payment_method_id)
+      params.require(:spending).permit(:description, :spending_date, :amount, :payment_method_id, :debt_balance_id, :budget_id)
     end
 
 end

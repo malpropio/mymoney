@@ -12,7 +12,7 @@ class CreateDebts < ActiveRecord::Migration
 
 	end
   end
-  
+
   def down
     remove_index :debts, name: "by_category_name"
   end

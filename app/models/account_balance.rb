@@ -8,7 +8,7 @@ class AccountBalance < ActiveRecord::Base
 
   def authorize(user=nil)
     owner = self.account.user
-    owner.id == user.id || owner.contributors.where(id: user.id).exists? 
+    owner.id == user.id || owner.contributors.where(id: user.id).exists?
   end
 
   def debts
@@ -27,7 +27,7 @@ class AccountBalance < ActiveRecord::Base
     end
     if !recommendations[account.name][self.debt.name].nil?
       recommendations[account.name][self.debt.name][2] -= other_pays
-      original = recommendations[account.name][self.debt.name][1] 
+      original = recommendations[account.name][self.debt.name][1]
       new_debt = [recommendations[account.name][self.debt.name][2], original].min
       recommendations[account.name][self.debt.name][1] = new_debt
       recommendations[account.name][account.name][1] += original - new_debt
@@ -70,10 +70,11 @@ class AccountBalance < ActiveRecord::Base
 
           if left_over_total > 0
                 balance.debts.map do |d|
-                  amount = [d.payment_due(balance.balance_date),0].max
                   max_amount = [d.max_payment(balance.balance_date),0].max
-                  result[d.debt.name] = [amount, amount, max_amount]
-                  left_over_total -= amount unless d.debt.name == left_over
+                  recommendation = [d.payment_due(balance.balance_date),0].max
+                  actual = [max_amount,recommendation].min
+                  result[d.debt.name] = [recommendation, actual, max_amount]
+                  left_over_total -= actual unless d.debt.name == left_over
                 end
           end
 

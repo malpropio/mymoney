@@ -7,12 +7,12 @@ class DebtBalancesController < ApplicationController
   # GET /debt_balances
   # GET /debt_balances.json
   def index
-      @debt_balances = current_user.get_debt_balances.search(params[:debt_balance]).order(:due_date => :desc).paginate(:per_page => 25, :page => params[:page])
-      @debts = current_user.get_debt_balances.joins(debt: :category).where("'#{Time.now.to_date}' <= due_date AND debts.is_asset=false AND categories.name <> 'Rent'")
+      @debt_balances = current_user.get_all("debt_balances").search(params[:debt_balance]).order(:due_date => :desc).paginate(:per_page => 25, :page => params[:page])
+      @debts = current_user.get_all("debt_balances").joins(debt: :category).where("'#{Time.now.to_date}' <= due_date AND debts.is_asset=false AND categories.name <> 'Rent'")
   end
 
   def ccs_by_month
-    render json: current_user.get_debt_balances.joins(debt: :category)
+    render json: current_user.get_all("debt_balances").joins(debt: :category)
                          .where("categories.name = 'Credit Cards'")
                          .group("debts.name")
                          .group_by_month(:due_date, format: "%b %Y")
@@ -27,14 +27,14 @@ class DebtBalancesController < ApplicationController
   last_n_months(12).reverse.each do |date|
       end_date = [date[1].end_of_month,Time.now.to_date].min
 	  total_debt = 0
-	  current_user.get_debt_balances.joins(debt: :category).where("debt_balances.payment_start_date <= '#{end_date}' AND '#{end_date}' <= due_date AND debts.is_asset=false AND categories.name <> 'Bill' AND categories.name = 'Credit Cards'").each { |k| total_debt += k.max_payment(end_date,true)}
-	  current_user.get_debt_balances.joins(debt: :category).where("'#{end_date}' <= due_date AND debts.is_asset=false AND categories.name NOT IN ('Rent','Credit Cards')").each { |k| total_debt += k.max_payment(end_date,true)}
+	  current_user.get_all("debt_balances").joins(debt: :category).where("debt_balances.payment_start_date <= '#{end_date}' AND '#{end_date}' <= due_date AND debts.is_asset=false AND categories.name <> 'Bill' AND categories.name = 'Credit Cards'").each { |k| total_debt += k.max_payment(end_date,true)}
+	  current_user.get_all("debt_balances").joins(debt: :category).where("'#{end_date}' <= due_date AND debts.is_asset=false AND categories.name NOT IN ('Rent','Credit Cards')").each { |k| total_debt += k.max_payment(end_date,true)}
 	  h1.store(date[0],total_debt)
   end
 
   render json: h1.chart_json
   end
-  
+
   # GET /debt_balances/1
   # GET /debt_balances/1.json
   def show
@@ -98,7 +98,7 @@ class DebtBalancesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to @debt_balance, notice: 'Debt/Asset balance was successfully closed.' }
       format.json { head :no_content }
-    end    
+    end
   end
 
   private

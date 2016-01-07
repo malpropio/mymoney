@@ -38,7 +38,7 @@ WARNING = "#F7FE2E"
        amount < 0 ? ERROR : NEUTRAL
      end
   end
-  
+
   def good_pos_cell_color_comparison(base = 0, actual = 0, debt_name = "")
     if VALID_GOOD_NEG.include?(debt_name)
        good_neg_cell_color(base)
@@ -65,13 +65,13 @@ WARNING = "#F7FE2E"
         NEUTRAL
      end
   end
-  
+
   def equal_cell_color(amount_1 = nil, amount_2 = nil, alert = true)
     if !(amount_1.nil? || amount_2.nil?)
       amount_1 == amount_2 ? alert ? SUCCESS : NEUTRAL : ERROR
     end
   end
-  
+
   def success(is_success = false)
     is_success ? SUCCESS : NEUTRAL
   end

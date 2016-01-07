@@ -7,7 +7,7 @@
 
 <p>
   <strong>Category:</strong>
-  <%= @spending.budget.category %>
+  <%= @spending.budget.category_name unless !@spending.budget %>
 </p>
 
 <p>
@@ -22,7 +22,7 @@
 
 <p>
   <strong>Payment Method:</strong>
-  <%= @spending.payment_method.name %>
+  <%= @spending.payment_method %>
 </p>
 
 <%= link_to 'Edit', edit_spending_path(@spending) %> |

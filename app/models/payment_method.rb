@@ -12,6 +12,6 @@ class PaymentMethod < ActiveRecord::Base
 
   def authorize(user=nil)
     owner = self.user
-    owner.id == user.id || owner.contributors.where(id: user.id).exists? 
+    owner.id == user.id || owner.contributors.where(id: user.id).exists?
   end
 end

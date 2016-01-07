@@ -22,8 +22,8 @@ namespace :db do
   task :diagram do
     t = Time.current.utc.strftime("%Y%m%d_%H%M%S")
     ENV['filename']="#{db_diagram_dir}/#{t}_erd"
-    ENV['orientation']='vertical' 
-    ENV['title']='My Money Model Diagram'  
+    ENV['orientation']='vertical'
+    ENV['title']='My Money Model Diagram'
     ENV['attributes']='content,foreign_keys,primary_keys'
     ENV['notation']='bachman'
     ENV['polymorphism']='true'
