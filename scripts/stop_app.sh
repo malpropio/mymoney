@@ -1,3 +1,3 @@
 #!/bin/bash
 
-rvmsudo passenger stop -p80
+rvmsudo passenger stop -p80 -i

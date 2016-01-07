@@ -7,3 +7,11 @@ files:
     - location: scripts/run_migration.sh
       timeout: 300
       runas: mymoney
+  ApplicationStop:
+    - location: scripts/stop_app.sh
+      timeout: 300
+      runas: mymoney
+  ApplicationStart:
+    - location: scripts/start_app.sh
+      timeout: 300
+      runas: mymoney
