@@ -2,17 +2,8 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ec2-user/mymoney
-hooks:
-  ApplicationStart:
-    - location: scripts/start_app.sh
-      timeout: 300
-      runas: ec2-user
-  ApplicationStop:
-    - location: scripts/stop_app.sh
-      timeout: 300
-      runas: ec2-user
+    destination: /var/apps/mymoney
   AfterInstall:
     - location: scripts/run_migration.sh
       timeout: 300
-      runas: ec2-user
+      runas: mymoney
