@@ -1,1 +1,1 @@
-rvmsudo passenger start -e production -p80 &
+rvmsudo passenger start -e production -p80 
