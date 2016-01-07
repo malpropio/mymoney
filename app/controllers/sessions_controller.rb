@@ -1,13 +1,12 @@
 class SessionsController < ApplicationController
   skip_before_action :require_login, only: [:create, :new, :destroy]
-  ALLOWED = USERS_CONFIG["allowed_users"] || USERS_CONFIG["allowed_users"].split(',')
 
   def new
   end
 
   def create
     user = User.find_by(username: params[:session][:username].downcase)
-    if user && ALLOWED.include?(user.email)
+    if user
       if user.authenticate(params[:session][:password])
         log_in user
 	params[:session][:remember_me] == '1' ? remember(user) : forget(user)
