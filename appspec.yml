@@ -5,14 +5,10 @@ files:
     destination: /var/apps/mymoney
 hooks:
   AfterInstall:
-    - location: scripts/run_migration.sh
-      timeout: 300
-      runas: mymoney
-  ApplicationStop:
-    - location: scripts/stop_app.sh
+    - location: scripts/update_app.sh
       timeout: 300
       runas: mymoney
   ApplicationStart:
-    - location: scripts/start_app.sh
+    - location: scripts/reload_app.sh
       timeout: 300
       runas: mymoney
