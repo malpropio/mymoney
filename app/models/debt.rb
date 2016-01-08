@@ -5,7 +5,6 @@ class Debt < ActiveRecord::Base
   has_many :debt_balances
 
   validates_presence_of :name, :category, :account
-  
   validate :debt_exists
 
   ## Titleize fields if not empty

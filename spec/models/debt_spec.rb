@@ -29,20 +29,30 @@ RSpec.describe Debt, type: :model do
   end
   
   it "is uniquer per user" do
-	debt1 = FactoryGirl.create(:debt1)
-	debt2 = FactoryGirl.build(:debt1, name: debt1.name)
-	expect(debt2).to_not be_valid
+	random_id = 323
+	user1 = FactoryGirl.build(:user, id: random_id)
+	category1 = FactoryGirl.build(:category, user: user1)
+	account1  = FactoryGirl.build(:account, user: user1)
+	debt_1 = FactoryGirl.create(:debt1, category: category1, account: account1)
+	debt_2 = FactoryGirl.build(:debt1, category: category1, account: account1, name: debt_1.name)
+	
+	expect(debt_2).to_not be_valid
   end
 
-  it "has a fix amount present and payment start date" 
+  it "has a fix amount present and payment start date" do
+	amount = "29.99"
+	debt = FactoryGirl.build(:debt1, fix_amount: amount)
+	expect(debt.payment_start_date).to_not be nil
+  end
 
-  it "has a fix amount present and schedule present"
-
-  it "has many account balances"
+  it "has a fix amount present and schedule present" do
+	amount = "329.99"
+	debt = FactoryGirl.build(:debt1, fix_amount: amount)
+	expect(debt.schedule).to_not be nil
+  end
 
   it "has many debt balances" do
-	debt2 = FactoryGirl.create(:debt_with_debt_balances)
-	expect(debt2.debt_balances.length).to eq(1)
+	debt = FactoryGirl.create(:debt_with_debt_balances)
+	expect(debt.debt_balances.length).to eq(1)
   end
- 
 end
