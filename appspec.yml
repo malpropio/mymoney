@@ -3,6 +3,7 @@ os: linux
 files:
   - source: /
     destination: /var/apps/mymoney
+hooks:
   AfterInstall:
     - location: scripts/run_migration.sh
       timeout: 300
