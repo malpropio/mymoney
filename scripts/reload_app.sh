@@ -1,3 +1,14 @@
+#!/bin/bash
+
 echo "reloading app as $(whoami)"
 echo "current directory: $(pwd)"
-rvmsudo passenger-config restart-app /var/apps/mymoney
+
+file="/opt/codedeploy-agent/passenger.80.pid"
+if [ -f "$file" ]
+then
+  passenger stop -p80
+else
+  echo "$file not found."
+fi
+
+passenger start /var/apps/mymoney
