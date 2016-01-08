@@ -1,0 +1,14 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /var/apps/mymoney
+hooks:
+  AfterInstall:
+    - location: scripts/update_app.sh
+      timeout: 300
+      runas: mymoney
+  ApplicationStart:
+    - location: scripts/reload_app.sh
+      timeout: 300
+      runas: root

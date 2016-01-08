@@ -6,18 +6,18 @@ class SessionsController < ApplicationController
 
   def create
     user = User.find_by(username: params[:session][:username].downcase)
-    if user
+    if user 
       if user.authenticate(params[:session][:password])
         log_in user
-	params[:session][:remember_me] == '1' ? remember(user) : forget(user)
-	redirect_back_or root_url
+        params[:session][:remember_me] == '1' ? remember(user) : forget(user)
+        redirect_back_or root_url
       else
-	  flash.now[:danger] = "Invalid username/password combination"
-	  render 'new'
+        flash.now[:danger] = "Invalid username/password combination"
+        render 'new'
       end
     else
-          flash.now[:danger] = "Invalid username or not Allowed to login"
-          render 'new'
+        flash.now[:danger] = "Invalid username or not Allowed to login"
+        render 'new'
     end
   end
 
