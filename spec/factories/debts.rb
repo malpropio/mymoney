@@ -10,6 +10,15 @@ FactoryGirl.define do
     autopay false
     category
     account
-  end
+  
+	factory :debt_with_debt_balances do
+          transient do
+                debt_balances_count 1
+          end
 
+          after(:create) do |param1, evaluator|
+                create_list(:debt_balance, evaluator.debt_balances_count, debt: param1)
+          end
+        end
+   end
 end

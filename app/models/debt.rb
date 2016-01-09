@@ -4,8 +4,8 @@ class Debt < ActiveRecord::Base
 
   has_many :debt_balances
 
-  validates_presence_of :name, :category_id
-  validates_uniqueness_of :name, case_sensitive: false, :scope => :category_id
+  validates_presence_of :name, :category, :account
+  validate :debt_exists
 
   ## Titleize fields if not empty
   before_validation :clean_fields
@@ -48,7 +48,8 @@ class Debt < ActiveRecord::Base
 
   private
   def debt_exists
-    if Debt.where("id != #{self.id || 0} AND category_id = '#{self.category.id}' AND deleted_at IS NULL").exists?
+    owner = self.category.user unless self.category.nil?
+    if owner && owner.debts.where("debts.id != #{self.id || 0} AND debts.name = '#{self.name}' AND deleted_at IS NULL").exists?
       errors.add(:debt, "already exists")
     end
   end
@@ -56,5 +57,6 @@ class Debt < ActiveRecord::Base
   def clean_fields
     self.sub_category = self.sub_category.titleize unless self.sub_category.nil?
     self.name = self.name.titleize unless self.name.nil?
+    self.name = self.name.gsub(/[^0-9a-z\\s]/i, '') unless self.name.nil?
   end
 end
