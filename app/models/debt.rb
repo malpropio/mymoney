@@ -57,6 +57,6 @@ class Debt < ActiveRecord::Base
   def clean_fields
     self.sub_category = self.sub_category.titleize unless self.sub_category.nil?
     self.name = self.name.titleize unless self.name.nil?
-    self.name = self.name.gsub(/[^0-9a-z\\s]/i, '') unless sef.name.nil?
+    self.name = self.name.gsub(/[^0-9a-z\\s]/i, '') unless self.name.nil?
   end
 end
