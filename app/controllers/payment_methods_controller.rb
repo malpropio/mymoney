@@ -4,7 +4,7 @@ class PaymentMethodsController < ApplicationController
   # GET /payment_methods
   # GET /payment_methods.json
   def index
-    @payment_methods = current_user.get_all("payment_methods")
+    @payment_methods = current_user.get_all('payment_methods')
   end
 
   # GET /payment_methods/1
@@ -62,14 +62,15 @@ class PaymentMethodsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_payment_method
-      @payment_method = PaymentMethod.find(params[:id])
-      authorize @payment_method
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def payment_method_params
-      params.require(:payment_method).permit(:user_id, :name, :description)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_payment_method
+    @payment_method = PaymentMethod.find(params[:id])
+    authorize @payment_method
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def payment_method_params
+    params.require(:payment_method).permit(:user_id, :name, :description)
+  end
 end

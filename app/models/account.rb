@@ -6,12 +6,11 @@ class Account < ActiveRecord::Base
   attr_readonly :user
 
   def to_s
-    self.name
+    name
   end
 
-  def authorize(user=nil)
+  def authorize(user = nil)
     owner = self.user
     owner.id == user.id || owner.contributors.where(id: user.id).exists?
   end
-
 end

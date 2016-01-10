@@ -6,5 +6,4 @@ FactoryGirl.define do
     description { Faker::Commerce.department(5) }
     user
   end
-
 end

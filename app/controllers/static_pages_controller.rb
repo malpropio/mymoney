@@ -4,8 +4,6 @@ class StaticPagesController < ApplicationController
   skip_before_action :require_login, only: [:home]
 
   def home
-    if params[:code]
-      store_token(params[:code])
-    end
+    store_token(params[:code]) if params[:code]
   end
 end

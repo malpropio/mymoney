@@ -4,5 +4,4 @@ FactoryGirl.define do
     name { Faker::Company.name[0...19] }
     user
   end
-
 end

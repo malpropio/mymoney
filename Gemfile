@@ -3,12 +3,12 @@ source 'https://rubygems.org'
 if ENV['CI']
   # use HTTPS with password on Travis CI
   git_source :github do |repo_name|
-    repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
-    "https://emthomas:#{ENV.fetch("CI_USER_PASSWORD")}@github.com/#{repo_name}.git"
+    repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
+    "https://emthomas:#{ENV.fetch('CI_USER_PASSWORD')}@github.com/#{repo_name}.git"
   end
 else
-  gem 'seed_dump', :git => 'git@github.com:iDreamOn/seed_dump.git', :branch => 'order-by-association'
-  #gem 'seed_dump', :path => '/home/vagrant/Git/seed_dump'
+  gem 'seed_dump', git: 'git@github.com:iDreamOn/seed_dump.git', branch: 'order-by-association'
+  # gem 'seed_dump', :path => '/home/vagrant/Git/seed_dump'
 end
 
 # Add bootstrap
@@ -23,14 +23,14 @@ gem 'devise'
 # Add bcrypt for password encription
 gem 'bcrypt', '3.1.7'
 
-#Create sample users
+# Create sample users
 gem 'faker'
 
-#Display long lists on multiple pages
+# Display long lists on multiple pages
 gem 'will_paginate',           '3.0.7'
 gem 'bootstrap-will_paginate', '0.0.10'
 
-#Display charts
+# Display charts
 gem 'chartkick'
 gem 'groupdate'
 gem 'active_median'
@@ -39,7 +39,7 @@ gem 'active_median'
 gem 'rails', '4.2.3'
 
 # Use sqlite3 as the database for Active Record
-#gem 'sqlite3'
+# gem 'sqlite3'
 gem 'mysql2', '0.3.20'
 
 # Use SCSS for stylesheets
@@ -69,7 +69,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # for text messages
 # gem 'sms-easy'
 
-#gem 'twilio-ruby'
+# gem 'twilio-ruby'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -80,7 +80,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-gem 'codecov', require: false, group: :test
+# gem 'codecov', require: false, group: :test
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -94,13 +94,15 @@ group :development, :test do
 
   gem 'database_cleaner'
   gem 'rspec-rails'
-  gem "factory_girl_rails", "~> 4.0"
+  gem 'factory_girl_rails', '~> 4.0'
 
   gem 'rack-mini-profiler'
+  gem 'simplecov'
+  gem 'simplecov-rcov'
+  gem 'codecov'
 end
 
 group :development do
-  #needed for database diagrams
-  gem "rails-erd"
+  # needed for database diagrams
+  gem 'rails-erd'
 end
-

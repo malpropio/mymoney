@@ -11,8 +11,8 @@ class Debt < ActiveRecord::Base
   before_validation :clean_fields
 
   before_save do
-    self.sub_category = self.category.name if self.sub_category.blank?
-    self.fix_amount = nil if self.fix_amount && self.fix_amount < 0
+    self.sub_category = category.name if sub_category.blank?
+    self.fix_amount = nil if fix_amount && fix_amount < 0
   end
 
   def self.search(search)
@@ -38,25 +38,26 @@ class Debt < ActiveRecord::Base
   end
 
   def to_s
-    self.name
+    name
   end
 
-  def authorize(user=nil)
-    owner = self.account.user
+  def authorize(user = nil)
+    owner = account.user
     owner.id == user.id || owner.contributors.where(id: user.id).exists?
   end
 
   private
+
   def debt_exists
-    owner = self.category.user unless self.category.nil?
-    if owner && owner.debts.where("debts.id != #{self.id || 0} AND debts.name = '#{self.name}' AND deleted_at IS NULL").exists?
-      errors.add(:debt, "already exists")
+    owner = category.user unless category.nil?
+    if owner && owner.debts.where("debts.id != #{id || 0} AND debts.name = '#{name}' AND deleted_at IS NULL").exists?
+      errors.add(:debt, 'already exists')
     end
   end
 
   def clean_fields
-    self.sub_category = self.sub_category.titleize unless self.sub_category.nil?
-    self.name = self.name.titleize unless self.name.nil?
-    self.name = self.name.gsub(/[^0-9a-z\\s]/i, '') unless self.name.nil?
+    self.sub_category = sub_category.titleize unless sub_category.nil?
+    self.name = name.titleize unless name.nil?
+    self.name = name.gsub(/[^0-9a-z\\s]/i, '') unless name.nil?
   end
 end

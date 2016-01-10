@@ -8,12 +8,12 @@ FactoryGirl.define do
   end
 
   factory :category_with_budgets do
-      transient do
-        budgets_count 2
-      end
-
-      after(:create) do |category, evaluator|
-        create_list(:budget, evaluator.budgets_count, category: category)
-      end
+    transient do
+      budgets_count 2
     end
+
+    after(:create) do |category, evaluator|
+      create_list(:budget, evaluator.budgets_count, category: category)
+    end
+  end
 end

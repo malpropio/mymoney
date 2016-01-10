@@ -19,141 +19,139 @@ require 'rails_helper'
 # that an instance is receiving a specific message.
 
 RSpec.describe SpendingsController, type: :controller do
-
   # This should return the minimal set of attributes required to create a valid
   # Spending. As you add validations to Spending, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
+  let(:valid_attributes) do
+    skip('Add a hash of attributes valid for your model')
+  end
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+  let(:invalid_attributes) do
+    skip('Add a hash of attributes invalid for your model')
+  end
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # SpendingsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET #index" do
-    it "assigns all spendings as @spendings" do
+  describe 'GET #index' do
+    it 'assigns all spendings as @spendings' do
       spending = Spending.create! valid_attributes
       get :index, {}, valid_session
       expect(assigns(:spendings)).to eq([spending])
     end
   end
 
-  describe "GET #show" do
-    it "assigns the requested spending as @spending" do
+  describe 'GET #show' do
+    it 'assigns the requested spending as @spending' do
       spending = Spending.create! valid_attributes
-      get :show, {:id => spending.to_param}, valid_session
+      get :show, { id: spending.to_param }, valid_session
       expect(assigns(:spending)).to eq(spending)
     end
   end
 
-  describe "GET #new" do
-    it "assigns a new spending as @spending" do
+  describe 'GET #new' do
+    it 'assigns a new spending as @spending' do
       get :new, {}, valid_session
       expect(assigns(:spending)).to be_a_new(Spending)
     end
   end
 
-  describe "GET #edit" do
-    it "assigns the requested spending as @spending" do
+  describe 'GET #edit' do
+    it 'assigns the requested spending as @spending' do
       spending = Spending.create! valid_attributes
-      get :edit, {:id => spending.to_param}, valid_session
+      get :edit, { id: spending.to_param }, valid_session
       expect(assigns(:spending)).to eq(spending)
     end
   end
 
-  describe "POST #create" do
-    context "with valid params" do
-      it "creates a new Spending" do
-        expect {
-          post :create, {:spending => valid_attributes}, valid_session
-        }.to change(Spending, :count).by(1)
+  describe 'POST #create' do
+    context 'with valid params' do
+      it 'creates a new Spending' do
+        expect do
+          post :create, { spending: valid_attributes }, valid_session
+        end.to change(Spending, :count).by(1)
       end
 
-      it "assigns a newly created spending as @spending" do
-        post :create, {:spending => valid_attributes}, valid_session
+      it 'assigns a newly created spending as @spending' do
+        post :create, { spending: valid_attributes }, valid_session
         expect(assigns(:spending)).to be_a(Spending)
         expect(assigns(:spending)).to be_persisted
       end
 
-      it "redirects to the created spending" do
-        post :create, {:spending => valid_attributes}, valid_session
+      it 'redirects to the created spending' do
+        post :create, { spending: valid_attributes }, valid_session
         expect(response).to redirect_to(Spending.last)
       end
     end
 
-    context "with invalid params" do
-      it "assigns a newly created but unsaved spending as @spending" do
-        post :create, {:spending => invalid_attributes}, valid_session
+    context 'with invalid params' do
+      it 'assigns a newly created but unsaved spending as @spending' do
+        post :create, { spending: invalid_attributes }, valid_session
         expect(assigns(:spending)).to be_a_new(Spending)
       end
 
       it "re-renders the 'new' template" do
-        post :create, {:spending => invalid_attributes}, valid_session
-        expect(response).to render_template("new")
+        post :create, { spending: invalid_attributes }, valid_session
+        expect(response).to render_template('new')
       end
     end
   end
 
-  describe "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested spending" do
-        spending = Spending.create! valid_attributes
-        put :update, {:id => spending.to_param, :spending => new_attributes}, valid_session
-        spending.reload
-        skip("Add assertions for updated state")
+  describe 'PUT #update' do
+    context 'with valid params' do
+      let(:new_attributes) do
+        skip('Add a hash of attributes valid for your model')
       end
 
-      it "assigns the requested spending as @spending" do
+      it 'updates the requested spending' do
         spending = Spending.create! valid_attributes
-        put :update, {:id => spending.to_param, :spending => valid_attributes}, valid_session
+        put :update, { id: spending.to_param, spending: new_attributes }, valid_session
+        spending.reload
+        skip('Add assertions for updated state')
+      end
+
+      it 'assigns the requested spending as @spending' do
+        spending = Spending.create! valid_attributes
+        put :update, { id: spending.to_param, spending: valid_attributes }, valid_session
         expect(assigns(:spending)).to eq(spending)
       end
 
-      it "redirects to the spending" do
+      it 'redirects to the spending' do
         spending = Spending.create! valid_attributes
-        put :update, {:id => spending.to_param, :spending => valid_attributes}, valid_session
+        put :update, { id: spending.to_param, spending: valid_attributes }, valid_session
         expect(response).to redirect_to(spending)
       end
     end
 
-    context "with invalid params" do
-      it "assigns the spending as @spending" do
+    context 'with invalid params' do
+      it 'assigns the spending as @spending' do
         spending = Spending.create! valid_attributes
-        put :update, {:id => spending.to_param, :spending => invalid_attributes}, valid_session
+        put :update, { id: spending.to_param, spending: invalid_attributes }, valid_session
         expect(assigns(:spending)).to eq(spending)
       end
 
       it "re-renders the 'edit' template" do
         spending = Spending.create! valid_attributes
-        put :update, {:id => spending.to_param, :spending => invalid_attributes}, valid_session
-        expect(response).to render_template("edit")
+        put :update, { id: spending.to_param, spending: invalid_attributes }, valid_session
+        expect(response).to render_template('edit')
       end
     end
   end
 
-  describe "DELETE #destroy" do
-    it "destroys the requested spending" do
+  describe 'DELETE #destroy' do
+    it 'destroys the requested spending' do
       spending = Spending.create! valid_attributes
-      expect {
-        delete :destroy, {:id => spending.to_param}, valid_session
-      }.to change(Spending, :count).by(-1)
+      expect do
+        delete :destroy, { id: spending.to_param }, valid_session
+      end.to change(Spending, :count).by(-1)
     end
 
-    it "redirects to the spendings list" do
+    it 'redirects to the spendings list' do
       spending = Spending.create! valid_attributes
-      delete :destroy, {:id => spending.to_param}, valid_session
+      delete :destroy, { id: spending.to_param }, valid_session
       expect(response).to redirect_to(spendings_url)
     end
   end
-
 end

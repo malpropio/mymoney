@@ -4,8 +4,8 @@ class Spending < ActiveRecord::Base
   belongs_to :debt_balance
 
   validates_presence_of :description, :spending_date, :amount, :payment_method, :budget
-  validates :amount, numericality: true, exclusion: { in: [0], message: "can't be %{value}."}
-  validate :spending_goal 
+  validates :amount, numericality: true, exclusion: { in: [0], message: "can't be %{value}." }
+  validate :spending_goal
 
   ## Set description to loans if loans selected
   before_validation :clean_desc
@@ -18,14 +18,15 @@ class Spending < ActiveRecord::Base
     end
   end
 
-  def authorize(user=nil)
-    owner = self.payment_method.user
+  def authorize(user = nil)
+    owner = payment_method.user
     owner.id == user.id || owner.contributors.where(id: user.id).exists?
   end
 
   private
+
   def clean_desc
-      self.description = self.description.titleize unless self.description.nil?
+    self.description = description.titleize unless description.nil?
   end
 
   def spending_goal
@@ -39,5 +40,4 @@ class Spending < ActiveRecord::Base
       end
     end
   end
-
 end

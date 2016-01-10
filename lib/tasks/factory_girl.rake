@@ -1,6 +1,6 @@
 # lib/tasks/factory_girl.rake
 namespace :factory_girl do
-  desc "Verify that all FactoryGirl factories are valid"
+  desc 'Verify that all FactoryGirl factories are valid'
   task lint: :environment do
     if Rails.env.test?
       begin
