@@ -13,6 +13,7 @@ script:
   - RAILS_ENV=test bundle exec rake db:migrate --trace
   - bundle exec rake db:test:prepare
   - bundle exec rspec spec/models/
+  - bundle exec rubocop
 before_install:
   - mysql -e "create database IF NOT EXISTS test;" -uroot
 before_script:
