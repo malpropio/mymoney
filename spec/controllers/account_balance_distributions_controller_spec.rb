@@ -19,141 +19,139 @@ require 'rails_helper'
 # that an instance is receiving a specific message.
 
 RSpec.describe AccountBalanceDistributionsController, type: :controller do
-
   # This should return the minimal set of attributes required to create a valid
   # AccountBalanceDistribution. As you add validations to AccountBalanceDistribution, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
+  let(:valid_attributes) do
+    skip('Add a hash of attributes valid for your model')
+  end
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+  let(:invalid_attributes) do
+    skip('Add a hash of attributes invalid for your model')
+  end
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # AccountBalanceDistributionsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET #index" do
-    it "assigns all account_balance_distributions as @account_balance_distributions" do
+  describe 'GET #index' do
+    it 'assigns all account_balance_distributions as @account_balance_distributions' do
       account_balance_distribution = AccountBalanceDistribution.create! valid_attributes
       get :index, {}, valid_session
       expect(assigns(:account_balance_distributions)).to eq([account_balance_distribution])
     end
   end
 
-  describe "GET #show" do
-    it "assigns the requested account_balance_distribution as @account_balance_distribution" do
+  describe 'GET #show' do
+    it 'assigns the requested account_balance_distribution as @account_balance_distribution' do
       account_balance_distribution = AccountBalanceDistribution.create! valid_attributes
-      get :show, {:id => account_balance_distribution.to_param}, valid_session
+      get :show, { id: account_balance_distribution.to_param }, valid_session
       expect(assigns(:account_balance_distribution)).to eq(account_balance_distribution)
     end
   end
 
-  describe "GET #new" do
-    it "assigns a new account_balance_distribution as @account_balance_distribution" do
+  describe 'GET #new' do
+    it 'assigns a new account_balance_distribution as @account_balance_distribution' do
       get :new, {}, valid_session
       expect(assigns(:account_balance_distribution)).to be_a_new(AccountBalanceDistribution)
     end
   end
 
-  describe "GET #edit" do
-    it "assigns the requested account_balance_distribution as @account_balance_distribution" do
+  describe 'GET #edit' do
+    it 'assigns the requested account_balance_distribution as @account_balance_distribution' do
       account_balance_distribution = AccountBalanceDistribution.create! valid_attributes
-      get :edit, {:id => account_balance_distribution.to_param}, valid_session
+      get :edit, { id: account_balance_distribution.to_param }, valid_session
       expect(assigns(:account_balance_distribution)).to eq(account_balance_distribution)
     end
   end
 
-  describe "POST #create" do
-    context "with valid params" do
-      it "creates a new AccountBalanceDistribution" do
-        expect {
-          post :create, {:account_balance_distribution => valid_attributes}, valid_session
-        }.to change(AccountBalanceDistribution, :count).by(1)
+  describe 'POST #create' do
+    context 'with valid params' do
+      it 'creates a new AccountBalanceDistribution' do
+        expect do
+          post :create, { account_balance_distribution: valid_attributes }, valid_session
+        end.to change(AccountBalanceDistribution, :count).by(1)
       end
 
-      it "assigns a newly created account_balance_distribution as @account_balance_distribution" do
-        post :create, {:account_balance_distribution => valid_attributes}, valid_session
+      it 'assigns a newly created account_balance_distribution as @account_balance_distribution' do
+        post :create, { account_balance_distribution: valid_attributes }, valid_session
         expect(assigns(:account_balance_distribution)).to be_a(AccountBalanceDistribution)
         expect(assigns(:account_balance_distribution)).to be_persisted
       end
 
-      it "redirects to the created account_balance_distribution" do
-        post :create, {:account_balance_distribution => valid_attributes}, valid_session
+      it 'redirects to the created account_balance_distribution' do
+        post :create, { account_balance_distribution: valid_attributes }, valid_session
         expect(response).to redirect_to(AccountBalanceDistribution.last)
       end
     end
 
-    context "with invalid params" do
-      it "assigns a newly created but unsaved account_balance_distribution as @account_balance_distribution" do
-        post :create, {:account_balance_distribution => invalid_attributes}, valid_session
+    context 'with invalid params' do
+      it 'assigns a newly created but unsaved account_balance_distribution as @account_balance_distribution' do
+        post :create, { account_balance_distribution: invalid_attributes }, valid_session
         expect(assigns(:account_balance_distribution)).to be_a_new(AccountBalanceDistribution)
       end
 
       it "re-renders the 'new' template" do
-        post :create, {:account_balance_distribution => invalid_attributes}, valid_session
-        expect(response).to render_template("new")
+        post :create, { account_balance_distribution: invalid_attributes }, valid_session
+        expect(response).to render_template('new')
       end
     end
   end
 
-  describe "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested account_balance_distribution" do
-        account_balance_distribution = AccountBalanceDistribution.create! valid_attributes
-        put :update, {:id => account_balance_distribution.to_param, :account_balance_distribution => new_attributes}, valid_session
-        account_balance_distribution.reload
-        skip("Add assertions for updated state")
+  describe 'PUT #update' do
+    context 'with valid params' do
+      let(:new_attributes) do
+        skip('Add a hash of attributes valid for your model')
       end
 
-      it "assigns the requested account_balance_distribution as @account_balance_distribution" do
+      it 'updates the requested account_balance_distribution' do
         account_balance_distribution = AccountBalanceDistribution.create! valid_attributes
-        put :update, {:id => account_balance_distribution.to_param, :account_balance_distribution => valid_attributes}, valid_session
+        put :update, { id: account_balance_distribution.to_param, account_balance_distribution: new_attributes }, valid_session
+        account_balance_distribution.reload
+        skip('Add assertions for updated state')
+      end
+
+      it 'assigns the requested account_balance_distribution as @account_balance_distribution' do
+        account_balance_distribution = AccountBalanceDistribution.create! valid_attributes
+        put :update, { id: account_balance_distribution.to_param, account_balance_distribution: valid_attributes }, valid_session
         expect(assigns(:account_balance_distribution)).to eq(account_balance_distribution)
       end
 
-      it "redirects to the account_balance_distribution" do
+      it 'redirects to the account_balance_distribution' do
         account_balance_distribution = AccountBalanceDistribution.create! valid_attributes
-        put :update, {:id => account_balance_distribution.to_param, :account_balance_distribution => valid_attributes}, valid_session
+        put :update, { id: account_balance_distribution.to_param, account_balance_distribution: valid_attributes }, valid_session
         expect(response).to redirect_to(account_balance_distribution)
       end
     end
 
-    context "with invalid params" do
-      it "assigns the account_balance_distribution as @account_balance_distribution" do
+    context 'with invalid params' do
+      it 'assigns the account_balance_distribution as @account_balance_distribution' do
         account_balance_distribution = AccountBalanceDistribution.create! valid_attributes
-        put :update, {:id => account_balance_distribution.to_param, :account_balance_distribution => invalid_attributes}, valid_session
+        put :update, { id: account_balance_distribution.to_param, account_balance_distribution: invalid_attributes }, valid_session
         expect(assigns(:account_balance_distribution)).to eq(account_balance_distribution)
       end
 
       it "re-renders the 'edit' template" do
         account_balance_distribution = AccountBalanceDistribution.create! valid_attributes
-        put :update, {:id => account_balance_distribution.to_param, :account_balance_distribution => invalid_attributes}, valid_session
-        expect(response).to render_template("edit")
+        put :update, { id: account_balance_distribution.to_param, account_balance_distribution: invalid_attributes }, valid_session
+        expect(response).to render_template('edit')
       end
     end
   end
 
-  describe "DELETE #destroy" do
-    it "destroys the requested account_balance_distribution" do
+  describe 'DELETE #destroy' do
+    it 'destroys the requested account_balance_distribution' do
       account_balance_distribution = AccountBalanceDistribution.create! valid_attributes
-      expect {
-        delete :destroy, {:id => account_balance_distribution.to_param}, valid_session
-      }.to change(AccountBalanceDistribution, :count).by(-1)
+      expect do
+        delete :destroy, { id: account_balance_distribution.to_param }, valid_session
+      end.to change(AccountBalanceDistribution, :count).by(-1)
     end
 
-    it "redirects to the account_balance_distributions list" do
+    it 'redirects to the account_balance_distributions list' do
       account_balance_distribution = AccountBalanceDistribution.create! valid_attributes
-      delete :destroy, {:id => account_balance_distribution.to_param}, valid_session
+      delete :destroy, { id: account_balance_distribution.to_param }, valid_session
       expect(response).to redirect_to(account_balance_distributions_url)
     end
   end
-
 end

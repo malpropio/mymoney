@@ -1,26 +1,25 @@
 Rails.application.routes.draw do
-
   resources :account_balance_distributions
   resources :account_balances do
     member do
-         get :make_payments
-         get :undo_payments
-       end
+      get :make_payments
+      get :undo_payments
+    end
   end
   resources :accounts
   resources :income_sources
   resources :income_distributions do
     member do
-         get :make_payments
-         get :undo_payments
-       end
+      get :make_payments
+      get :undo_payments
+    end
   end
 
-  root               		'static_pages#home'
+  root	'static_pages#home'
   get	'home'		=>	'static_pages#home'
   get	'signup'	=> 	'users#new'
-  get    'login'   	=> 	'sessions#new'
-  post   'login'   	=> 	'sessions#create'
+  get 'login'   	=> 	'sessions#new'
+  post 'login'   	=> 	'sessions#create'
   delete 'logout'  	=> 	'sessions#destroy'
   get	'curr_alloc'  =>      'allocations#show_curr'
   get 'authorize' => 'application#authorize'
@@ -29,8 +28,8 @@ Rails.application.routes.draw do
 
   resources :users do
     member do
-       get :add_contributor
-       get :remove_contributor
+      get :add_contributor
+      get :remove_contributor
     end
   end
 

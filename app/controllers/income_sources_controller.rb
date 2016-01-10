@@ -4,7 +4,7 @@ class IncomeSourcesController < ApplicationController
   # GET /income_sources
   # GET /income_sources.json
   def index
-    @income_sources = current_user.get_all("income_sources").order(end_date: 'desc')
+    @income_sources = current_user.get_all('income_sources').order(end_date: 'desc')
   end
 
   # GET /income_sources/1
@@ -62,14 +62,15 @@ class IncomeSourcesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_income_source
-      @income_source = IncomeSource.find(params[:id])
-      authorize @income_source
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def income_source_params
-      params.require(:income_source).permit(:name, :account_id, :pay_schedule, :pay_day, :amount, :start_date, :end_date)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_income_source
+    @income_source = IncomeSource.find(params[:id])
+    authorize @income_source
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def income_source_params
+    params.require(:income_source).permit(:name, :account_id, :pay_schedule, :pay_day, :amount, :start_date, :end_date)
+  end
 end

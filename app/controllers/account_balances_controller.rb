@@ -4,7 +4,7 @@ class AccountBalancesController < ApplicationController
   # GET /account_balances
   # GET /account_balances.json
   def index
-    @account_balances = current_user.get_all("account_balances").order(balance_date: :asc, account_id: :desc)
+    @account_balances = current_user.get_all('account_balances').order(balance_date: :asc, account_id: :desc)
   end
 
   # GET /account_balances/1
@@ -67,8 +67,8 @@ class AccountBalancesController < ApplicationController
     @account_balance.make_payments
 
     respond_to do |format|
-        format.html { redirect_to @account_balance, notice: 'Payments successfully made.' }
-        format.json { render :show, status: :made, location: @account_balance }
+      format.html { redirect_to @account_balance, notice: 'Payments successfully made.' }
+      format.json { render :show, status: :made, location: @account_balance }
     end
   end
 
@@ -76,20 +76,21 @@ class AccountBalancesController < ApplicationController
     @account_balance.undo_payments
 
     respond_to do |format|
-        format.html { redirect_to @account_balance, notice: 'Payments successfully made.' }
-        format.json { render :show, status: :made, location: @account_balance }
+      format.html { redirect_to @account_balance, notice: 'Payments successfully made.' }
+      format.json { render :show, status: :made, location: @account_balance }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_account_balance
-      @account_balance = AccountBalance.find(params[:id])
-      authorize @account_balance
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def account_balance_params
-      params.require(:account_balance).permit(:balance_date, :account_id, :amount, :buffer, :debt_id, :paid)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_account_balance
+    @account_balance = AccountBalance.find(params[:id])
+    authorize @account_balance
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def account_balance_params
+    params.require(:account_balance).permit(:balance_date, :account_id, :amount, :buffer, :debt_id, :paid)
+  end
 end

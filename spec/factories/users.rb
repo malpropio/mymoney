@@ -3,12 +3,12 @@ require 'faker'
 # This will guess the User class
 FactoryGirl.define do
   factory :user do
-    first_name { Faker::Name.first_name }
+    sequence(:first_name) { |n| Faker::Name.first_name + "_#{n}" }
     last_name { Faker::Name.last_name }
     email { Faker::Internet.email(first_name) }
     username { Faker::Internet.user_name(first_name) }
-    password "abcabc"
-    password_confirmation "abcabc"
+    password 'abcabc'
+    password_confirmation 'abcabc'
 
     factory :user_with_accounts do
       transient do
@@ -68,8 +68,8 @@ FactoryGirl.define do
       end
 
       after(:create) do |user, evaluator|
-          evaluator.category.budgets << evaluator.budget
-          user.categories << evaluator.category
+        evaluator.category.budgets << evaluator.budget
+        user.categories << evaluator.category
       end
     end
 
@@ -80,8 +80,8 @@ FactoryGirl.define do
       end
 
       after(:create) do |user, evaluator|
-          evaluator.payment_method.spendings << evaluator.spending
-          user.payment_methods << evaluator.payment_method
+        evaluator.payment_method.spendings << evaluator.spending
+        user.payment_methods << evaluator.payment_method
       end
     end
 
@@ -104,8 +104,8 @@ FactoryGirl.define do
       end
 
       after(:create) do |user, evaluator|
-          evaluator.account.debts << evaluator.debt
-          user.accounts << evaluator.account
+        evaluator.account.debts << evaluator.debt
+        user.accounts << evaluator.account
       end
     end
 
@@ -116,8 +116,8 @@ FactoryGirl.define do
       end
 
       after(:create) do |user, evaluator|
-          evaluator.account.account_balances << evaluator.account_balance
-          user.accounts << evaluator.account
+        evaluator.account.account_balances << evaluator.account_balance
+        user.accounts << evaluator.account
       end
     end
 
@@ -129,9 +129,9 @@ FactoryGirl.define do
       end
 
       after(:create) do |user, evaluator|
-          evaluator.debt.debt_balances << evaluator.debt_balance
-          evaluator.account.debts << evaluator.debt
-          user.accounts << evaluator.account
+        evaluator.debt.debt_balances << evaluator.debt_balance
+        evaluator.account.debts << evaluator.debt
+        user.accounts << evaluator.account
       end
     end
   end

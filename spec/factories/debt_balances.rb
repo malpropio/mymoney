@@ -6,5 +6,4 @@ FactoryGirl.define do
     target_balance { Faker::Commerce.price }
     debt
   end
-
 end

@@ -19,141 +19,139 @@ require 'rails_helper'
 # that an instance is receiving a specific message.
 
 RSpec.describe DebtsController, type: :controller do
-
   # This should return the minimal set of attributes required to create a valid
   # Debt. As you add validations to Debt, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
+  let(:valid_attributes) do
+    skip('Add a hash of attributes valid for your model')
+  end
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+  let(:invalid_attributes) do
+    skip('Add a hash of attributes invalid for your model')
+  end
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # DebtsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET #index" do
-    it "assigns all debts as @debts" do
+  describe 'GET #index' do
+    it 'assigns all debts as @debts' do
       debt = Debt.create! valid_attributes
       get :index, {}, valid_session
       expect(assigns(:debts)).to eq([debt])
     end
   end
 
-  describe "GET #show" do
-    it "assigns the requested debt as @debt" do
+  describe 'GET #show' do
+    it 'assigns the requested debt as @debt' do
       debt = Debt.create! valid_attributes
-      get :show, {:id => debt.to_param}, valid_session
+      get :show, { id: debt.to_param }, valid_session
       expect(assigns(:debt)).to eq(debt)
     end
   end
 
-  describe "GET #new" do
-    it "assigns a new debt as @debt" do
+  describe 'GET #new' do
+    it 'assigns a new debt as @debt' do
       get :new, {}, valid_session
       expect(assigns(:debt)).to be_a_new(Debt)
     end
   end
 
-  describe "GET #edit" do
-    it "assigns the requested debt as @debt" do
+  describe 'GET #edit' do
+    it 'assigns the requested debt as @debt' do
       debt = Debt.create! valid_attributes
-      get :edit, {:id => debt.to_param}, valid_session
+      get :edit, { id: debt.to_param }, valid_session
       expect(assigns(:debt)).to eq(debt)
     end
   end
 
-  describe "POST #create" do
-    context "with valid params" do
-      it "creates a new Debt" do
-        expect {
-          post :create, {:debt => valid_attributes}, valid_session
-        }.to change(Debt, :count).by(1)
+  describe 'POST #create' do
+    context 'with valid params' do
+      it 'creates a new Debt' do
+        expect do
+          post :create, { debt: valid_attributes }, valid_session
+        end.to change(Debt, :count).by(1)
       end
 
-      it "assigns a newly created debt as @debt" do
-        post :create, {:debt => valid_attributes}, valid_session
+      it 'assigns a newly created debt as @debt' do
+        post :create, { debt: valid_attributes }, valid_session
         expect(assigns(:debt)).to be_a(Debt)
         expect(assigns(:debt)).to be_persisted
       end
 
-      it "redirects to the created debt" do
-        post :create, {:debt => valid_attributes}, valid_session
+      it 'redirects to the created debt' do
+        post :create, { debt: valid_attributes }, valid_session
         expect(response).to redirect_to(Debt.last)
       end
     end
 
-    context "with invalid params" do
-      it "assigns a newly created but unsaved debt as @debt" do
-        post :create, {:debt => invalid_attributes}, valid_session
+    context 'with invalid params' do
+      it 'assigns a newly created but unsaved debt as @debt' do
+        post :create, { debt: invalid_attributes }, valid_session
         expect(assigns(:debt)).to be_a_new(Debt)
       end
 
       it "re-renders the 'new' template" do
-        post :create, {:debt => invalid_attributes}, valid_session
-        expect(response).to render_template("new")
+        post :create, { debt: invalid_attributes }, valid_session
+        expect(response).to render_template('new')
       end
     end
   end
 
-  describe "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested debt" do
-        debt = Debt.create! valid_attributes
-        put :update, {:id => debt.to_param, :debt => new_attributes}, valid_session
-        debt.reload
-        skip("Add assertions for updated state")
+  describe 'PUT #update' do
+    context 'with valid params' do
+      let(:new_attributes) do
+        skip('Add a hash of attributes valid for your model')
       end
 
-      it "assigns the requested debt as @debt" do
+      it 'updates the requested debt' do
         debt = Debt.create! valid_attributes
-        put :update, {:id => debt.to_param, :debt => valid_attributes}, valid_session
+        put :update, { id: debt.to_param, debt: new_attributes }, valid_session
+        debt.reload
+        skip('Add assertions for updated state')
+      end
+
+      it 'assigns the requested debt as @debt' do
+        debt = Debt.create! valid_attributes
+        put :update, { id: debt.to_param, debt: valid_attributes }, valid_session
         expect(assigns(:debt)).to eq(debt)
       end
 
-      it "redirects to the debt" do
+      it 'redirects to the debt' do
         debt = Debt.create! valid_attributes
-        put :update, {:id => debt.to_param, :debt => valid_attributes}, valid_session
+        put :update, { id: debt.to_param, debt: valid_attributes }, valid_session
         expect(response).to redirect_to(debt)
       end
     end
 
-    context "with invalid params" do
-      it "assigns the debt as @debt" do
+    context 'with invalid params' do
+      it 'assigns the debt as @debt' do
         debt = Debt.create! valid_attributes
-        put :update, {:id => debt.to_param, :debt => invalid_attributes}, valid_session
+        put :update, { id: debt.to_param, debt: invalid_attributes }, valid_session
         expect(assigns(:debt)).to eq(debt)
       end
 
       it "re-renders the 'edit' template" do
         debt = Debt.create! valid_attributes
-        put :update, {:id => debt.to_param, :debt => invalid_attributes}, valid_session
-        expect(response).to render_template("edit")
+        put :update, { id: debt.to_param, debt: invalid_attributes }, valid_session
+        expect(response).to render_template('edit')
       end
     end
   end
 
-  describe "DELETE #destroy" do
-    it "destroys the requested debt" do
+  describe 'DELETE #destroy' do
+    it 'destroys the requested debt' do
       debt = Debt.create! valid_attributes
-      expect {
-        delete :destroy, {:id => debt.to_param}, valid_session
-      }.to change(Debt, :count).by(-1)
+      expect do
+        delete :destroy, { id: debt.to_param }, valid_session
+      end.to change(Debt, :count).by(-1)
     end
 
-    it "redirects to the debts list" do
+    it 'redirects to the debts list' do
       debt = Debt.create! valid_attributes
-      delete :destroy, {:id => debt.to_param}, valid_session
+      delete :destroy, { id: debt.to_param }, valid_session
       expect(response).to redirect_to(debts_url)
     end
   end
-
 end

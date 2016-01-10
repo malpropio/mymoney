@@ -7,20 +7,18 @@ class ApplicationController < ActionController::Base
 
   before_action :require_login
 
-  def authorize(object=nil)
-    if !object.authorize(current_user)
-      flash[:error] = "You dont have permission to access this section"
-      redirect_to root_url
-    end
+  def authorize(object = nil)
+    return if object.authorize(current_user)
+    flash[:error] = 'You dont have permission to access this section'
+    redirect_to root_url
   end
 
   private
 
   def require_login
-    unless logged_in?
-      store_location
-      flash[:error] = "You must be logged in to access this section"
-      redirect_to login_url
-    end
+    return if logged_in?
+    store_location
+    flash[:error] = 'You must be logged in to access this section'
+    redirect_to login_url
   end
 end

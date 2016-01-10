@@ -3,17 +3,16 @@ class BudgetsController < ApplicationController
 
   before_action :set_budget, only: [:show, :edit, :update, :destroy]
 
-  FLOOR = "2014-01-01"
-
+  FLOOR = '2014-01-01'
 
   # GET /budgets
   # GET /budgets.json
   def index
-    @budgets = current_user.get_all("budgets")
-                           .joins(:category)
-                           .search(params[:search])
-                           .order("categories.name")
-                           .where("budget_month >= '#{FLOOR}'")
+    @budgets = current_user.get_all('budgets')
+               .joins(:category)
+               .search(params[:search])
+               .order('categories.name')
+               .where("budget_month >= '#{FLOOR}'")
     @curr_budget = (params[:search] || Time.now.to_date.change(day: 1)).to_date
   end
 
@@ -21,8 +20,8 @@ class BudgetsController < ApplicationController
   # GET /budgets/1.json
   def show
     @spendings = @budget.spendings
-                        .order(sort_column + " " + sort_direction)
-                        .order(updated_at: :desc)
+                 .order(sort_column + ' ' + sort_direction)
+                 .order(updated_at: :desc)
   end
 
   # GET /budgets/new
@@ -35,14 +34,14 @@ class BudgetsController < ApplicationController
   end
 
   def budgets_by_month
-    h1 = Hash.new
+    h1 = {}
 
-    current_user.real_spendings.group_by_month(:spending_date, format: "%b %Y").sum(:amount).each do |spending|
-      h1.store(["Spending", spending[0]], spending[1])
+    current_user.real_spendings.group_by_month(:spending_date, format: '%b %Y').sum(:amount).each do |spending|
+      h1.store(['Spending', spending[0]], spending[1])
     end
 
-    current_user.real_budgets.group_by_month(:budget_month, format: "%b %Y").sum(:amount).each do |budget|
-      h1.store(["Budget", budget[0]], budget[1])
+    current_user.real_budgets.group_by_month(:budget_month, format: '%b %Y').sum(:amount).each do |budget|
+      h1.store(['Budget', budget[0]], budget[1])
     end
 
     render json: h1.chart_json
@@ -56,24 +55,13 @@ class BudgetsController < ApplicationController
     end
   end
 
-
   # Reset current month's budgets
   def reset_current_month
-
-    time = nil
-
-    if params[:choice] == "current"
-      time = Time.now.strftime('%Y-%m-01')
-    elsif params[:choice] == "next" && (Time.now >= 1.month.from_now.change(day: 1) - 5.days)
-      time = 1.month.from_now.strftime('%Y-%m-01')
-    end
-
     respond_to do |format|
       format.html { redirect_to budgets_url, notice: 'Budgets were successfully set.' }
       format.json { head :no_content }
     end
   end
-
 
   # POST /budgets
   # POST /budgets.json
@@ -116,19 +104,15 @@ class BudgetsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_budget
-      @budget = Budget.find(params[:id])
-      authorize @budget
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def budget_params
-      params.require(:budget).permit(:category_id, :budget_month, :amount)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_budget
+    @budget = Budget.find(params[:id])
+    authorize @budget
+  end
 
-    def get_month
-      number = params[:page].nil ? 0 : params[:page] - 1
-      Time.new.to_date.change(day: 1) - number.months
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def budget_params
+    params.require(:budget).permit(:category_id, :budget_month, :amount)
+  end
 end

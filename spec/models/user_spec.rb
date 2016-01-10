@@ -1,141 +1,140 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  it "has a valid factory" do
+  it 'has a valid factory' do
     expect(FactoryGirl.build(:user)).to be_valid
   end
 
-  context "is invalid when" do
-    it "firstname is empty" do
+  context 'is invalid when' do
+    it 'firstname is empty' do
       user = FactoryGirl.build(:user, first_name: nil)
       expect(user).to_not be_valid
       expect(user.errors).to have_key(:first_name)
     end
 
-    it "lastname is empty" do
+    it 'lastname is empty' do
       user = FactoryGirl.build(:user, last_name: nil)
       expect(user).to_not be_valid
       expect(user.errors).to have_key(:last_name)
     end
 
-    it "username is empty" do
+    it 'username is empty' do
       user = FactoryGirl.build(:user, username: nil)
       expect(user).to_not be_valid
       expect(user.errors).to have_key(:username)
     end
 
-    it "email is empty" do
+    it 'email is empty' do
       user = FactoryGirl.build(:user, email: nil)
       expect(user).to_not be_valid
       expect(user.errors).to have_key(:email)
     end
 
-    it "email is not well formatted" do
-      user = FactoryGirl.build(:user, email: "test.com")
+    it 'email is not well formatted' do
+      user = FactoryGirl.build(:user, email: 'test.com')
       expect(user).to_not be_valid
       expect(user.errors).to have_key(:email)
-      user = FactoryGirl.build(:user, email: "test@test")
+      user = FactoryGirl.build(:user, email: 'test@test')
       expect(user).to_not be_valid
       expect(user.errors).to have_key(:email)
     end
 
-    it "email is not unique" do
-      user_1 = FactoryGirl.create(:user, email: "test@test.com")
-      user_2 = FactoryGirl.build(:user, email: "test@test.com")
+    it 'email is not unique' do
+      FactoryGirl.create(:user, email: 'test@test.com')
+      user_2 = FactoryGirl.build(:user, email: 'test@test.com')
       expect(user_2).to_not be_valid
       expect(user_2.errors).to have_key(:email)
     end
 
-    it "password is empty" do
+    it 'password is empty' do
       user = FactoryGirl.build(:user, password: nil)
       expect(user).to_not be_valid
       expect(user.errors).to have_key(:password)
     end
 
-    it "password is too short" do
-      user = FactoryGirl.build(:user, password: "abc", password_confirmation: "abc")
+    it 'password is too short' do
+      user = FactoryGirl.build(:user, password: 'abc', password_confirmation: 'abc')
       expect(user).to_not be_valid
       expect(user.errors).to have_key(:password)
     end
 
     it "password and password confirmation don't match" do
-      user = FactoryGirl.build(:user, password: "password")
+      user = FactoryGirl.build(:user, password: 'password')
       expect(user).to_not be_valid
       expect(user.errors).to have_key(:password_confirmation)
     end
   end
 
-  context "association" do
-    it "has many categories" do
+  context 'association' do
+    it 'has many categories' do
       user = FactoryGirl.create(:user_with_categories)
       expect(user.categories.length).to eq(2)
     end
 
-    it "has many payment_methods" do
+    it 'has many payment_methods' do
       user = FactoryGirl.create(:user_with_payment_methods)
       expect(user.payment_methods.length).to eq(2)
     end
 
-    it "has many accounts" do
+    it 'has many accounts' do
       user = FactoryGirl.create(:user_with_accounts)
       expect(user.accounts.length).to eq(2)
     end
 
-    it "has many contributors" do
+    it 'has many contributors' do
       user = FactoryGirl.create(:user_with_contributors)
       expect(user.contributors.length).to eq(1)
     end
 
-    it "has many contributors and contributes to many" do
+    it 'has many contributors and contributes to many' do
       user = FactoryGirl.create(:user_has_and_belongs_to_many_contributors)
       expect(user.contributors.length).to eq(1)
       contributor = user.contributors.first
       expect(contributor.contributors.where(id: user.id)).to exist
     end
 
-    it "has many budgets" do
+    it 'has many budgets' do
       user = FactoryGirl.create(:user_with_budgets)
       expect(user.budgets.length).to eq(1)
     end
 
-    it "has many spendings" do
+    it 'has many spendings' do
       user = FactoryGirl.create(:user_with_spendings)
       expect(user.spendings.length).to eq(1)
     end
 
-    it "has many income_sources" do
+    it 'has many income_sources' do
       user = FactoryGirl.create(:user_with_income_sources)
       expect(user.income_sources.length).to eq(1)
     end
 
-    it "has many debts" do
+    it 'has many debts' do
       user = FactoryGirl.create(:user_with_debts)
       expect(user.debts.length).to eq(1)
     end
 
-    it "has many account_balances" do
+    it 'has many account_balances' do
       user = FactoryGirl.create(:user_with_account_balances)
       expect(user.account_balances.length).to eq(1)
     end
 
-    it "has many debt_balances" do
+    it 'has many debt_balances' do
       user = FactoryGirl.create(:user_with_debt_balances)
       expect(user.debt_balances.length).to eq(1)
     end
 
-    it "has many account_balance_distributions" do
-      skip "MIGHT BE DELETED"
+    it 'has many account_balance_distributions' do
+      skip 'MIGHT BE DELETED'
     end
   end
 
   context "has contributor but doesn't contributes" do
-    it "cant see eachothers spendings" do
+    it 'cant see eachothers spendings' do
       user_1 = FactoryGirl.create(:user_with_spendings)
       user_2 = FactoryGirl.create(:user_with_spendings)
       user_1.contributors << user_2
-      expect(user_1.get_all("spendings").length).to eq(1)
+      expect(user_1.get_all('spendings').length).to eq(1)
     end
-
 
     it 'cant see eachothers categories' do
       user_1 = FactoryGirl.create(:user_with_categories)
@@ -166,11 +165,11 @@ RSpec.describe User, type: :model do
     end
 
     it 'cant see eachothers account_balance_distributions' do
-      skip "MIGHT BE DELETED"
-      #user_1 = FactoryGirl.create(:user_with_account_balance_distributions)
-      #user_2 = FactoryGirl.create(:user_with_account_balance_distributions)
-      #user_1.contributors << user_2
-      #expect(user_1.get_all('account_balance_distributions').length).to eq(1)
+      skip 'MIGHT BE DELETED'
+      # user_1 = FactoryGirl.create(:user_with_account_balance_distributions)
+      # user_2 = FactoryGirl.create(:user_with_account_balance_distributions)
+      # user_1.contributors << user_2
+      # expect(user_1.get_all('account_balance_distributions').length).to eq(1)
     end
 
     it 'cant see eachothers budgets' do
@@ -209,15 +208,14 @@ RSpec.describe User, type: :model do
     end
   end
 
-  context "when has contributor and contributes" do
-    it "can see eachothers spendings" do
+  context 'when has contributor and contributes' do
+    it 'can see eachothers spendings' do
       user_1 = FactoryGirl.create(:user_with_spendings)
       user_2 = FactoryGirl.create(:user_with_spendings)
       user_1.contributors << user_2
       user_2.contributors << user_1
-      expect(user_1.get_all("spendings").length).to eq(2)
+      expect(user_1.get_all('spendings').length).to eq(2)
     end
-
 
     it 'can see eachothers categories' do
       user_1 = FactoryGirl.create(:user_with_categories)
@@ -252,7 +250,7 @@ RSpec.describe User, type: :model do
     end
 
     it 'can see eachothers account_balance_distributions' do
-      skip "MIGHT BE DELETED"
+      skip 'MIGHT BE DELETED'
     end
 
     it 'can see eachothers budgets' do
@@ -296,8 +294,8 @@ RSpec.describe User, type: :model do
     end
   end
 
-  context "columns format" do
-    it "converts valid email to lowercase" do
+  context 'columns format' do
+    it 'converts valid email to lowercase' do
       user = FactoryGirl.build(:user)
       expect(user.email).to eq(user.email.downcase)
     end
