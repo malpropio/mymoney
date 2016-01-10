@@ -8,7 +8,7 @@
 
 AllCops:
   Excludes:
-    - bundler_stubs
+    - bundler_stubs/*
     - db/schema.rb
 
 # Offense count: 22
