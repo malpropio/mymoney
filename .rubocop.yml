@@ -6,6 +6,11 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
+AllCops:
+  Excludes:
+    - bundler_stubs
+    - db/schema.rb
+
 # Offense count: 22
 Metrics/AbcSize:
   Max: 84
