@@ -3,10 +3,10 @@ require 'faker'
 # This will guess the User class
 FactoryGirl.define do
   factory :user do
-    sequence(:first_name) {|n| Faker::Name.first_name + "_#{n}" }
+    sequence(:first_name) { |n| Faker::Name.first_name + "_#{n}" }
     last_name { Faker::Name.last_name }
     email { Faker::Internet.email(first_name) }
-    username { Faker::Internet.user_name(first_name) } 
+    username { Faker::Internet.user_name(first_name) }
     password 'abcabc'
     password_confirmation 'abcabc'
 

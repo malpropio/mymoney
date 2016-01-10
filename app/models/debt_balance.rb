@@ -115,10 +115,9 @@ class DebtBalance < ActiveRecord::Base
       errors.add(:goal, "already set between #{goal.payment_start_date} and #{goal.due_date}")
     end
 
-    if !due_date.blank? && !payment_start_date.blank?
-      if due_date < payment_start_date
-        errors.add(:payment_start_date, "(#{payment_start_date}) must be before due date (#{due_date})")
-      end
+    return unless !due_date.blank? && !payment_start_date.blank?
+    if due_date < payment_start_date
+      errors.add(:payment_start_date, "(#{payment_start_date}) must be before due date (#{due_date})")
     end
   end
 end

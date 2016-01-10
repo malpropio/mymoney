@@ -30,14 +30,13 @@ class Spending < ActiveRecord::Base
   end
 
   def spending_goal
-    if budget && budget.category.debts.any?
-      if !debt_balance
-        errors.add(:goal, "can't be empty for this category")
-      elsif debt_balance.debt.category_id != budget.category_id
-        errors.add(:goal, "doesn't belong to this category; budget.category_id: #{budget.category_id}; debt_balance.debt.category_id #{debt_balance.debt.category_id}")
-      else
-        self.description = debt_balance.debt_name
-      end
+    return unless budget && budget.category.debts.any?
+    if !debt_balance
+      errors.add(:goal, "can't be empty for this category")
+    elsif debt_balance.debt.category_id != budget.category_id
+      errors.add(:goal, "doesn't belong to this category; budget.category_id: #{budget.category_id}; debt_balance.debt.category_id #{debt_balance.debt.category_id}")
+    else
+      self.description = debt_balance.debt_name
     end
   end
 end

@@ -34,11 +34,10 @@ module BudgetsHelper
   end
 
   def potential_income(curr_month = nil)
-    unless curr_month.nil?
-      start_date = curr_month.beginning_of_month
-      end_date = curr_month.end_of_month
-      current_user.get_all('income_sources').total_income(nil, start_date, end_date)
-    end
+    return if curr_month.nil?
+    start_date = curr_month.beginning_of_month
+    end_date = curr_month.end_of_month
+    current_user.get_all('income_sources').total_income(nil, start_date, end_date)
   end
 
   def potential_income_notes(curr_month = nil)

@@ -70,38 +70,34 @@ class IncomeSource < ActiveRecord::Base
   private
 
   def bi_weekly_payday
-    if start_date && end_date && pay_day
-      errors.add(:pay_day, "must be a valid day (#{days_of_week.join(', ')})") unless days_of_week.include?(pay_day.titleize)
-      errors.add(:start_date, "must be a #{pay_day.titleize}") unless day_of_week?(start_date, pay_day)
-      errors.add(:end_date, "must be a #{pay_day.titleize}") unless day_of_week?(end_date, pay_day)
-    end
+    return unless start_date && end_date && pay_day
+    errors.add(:pay_day, "must be a valid day (#{days_of_week.join(', ')})") unless days_of_week.include?(pay_day.titleize)
+    errors.add(:start_date, "must be a #{pay_day.titleize}") unless day_of_week?(start_date, pay_day)
+    errors.add(:end_date, "must be a #{pay_day.titleize}") unless day_of_week?(end_date, pay_day)
   end
 
   def weekly_payday
-    if start_date && end_date && pay_day
-      errors.add(:pay_day, "must be a valid day (#{days_of_week.join(', ')})") unless days_of_week.include?(pay_day.titleize)
-      errors.add(:start_date, "must be a #{pay_day.titleize}") unless day_of_week?(start_date, pay_day)
-      errors.add(:end_date, "must be a #{pay_day.titleize}") unless day_of_week?(end_date, pay_day)
-    end
+    return unless start_date && end_date && pay_day
+    errors.add(:pay_day, "must be a valid day (#{days_of_week.join(', ')})") unless days_of_week.include?(pay_day.titleize)
+    errors.add(:start_date, "must be a #{pay_day.titleize}") unless day_of_week?(start_date, pay_day)
+    errors.add(:end_date, "must be a #{pay_day.titleize}") unless day_of_week?(end_date, pay_day)
   end
 
   def semi_monthly_pay
-    if start_date && end_date && pay_day
-      if pay_day.split(',').size != 2
-        errors.add(:pay_day, "must be a list of 2 elements. e.g. '1, 15' for 1st and 15th of each month. Days can be 'first' or 'last'.")
-      else
-        pay_day.split(',').each do |k|
-          unless (k.to_i >= 1 && k.to_i <= 31) || %w(first last).include?(k.strip.downcase)
-            errors.add(:pay_day, "must be between the 1st and the 31st or 'first' or 'last'.")
-          end
+    return unless start_date && end_date && pay_day
+    if pay_day.split(',').size != 2
+      errors.add(:pay_day, "must be a list of 2 elements. e.g. '1, 15' for 1st and 15th of each month. Days can be 'first' or 'last'.")
+    else
+      pay_day.split(',').each do |k|
+        unless (k.to_i >= 1 && k.to_i <= 31) || %w(first last).include?(k.strip.downcase)
+          errors.add(:pay_day, "must be between the 1st and the 31st or 'first' or 'last'.")
         end
       end
     end
   end
 
   def start_and_end
-    if start_date && end_date
-      errors.add(:start_date, 'must be before end date') unless before?(start_date, end_date)
-    end
+    return unless start_date && end_date
+    errors.add(:start_date, 'must be before end date') unless before?(start_date, end_date)
   end
 end
